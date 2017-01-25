@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VUE JS Starter</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+		.is-loading { background-color: yellow; }
+	</style>
+</head>
+<body>
+	<div id="root">
+		<li v-for="name in names" v-text="name"></li>
+		<input v-model="newName" :title="title" type="text" id="input">
+		<button @click="addName" :title="title" :class="{ 'is-loading': isLoading}" type="button">Add name</button>
+		<p>The value of the input is: {{ newName }}</p>
+	</div>
+	<script>
+		let $vue = new Vue({
+			el: '#root',
+			data: {
+				newName: '',
+				names: ['Joe', 'Mary', 'Jill', 'Jack'],
+				title: 'Add a name to your list',
+				isLoading: false
+			},
+			methods : {
+				addName(){
+					this.names.push(this.newName);
+					this.newName = '';
+					this.isLoading = !this.isLoading;
+				}
+			}
+		});
+	</script>
+</body>
+</html>
