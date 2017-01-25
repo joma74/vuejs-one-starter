@@ -11,8 +11,8 @@
 <body>
 	<div id="root">
 		<li v-for="name in names" v-text="name"></li>
-		<input v-model="newName" :title="title" type="text" id="input">
-		<button @click="addName" :title="title" :class="{ 'is-loading': isLoading}" type="button">Add name</button>
+		<input v-model="newName" :title="title" @keyUp="checkNewNameIsEmpty" type="text" id="input">
+		<button @click="addName" :title="title" :class="{ 'is-loading': isLoading}" :disabled="isNewNameEmpty" type="button">Add name</button>
 		<p>The value of the input is: {{ newName }}</p>
 	</div>
 	<script>
@@ -22,13 +22,21 @@
 				newName: '',
 				names: ['Joe', 'Mary', 'Jill', 'Jack'],
 				title: 'Add a name to your list',
-				isLoading: false
+				isLoading: false,
+				isNewNameEmpty: true
 			},
 			methods : {
 				addName(){
 					this.names.push(this.newName);
 					this.newName = '';
 					this.isLoading = !this.isLoading;
+				},
+				checkNewNameIsEmpty(){
+					if(this.newName){
+						this.isNewNameEmpty = false;
+					}else{
+						this.isNewNameEmpty = true;
+					}
 				}
 			}
 		});
