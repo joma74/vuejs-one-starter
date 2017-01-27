@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VUE JS Starter Episode 6</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	</style>
+</head>
+<body>
+	<div id="root">
+		<h2>All Tasks</h2>
+		<ul>
+			<li v-for="task in tasks" v-text="task.description"></li>
+		</ul>
+		<h2>Incomplete Tasks</h2>
+		<ul>
+			<li v-for="task in incompleteTasks" v-text="task.description"></li>
+		</div>
+		<script>
+			let app =
+			new Vue({
+				el: '#root',
+				data: {
+					tasks: [
+					{description: 'Go to the store', completed: true},
+					{description: 'Finish screencast', completed: false},
+					{description: 'Make donation', completed: false},
+					{description: 'Clear inbox', completed: false},
+					{description: 'Make dinner', completed: false},
+					{description: 'Clean room', completed: true}
+					]
+				},
+				computed : {
+					incompleteTasks (){
+						return this.tasks.filter(task => ! task.completed);
+					}
+				}
+			});
+		</script>
+	</body>
+	</html>
