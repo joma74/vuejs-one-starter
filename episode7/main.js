@@ -1,5 +1,5 @@
-Vue.component('tasks', {
-	template: '<li>Foobar</li>'
+Vue.component('task', {
+	template: '<li><slot></slot></li>'
 });
 
 new Vue({
