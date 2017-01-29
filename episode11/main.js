@@ -51,13 +51,13 @@ Vue.component('tab', {
             isActive: false
         }
     },
-    mounted() {
-        this.isActive = this.selected;
-    },
     computed: {
         href() {
             return '#' + this.name.trim().toLowerCase().replace(/ /g, '-');
         }
+    },
+    mounted() {
+        this.isActive = this.selected;
     }
 });
 

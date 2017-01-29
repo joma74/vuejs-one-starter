@@ -1,5 +1,8 @@
 Vue.component('cname', {
-	props: ['one', 'two'],
+	props: ['one', 'two', name: {
+			required: true,
+			default: false
+	}],
 	template: `
 	<article class="message" v-show="isVisible">
 	{{ one }} {{ two }}
@@ -12,6 +15,15 @@ Vue.component('cname', {
 	data() { // This is a static component, so to make a instance factory wrap it e.g. in a return.
 		return { // The "data" option should be a function that returns a per-instance value in component definitions.
 		}
+	},
+	computed: { // access like data
+			theComputed() {
+					return 'abc';
+			}
+	},
+	created() {
+	},
+	mounted() {
 	}
 });
 
