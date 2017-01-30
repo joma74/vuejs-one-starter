@@ -4,9 +4,9 @@ Vue.component('cname', {
 			default: false
 	}],
 	template: `
-	<article class="message" v-show="isVisible">
-	{{ one }} {{ two }}
-	</article>
+	<input>
+		{{ one }} {{ two }}
+	</input>
 	`,
 	methods: { // This is a static component, but methods are stateless - so they can be an object property.
 		someMethod(){

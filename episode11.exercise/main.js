@@ -4,7 +4,10 @@ Vue.component('tabs', {
 			<div class="tabs">
 				<ul>
 					<li v-for="tab in tabs" :class="{'is-active' : tab.isActive}">
-						<a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
+						<a :href="tab.href" @click="selectTab(tab)">
+              <span class="icon is-small"><i :class="'fa ' + tab.iconRef"></i></span> <!-- Interpolation within attributes -->
+              <span>{{ tab.name }}</span>
+            </a>
 					</li>
 				</ul>
 			</div>
@@ -43,7 +46,9 @@ Vue.component('tab', {
         },
 				selectedOnInit: {
 					default: false
-				}
+				},
+        icon: {
+        }
     },
     template: `
 			<div v-show="isActive">
@@ -58,7 +63,10 @@ Vue.component('tab', {
     computed: { // access like data
   			href() {
   					return '#' + this.name.trim().toLowerCase().replace(/ /g, "-");
-  			}
+  			},
+        iconRef(){
+          return 'fa ' + this.icon;
+        }
   	},
     mounted() {
         this.isActive = this.selectedOnInit;
