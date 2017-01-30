@@ -4,9 +4,7 @@ Vue.component('cname', {
 			default: false
 	}],
 	template: `
-	<input>
-		{{ one }} {{ two }}
-	</input>
+		<input placeholder="{{ one }} {{ two }}">
 	`,
 	methods: { // This is a static component, but methods are stateless - so they can be an object property.
 		someMethod(){
