@@ -1,13 +1,16 @@
 Vue.component('cname', {
-	props: ['one', 'two', name: {
-			required: true,
-			default: false
-	}],
+	props: {
+			one: {
+					required: true,
+					default: ''
+			}
+	},
 	template: `
-		<input placeholder="{{ one }} {{ two }}">
+		<input :placeholder="this.theComputed" @blur="onChanged" required>
 	`,
 	methods: { // This is a static component, but methods are stateless - so they can be an object property.
-		someMethod(){
+		onChanged(){
+			this.$emit('changed');
 		}
 	},
 	data() { // This is a static component, so to make a instance factory wrap it e.g. in a return.
@@ -16,18 +19,25 @@ Vue.component('cname', {
 	},
 	computed: { // access like data
 			theComputed() {
-					return 'abc';
+					return this.one + ' vue';
 			}
 	},
-	created() {
+	created() { // lifecycle hook see
+		console.log('Created ' + this.$options.name);
 	},
-	mounted() {
+	mounted() { // lifecycle hook see
+		console.log('Mounted ' + this.$options.name);
 	}
 });
 
 new Vue({
 	el: '#root',
 	data: { // This is a global object, so object properties are initialized one time
-		showSome: true
+		doShow: true
+	},
+	methods: {
+			toggle(){
+				this.doShow = !this.doShow;
+			}
 	}
 });

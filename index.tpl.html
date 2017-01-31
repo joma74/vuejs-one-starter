@@ -11,8 +11,9 @@
 </head>
 <body>
 	<div id="root" class="container">
-		<cname one="Hello world" two="Lorem ipsum dolor sit amet."></cname>
+		<cname one="Hello" @changed="toggle"></cname>
+		<h1 v-show="doShow">Blurry vision - now you can see me</h1>
 	</div>
-	<script src="main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="main.tpl.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
