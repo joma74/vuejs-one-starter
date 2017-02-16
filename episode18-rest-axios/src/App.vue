@@ -2,7 +2,7 @@
 <div class="container content">
     <h1>My Projects</h1>
     <ul>
-        <li v-for="project in projects" v-text="project.name"></li>
+        <li v-for="project in projectList" v-text="project.name"></li>
     </ul>
     <form method="post" action="/projects" @submit.prevent="onSubmit">
         <label for="name" class="label">Project Name:</label>
@@ -35,7 +35,7 @@ export default {
         return {
             name: '',
             description: '',
-            projects: [],
+            projectList: [],
             fieldErrors: {}
         }
     },
@@ -51,7 +51,7 @@ export default {
                 });
         };
         var updateProjectList = function(response) {
-            $scope.projects = response.data.projects;
+            $scope.projectList = response.data.projects;
         };
 
         getProjects()
@@ -83,10 +83,10 @@ export default {
                     });
             };
             var updateProjectList = function(response) {
-                $scope.projects = response.data.projects;
+                $scope.projectList = response.data.projects;
             };
 
-            putProject()
+            putProject() 
                 .then(getProjects)
                 .then(updateProjectList)
                 .catch((err) => {
