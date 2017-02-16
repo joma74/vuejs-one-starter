@@ -5,15 +5,15 @@
         <li v-for="project in projectList" v-text="project.name"></li>
     </ul>
     <form method="post" action="/projects" @submit.prevent="onSubmit">
-        <label for="name" class="label">Project Name:</label>
-        <p class="control has-icon has-icon-right">
-            <input type="text" id="name" name="name" class="input is-danger" v-model="name" placeholder="Insert Your Project Name Here...">
-            <span class="help is-danger">This name is invalid</span>
+        <p class="control">
+            <label for="name" class="label">Project Name:</label>
+            <input type="text" id="name" name="name" class="input" v-model="name" @keydown="fieldErrors.clear('name')" placeholder="Insert Your Project Name Here...">
+            <span class="help is-danger" v-text="fieldErrors.get('name')">This name is invalid</span>
         </p>
-        <label for="description" class="label">Project Description:</label>
-        <p class="control has-icon has-icon-right">
-            <input type="text" id="description" name="description" class="input is-danger" v-model="description" placeholder="Insert Your Project Description Here...">
-            <span class="help is-danger">This description is invalid</span>
+        <p class="control">
+            <label for="description" class="label">Project Description:</label>
+            <input type="text" id="description" name="description" class="input" v-model="description" @keydown="fieldErrors.clear('description')" placeholder="Insert Your Project Description Here...">
+            <span class="help is-danger" v-text="fieldErrors.get('description')" @keydown="fieldErrors.clear('description')">This description is invalid</span>
         </p>
         <p class="control">
             <button class="button is-primary">Create</button>
@@ -27,6 +27,69 @@ import axios from 'axios';
 const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
 const tough = require('tough-cookie');
 
+class Errors {
+
+    constructor() {
+        this.fieldErrors = {};
+    }
+
+    /**
+     * Convert objects at 1-st level into an array of objects
+     */
+    _objectsToArray(obj) {
+        return Object.keys(obj).map(function(key) {
+            return obj[key];
+        });
+    }
+
+    /*
+     * Returns the first fieldError with the same field value as the parameter.
+     *
+     * @param {string} byFieldName - The name of the field to filter errors for.
+     */
+    _findBy(byFieldName) {
+        let fieldErrorsArray = this._objectsToArray(this.fieldErrors);
+        let filtered = fieldErrorsArray.filter(function(fieldError) {
+            if (fieldError.field == byFieldName) {
+                return true;
+            }
+            return false;
+        });
+        return filtered[0];
+    }
+
+    /*
+     * Deletes the first fieldErrors with the same field value as the parameter.
+     *
+     * @param {string} byFieldName - The name of the field to filter errors for.
+     */
+    _deleteBy(byFieldName) {
+        let fieldErrorsArray = this._objectsToArray(this.fieldErrors);
+        let foundIndex = fieldErrorsArray.findIndex(function(fieldError) {
+            if (fieldError.field == byFieldName) {
+                return true;
+            }
+            return false;
+        });
+        delete this.fieldErrors[foundIndex];
+    }
+
+    get(fieldName) {
+        let fieldError = this._findBy(fieldName);
+        if (fieldError) {
+            return fieldError.field + " " + fieldError.error;
+        }
+    }
+
+    clear(fieldName) {
+        delete this._deleteBy(fieldName);
+    }
+
+    record(fieldErrors) {
+        this.fieldErrors = fieldErrors;
+    }
+}
+
 axiosCookieJarSupport(axios);
 
 export default {
@@ -36,7 +99,7 @@ export default {
             name: '',
             description: '',
             projectList: [],
-            fieldErrors: {}
+            fieldErrors: new Errors()
         }
     },
     mounted() {
@@ -86,13 +149,13 @@ export default {
                 $scope.projectList = response.data.projects;
             };
 
-            putProject() 
+            putProject()
                 .then(getProjects)
                 .then(updateProjectList)
                 .catch((err) => {
                     if (err.response) {
                         console.error(err.response);
-                        $scope.fieldErrors = err.response.data.fieldErrors;
+                        $scope.fieldErrors.record(err.response.data.fieldErrors);
                     } else {
                         console.error(err.stack || err);
                     }
