@@ -7,12 +7,12 @@
     <form method="post" action="/projects" @submit.prevent="onSubmit">
         <label for="name" class="label">Project Name:</label>
         <p class="control has-icon has-icon-right">
-            <input type="text" id="name" name="name" class="input is-danger" v-model="name">
+            <input type="text" id="name" name="name" class="input is-danger" v-model="name" placeholder="Insert Your Project Name Here...">
             <span class="help is-danger">This name is invalid</span>
         </p>
         <label for="description" class="label">Project Description:</label>
         <p class="control has-icon has-icon-right">
-            <input type="text" id="description" name="description" class="input is-danger" v-model="description">
+            <input type="text" id="description" name="description" class="input is-danger" v-model="description" placeholder="Insert Your Project Description Here...">
             <span class="help is-danger">This description is invalid</span>
         </p>
         <p class="control">
@@ -36,6 +36,7 @@ export default {
             name: '',
             description: '',
             projects: [],
+            fieldErrors: {}
         }
     },
     mounted() {
@@ -51,25 +52,41 @@ export default {
     },
     methods: {
         onSubmit() {
-            var self = this;
-            axios.put('/api/projects', {
-                name: self.name,
-                description: self.description
-            }, {
-                withCredentials: true
-            }).then(() => {
-                    axios.get('/api/projects', {
+            var $scope = this;
+            var putProject = function() {
+                return axios.put('/api/projects', {
+                        name: $scope.name,
+                        description: $scope.description
+                    }, {
                         withCredentials: true
-                    }).then(response => {
-                        this.projects = response.data.projects;
                     })
                     .catch((err) => {
-                        console.error(err.stack || err);
+                        throw err;
                     });
-                }
-            ).catch((err) => {
-                console.error(err.stack || err);
-            });
+            };
+            var getProjects = function() {
+                return axios.get('/api/projects', {
+                        withCredentials: true
+                    })
+                    .catch((err) => {
+                        throw err;
+                    });
+            };
+            var updateProjectList = function(response) {
+                $scope.projects = response.data.projects;
+            };
+
+            putProject()
+                .then(getProjects)
+                .then(updateProjectList)
+                .catch((err) => {
+                    if (err.response) {
+                        console.error(err.response);
+                        $scope.fieldErrors = err.response.data.fieldErrors;
+                    } else {
+                        console.error(err.stack || err);
+                    }
+                });
         }
     }
 }
