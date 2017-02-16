@@ -41,11 +41,21 @@ export default {
     },
     mounted() {
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        axios.get('/api/projects', {
-                withCredentials: true
-            }).then(response => {
-                this.projects = response.data.projects;
-            })
+        var $scope = this;
+        var getProjects = function() {
+            return axios.get('/api/projects', {
+                    withCredentials: true
+                })
+                .catch((err) => {
+                    throw err;
+                });
+        };
+        var updateProjectList = function(response) {
+            $scope.projects = response.data.projects;
+        };
+
+        getProjects()
+            .then(updateProjectList)
             .catch((err) => {
                 console.error(err.stack || err);
             });
