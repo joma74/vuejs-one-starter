@@ -4,19 +4,19 @@
     <ul>
         <li v-for="project in projectList" v-text="project.name"></li>
     </ul>
-    <form method="post" action="/projects" @submit.prevent="onSubmit">
+    <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="fieldErrors.clear($event.target.name)">
         <p class="control">
             <label for="name" class="label">Project Name:</label>
-            <input type="text" id="name" name="name" class="input" v-model="name" @keydown="fieldErrors.clear('name')" placeholder="Insert Your Project Name Here...">
-            <span class="help is-danger" v-text="fieldErrors.get('name')">This name is invalid</span>
+            <input type="text" id="name" name="name" class="input" v-model="name"  placeholder="Insert Your Project Name Here...">
+            <span class="help is-danger" v-if="fieldErrors.has('name')" v-text="fieldErrors.get('name')">This name is invalid</span>
         </p>
         <p class="control">
             <label for="description" class="label">Project Description:</label>
-            <input type="text" id="description" name="description" class="input" v-model="description" @keydown="fieldErrors.clear('description')" placeholder="Insert Your Project Description Here...">
-            <span class="help is-danger" v-text="fieldErrors.get('description')" @keydown="fieldErrors.clear('description')">This description is invalid</span>
+            <input type="text" id="description" name="description" class="input" v-model="description" placeholder="Insert Your Project Description Here...">
+            <span class="help is-danger" v-if="fieldErrors.has('description')" v-text="fieldErrors.get('description')" @keydown="fieldErrors.clear('description')">This description is invalid</span>
         </p>
         <p class="control">
-            <button class="button is-primary">Create</button>
+            <button class="button is-primary" :disabled="fieldErrors.any()">Create</button>
         </p>
     </form>
 </div>
@@ -77,7 +77,7 @@ class Errors {
     get(fieldName) {
         let fieldError = this._findBy(fieldName);
         if (fieldError) {
-            return fieldError.field + " " + fieldError.error;
+            return "Das Feld " + fieldError.error;
         }
     }
 
@@ -87,6 +87,14 @@ class Errors {
 
     record(fieldErrors) {
         this.fieldErrors = fieldErrors;
+    }
+
+    has(fieldName) {
+        return this.get(fieldName);
+    }
+
+    any() {
+        return Object.keys(this.fieldErrors).length > 0;
     }
 }
 
