@@ -7,7 +7,7 @@
     <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="fieldErrors.clear($event.target.name)">
         <p class="control">
             <label for="name" class="label">Project Name:</label>
-            <input type="text" id="name" name="name" class="input" v-model="name"  placeholder="Insert Your Project Name Here...">
+            <input type="text" id="name" name="name" class="input" v-model="name" placeholder="Insert Your Project Name Here...">
             <span class="help is-danger" v-if="fieldErrors.has('name')" v-text="fieldErrors.get('name')">This name is invalid</span>
         </p>
         <p class="control">
@@ -30,7 +30,7 @@ const tough = require('tough-cookie');
 class Errors {
 
     constructor() {
-        this.fieldErrors = {};
+        this.fieldErrorsArray = [];
     }
 
     /**
@@ -48,8 +48,7 @@ class Errors {
      * @param {string} byFieldName - The name of the field to filter errors for.
      */
     _findBy(byFieldName) {
-        let fieldErrorsArray = this._objectsToArray(this.fieldErrors);
-        let filtered = fieldErrorsArray.filter(function(fieldError) {
+        let filtered = this.fieldErrorsArray.filter(function(fieldError) {
             if (fieldError.field == byFieldName) {
                 return true;
             }
@@ -64,29 +63,35 @@ class Errors {
      * @param {string} byFieldName - The name of the field to filter errors for.
      */
     _deleteBy(byFieldName) {
-        let fieldErrorsArray = this._objectsToArray(this.fieldErrors);
-        let foundIndex = fieldErrorsArray.findIndex(function(fieldError) {
+        let foundIndex = this.fieldErrorsArray.findIndex(function(fieldError) {
             if (fieldError.field == byFieldName) {
                 return true;
             }
             return false;
         });
-        delete this.fieldErrors[foundIndex];
+        if (foundIndex >= 0) {
+            // remove an element at index foundIndex
+            this.fieldErrorsArray.splice(foundIndex, 1);
+        }
+    }
+
+    _constructErrorMessage(fieldError){
+      if (fieldError) {
+          return "Das Feld " + fieldError.error;
+      }
     }
 
     get(fieldName) {
         let fieldError = this._findBy(fieldName);
-        if (fieldError) {
-            return "Das Feld " + fieldError.error;
-        }
+        return this._constructErrorMessage(fieldError);
     }
 
     clear(fieldName) {
-        delete this._deleteBy(fieldName);
+        this._deleteBy(fieldName);
     }
 
     record(fieldErrors) {
-        this.fieldErrors = fieldErrors;
+        this.fieldErrorsArray = this._objectsToArray(fieldErrors);
     }
 
     has(fieldName) {
@@ -94,7 +99,7 @@ class Errors {
     }
 
     any() {
-        return Object.keys(this.fieldErrors).length > 0;
+        return this.fieldErrorsArray.length > 0;
     }
 }
 
