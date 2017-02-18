@@ -43,10 +43,11 @@ class Errors {
         });
     }
 
-    /*
-     * Returns the first fieldError with the same field value as the parameter.
-     *
-     * @param {string} byFieldName - The name of the field to filter errors for.
+    /**
+     * Returns the first fieldError with the same
+     * field value as the parameter.
+     * @method _findBy
+     * @param {string} byFieldName The name of the field to filter errors for.
      */
     _findBy(byFieldName) {
         let filtered = this.fieldErrorsArray.filter(function(fieldError) {
@@ -58,10 +59,11 @@ class Errors {
         return filtered[0];
     }
 
-    /*
-     * Deletes the first fieldErrors with the same field value as the parameter.
-     *
-     * @param {string} byFieldName - The name of the field to filter errors for.
+    /**
+     * Deletes the first fieldErrors with the same
+     * field value as the parameter.
+     * @method _deleteBy
+     * @param {string} byFieldName The name of the field to filter errors for.
      */
     _deleteBy(byFieldName) {
         let foundIndex = this.fieldErrorsArray.findIndex(function(fieldError) {
@@ -133,7 +135,7 @@ class Form {
    * [submit description]
    * @method submit
    * @param  {string} url to submit to
-   * @return {promise}     return the promise
+   * @return {Promise} return the promise
    */
     submit(url) {
         let $scope = this;
@@ -171,8 +173,8 @@ class Projects {
     /**
      * [updateProjectList description]
      * @method updateProjectList
-     * @param  {string}          url to update from
-     * @return {Promise}         return the promise
+     * @param  {string} url to update from
+     * @return {Promise} return the promise
      */
     updateProjectList(url) {
         let $scope = this;
