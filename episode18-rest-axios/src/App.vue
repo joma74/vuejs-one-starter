@@ -2,21 +2,22 @@
 <div class="container content">
     <h1>My Projects</h1>
     <ul>
-        <li v-for="project in projectList" v-text="project.name"></li>
+        <li v-for="project in projects.projectArray" v-text="project.name"></li>
     </ul>
-    <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="fieldErrors.clear($event.target.name)">
+    <hr>
+    <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
         <p class="control">
             <label for="name" class="label">Project Name:</label>
-            <input type="text" id="name" name="name" class="input" v-model="name" placeholder="Insert Your Project Name Here...">
-            <span class="help is-danger" v-if="fieldErrors.has('name')" v-text="fieldErrors.get('name')">This name is invalid</span>
+            <input type="text" id="name" name="name" class="input" v-model="form.name" placeholder="Insert Your Project Name Here...">
+            <span class="help is-danger" v-if="form.fieldErrors.has('name')" v-text="form.fieldErrors.get('name')">This name is invalid</span>
         </p>
         <p class="control">
             <label for="description" class="label">Project Description:</label>
-            <input type="text" id="description" name="description" class="input" v-model="description" placeholder="Insert Your Project Description Here...">
-            <span class="help is-danger" v-if="fieldErrors.has('description')" v-text="fieldErrors.get('description')" @keydown="fieldErrors.clear('description')">This description is invalid</span>
+            <input type="text" id="description" name="description" class="input" v-model="form.description" placeholder="Insert Your Project Description Here...">
+            <span class="help is-danger" v-if="form.fieldErrors.has('description')" v-text="form.fieldErrors.get('description')">This description is invalid</span>
         </p>
         <p class="control">
-            <button class="button is-primary" :disabled="fieldErrors.any()">Create</button>
+            <button class="button is-primary" :disabled="form.fieldErrors.any()">Create</button>
         </p>
     </form>
 </div>
@@ -75,10 +76,10 @@ class Errors {
         }
     }
 
-    _constructErrorMessage(fieldError){
-      if (fieldError) {
-          return "Das Feld " + fieldError.error;
-      }
+    _constructErrorMessage(fieldError) {
+        if (fieldError) {
+            return "Das Feld " + fieldError.error;
+        }
     }
 
     get(fieldName) {
@@ -103,22 +104,79 @@ class Errors {
     }
 }
 
-axiosCookieJarSupport(axios);
+class Form {
 
-export default {
-    name: 'app',
-    data() {
-        return {
-            name: '',
-            description: '',
-            projectList: [],
-            fieldErrors: new Errors()
+    constructor(data) {
+        this.originalData = data;
+
+        for (let field in this.originalData) {
+            this[field] = this.originalData[field];
         }
-    },
-    mounted() {
-        axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        var $scope = this;
-        var getProjects = function() {
+
+        this.fieldErrors = new Errors();
+    }
+
+    reset() {
+        for (let field in this.originalData) {
+            this[field] = null;
+        }
+    }
+
+    _payload() {
+        let payload = Object.assign({}, this);
+        delete payload.originalData;
+        delete payload.fieldErrors;
+        return payload;
+    }
+
+  /**
+   * [submit description]
+   * @method submit
+   * @param  {string} url to submit to
+   * @return {promise}     return the promise
+   */
+    submit(url) {
+        let $scope = this;
+        let putProject = function() {
+            return axios.put(url, $scope._payload(), {
+                    withCredentials: true
+                })
+                .catch((err) => {
+                    throw err;
+                });
+        };
+        let resetForm = function() {
+            $scope.reset();
+        };
+
+        return putProject()
+            .then(resetForm)
+            .catch((err) => {
+                if (err.response) {
+                    console.error(err.response);
+                    $scope.fieldErrors.record(err.response.data.fieldErrors);
+                } else {
+                    console.error(err.stack || err);
+                }
+            });
+    }
+}
+
+class Projects {
+
+    constructor() {
+        this.projectArray = [];
+    }
+
+    /**
+     * [updateProjectList description]
+     * @method updateProjectList
+     * @param  {string}          url to update from
+     * @return {Promise}         return the promise
+     */
+    updateProjectList(url) {
+        let $scope = this;
+        let getProjects = function() {
             return axios.get('/api/projects', {
                     withCredentials: true
                 })
@@ -126,53 +184,46 @@ export default {
                     throw err;
                 });
         };
-        var updateProjectList = function(response) {
-            $scope.projectList = response.data.projects;
+        let updateProjectList = function(response) {
+            $scope.projectArray = response.data.projects;
         };
 
-        getProjects()
+        return getProjects()
             .then(updateProjectList)
             .catch((err) => {
                 console.error(err.stack || err);
             });
+    }
+
+}
+
+axiosCookieJarSupport(axios);
+
+export default {
+    name: 'app',
+    data() {
+        return {
+            projects: new Projects(),
+            form: new Form({
+                name: '',
+                description: ''
+            })
+        }
+    },
+    mounted() {
+        axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
+        this.projects.updateProjectList('/api/projects');
     },
     methods: {
         onSubmit() {
-            var $scope = this;
-            var putProject = function() {
-                return axios.put('/api/projects', {
-                        name: $scope.name,
-                        description: $scope.description
-                    }, {
-                        withCredentials: true
-                    })
-                    .catch((err) => {
-                        throw err;
-                    });
-            };
-            var getProjects = function() {
-                return axios.get('/api/projects', {
-                        withCredentials: true
-                    })
-                    .catch((err) => {
-                        throw err;
-                    });
-            };
-            var updateProjectList = function(response) {
-                $scope.projectList = response.data.projects;
+            let $scope = this;
+            let updateProjectList = function() {
+                $scope.projects.updateProjectList('/api/projects');
             };
 
-            putProject()
-                .then(getProjects)
-                .then(updateProjectList)
-                .catch((err) => {
-                    if (err.response) {
-                        console.error(err.response);
-                        $scope.fieldErrors.record(err.response.data.fieldErrors);
-                    } else {
-                        console.error(err.stack || err);
-                    }
-                });
+            this.form.submit('/api/projects')
+                .then(updateProjectList);
+
         }
     }
 }
