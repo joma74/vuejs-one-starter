@@ -35,11 +35,17 @@ class Errors {
     }
 
     /**
-     * Convert objects at 1-st level into an array of objects
+     *
      */
-    _objectsToArray(obj) {
-        return Object.keys(obj).map(function(key) {
-            return obj[key];
+    /**
+     * Convert multi-objects at 1-st level into an array of objects
+     * @method _objectsToArray
+     * @param  {Object} objs the multi-objects to be converted
+     * @return {array} an array of objects
+     */
+    _objectsToArray(objs) {
+        return Object.keys(objs).map(function(key) {
+            return objs[key];
         });
     }
 
@@ -78,21 +84,58 @@ class Errors {
         }
     }
 
+    /**
+     * Constructs an error message from the given field error for displayment
+     * @method _constructErrorMessage
+     * @param  {Object} fieldError the fieldError as returned by the serevr
+     * @return {string} the error message for displayment
+     */
     _constructErrorMessage(fieldError) {
         if (fieldError) {
             return "Das Feld " + fieldError.error;
         }
     }
 
+    /**
+     * Get the error message for displayment by the given fieldName
+     * @method get
+     * @param  {string} fieldName the name of the field
+     * @return {string} the error message for displayment
+     */
     get(fieldName) {
         let fieldError = this._findBy(fieldName);
         return this._constructErrorMessage(fieldError);
     }
 
+    /**
+     * Clear the fieldError for the given fieldName, if any
+     * @method clear
+     * @param  {string} fieldName to clear, if any
+     */
     clear(fieldName) {
         this._deleteBy(fieldName);
     }
 
+    /**
+     * Record a multi-object of fieldErrors
+     * <pre>
+     * {
+     *  "fieldErrors": [
+     *   {
+     *      "field": "name",
+     *      "error": "darf nicht leer sein"
+     *    },
+     *    {
+     *      "field": "description",
+     *      "error": "darf nicht leer sein"
+     *    }
+     *  ]
+     *}
+     * </pre>
+     * @method record
+     * @param  {Object[]} fieldErrors
+     * @return {[type]}             [description]
+     */
     record(fieldErrors) {
         this.fieldErrorsArray = this._objectsToArray(fieldErrors);
     }
@@ -131,14 +174,14 @@ class Form {
         return payload;
     }
 
-  /**
-   * [submit description]
-   * @method submit
-   * @param  {string} url to submit to
-   * @return {Promise} return the promise
-   */
+    /**
+     * Submit the project to the given url.
+     * @method submit
+     * @param  {string} url to submit to
+     * @return {Promise} return the promise
+     */
     submit(url) {
-        let $scope = this;
+        const $scope = this;
         let putProject = function() {
             return axios.put(url, $scope._payload(), {
                     withCredentials: true
@@ -177,7 +220,7 @@ class Projects {
      * @return {Promise} return the promise
      */
     updateProjectList(url) {
-        let $scope = this;
+        const $scope = this;
         let getProjects = function() {
             return axios.get('/api/projects', {
                     withCredentials: true
@@ -191,7 +234,7 @@ class Projects {
         };
 
         return getProjects()
-            .then(updateProjectList)
+            .then((response) => updateProjectList(response))
             .catch((err) => {
                 console.error(err.stack || err);
             });
