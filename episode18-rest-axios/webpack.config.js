@@ -2,11 +2,14 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-    entry: './src/main.js',
+    entry: {
+      main: './src/main.js',
+      vendor: ['vue', 'axios']
+    },
     output: {
         path: path.resolve(__dirname, './dist'),
         publicPath: '/dist/',
-        filename: 'build.js'
+        filename: '[name].js'
     },
     module: {
         rules: [{
@@ -36,6 +39,11 @@ module.exports = {
             'vue$': 'vue/dist/vue.common.js'
         }
     },
+    plugins: [
+      new webpack.optimize.CommonsChunkPlugin({
+        names: ['vendor']
+      })
+    ],
     node: {
         console: true,
         fs: 'empty',
