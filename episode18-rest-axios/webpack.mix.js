@@ -12,17 +12,22 @@ let mix = require('laravel-mix');
  */
 
 mix.js('src/main.js', 'dist/')
+    .sass('src/assets/app.sass', 'dist/', {
+        outputStyle: 'nested'
+    })
     .sourceMaps()
-    .extract(['vue','axios'])
+    .extract(['vue', 'axios'])
     .webpackConfig({
-        node : {
+        node: {
             console: true,
             fs: 'empty',
             net: 'empty',
             tls: 'empty'
         }
     })
-    ;
+    .options({
+        processCssUrls: true // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+    });
 
 // Full API
 // mix.js(src, output);

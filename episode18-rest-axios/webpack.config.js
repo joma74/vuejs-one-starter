@@ -235,11 +235,11 @@ module.exports.resolve = {
  */
 
 module.exports.stats = {
-    hash: false,
-    version: false,
-    timings: false,
-    children: false,
-    errors: false
+    hash: true,
+    version: true,
+    timings: true,
+    children: true,
+    errors: true
 };
 
 module.exports.performance = { hints: false };
@@ -314,7 +314,8 @@ module.exports.plugins = (module.exports.plugins || []).concat([
                 require('autoprefixer')
             ],
             context: __dirname,
-            output: { path: './' }
+            output: { path: './' },
+            debug: true
         }
     })
 ]);

@@ -1,6 +1,6 @@
 <template>
 <div class="container content">
-    <h1>My Projects</h1>
+    <h1>My Project List</h1>
     <ul>
         <li v-for="project in projects.projectArray" v-text="project.name"></li>
     </ul>
