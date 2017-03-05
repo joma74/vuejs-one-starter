@@ -13,6 +13,10 @@ class Form {
         this.fieldErrors = new Errors();
     }
 
+    setToastr(toastr) {
+        this.toastr = toastr;
+    }
+
     reset() {
         for (let field in this.originalData) {
             this[field] = null;
@@ -23,6 +27,7 @@ class Form {
         let payload = Object.assign({}, this);
         delete payload.originalData;
         delete payload.fieldErrors;
+        delete payload.toastr;
         return payload;
     }
 
@@ -54,6 +59,11 @@ class Form {
                     $scope.fieldErrors.record(err.response.data.fieldErrors);
                 } else {
                     console.error(err.stack || err);
+                    $scope.toastr.Add({
+                        msg: err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url: ''),
+                        type: "error"
+                    });
+                    throw err;
                 }
             });
     }

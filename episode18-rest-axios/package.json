@@ -6,14 +6,16 @@
   "private": true,
   "scripts": {
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open",
-    "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack --progress",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.3",
     "axios": "^0.15.3",
     "bulma": "^0.3.1",
-    "vue": "^2.1.0"
+    "laravel-mix": "^0.8.8",
+    "vue": "^2.1.0",
+    "vue-toastr": "^2.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

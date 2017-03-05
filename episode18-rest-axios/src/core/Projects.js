@@ -1,9 +1,15 @@
 import axios from 'axios';
+import Toastr from 'vue-toastr';
 
 class Projects {
 
     constructor() {
         this.projectArray = [];
+
+    }
+
+    setToastr(toastr) {
+        this.toastr = toastr;
     }
 
     /**
@@ -30,6 +36,11 @@ class Projects {
             .then((response) => updateProjectList(response))
             .catch((err) => {
                 console.error(err.stack || err);
+                $scope.toastr.Add({
+                    msg: err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url: ''),
+                    type: "error"
+                });
+
             });
     }
 

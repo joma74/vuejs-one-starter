@@ -11,12 +11,12 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('src/main.js', 'dist/')
-    .sass('src/assets/app.sass', 'dist/', {
-        outputStyle: 'nested'
-    })
+mix
+    .js('src/main.js', 'dist/')
+    .sass('src/assets/app.sass', 'dist/')
+    .less('node_modules/vue-toastr/src/vue-toastr.less', 'dist/')
     .sourceMaps()
-    .extract(['vue', 'axios'])
+    .extract(['vue', 'axios', 'vue-toastr'])
     .webpackConfig({
         node: {
             console: true,

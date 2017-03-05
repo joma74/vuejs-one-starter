@@ -20,12 +20,15 @@
             <button class="button is-primary" :disabled="form.fieldErrors.any()">Create</button>
         </p>
     </form>
+    <vue-toastr ref="toastr"></vue-toastr>
 </div>
 </template>
 
 <script>
 import Form from './core/Form';
 import Projects from './core/Projects';
+import Toastr from 'vue-toastr';
+require('vue-toastr/src/vue-toastr.less');
 
 import axios from 'axios';
 
@@ -38,7 +41,7 @@ export default {
     name: 'app',
     data() {
         return {
-            projects: new Projects(),
+            projects: new Projects(this.$refs.toastr),
             form: new Form({
                 name: '',
                 description: ''
@@ -46,12 +49,20 @@ export default {
         }
     },
     mounted() {
+        this.projects.setToastr(this.$refs.toastr);
+        this.form.setToastr(this.$refs.toastr);
+        this.$refs.toastr.defaultTimeout = 5000;
+        this.$refs.toastr.defaultPosition = "toast-bottom-full-width";
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
         this.projects.updateProjectList('/api/projects');
+    },
+    components: {
+        'vue-toastr': Toastr
     },
     methods: {
         onSubmit() {
             let $scope = this;
+
             let updateProjectList = function() {
                 $scope.projects.updateProjectList('/api/projects');
             };
