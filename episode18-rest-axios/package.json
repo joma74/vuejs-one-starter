@@ -14,8 +14,9 @@
     "axios": "^0.15.3",
     "bulma": "^0.3.1",
     "laravel-mix": "^0.8.8",
-    "vue": "^2.1.0",
-    "vue-toastr": "^2.0.5"
+    "vue": "^2.2.0",
+    "vue-toastr": "^2.0.5",
+    "vuex": "^2.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -25,8 +26,8 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "laravel-mix": "^0.8.1",
-    "vue-loader": "^10.0.0",
-    "vue-template-compiler": "^2.1.0",
+    "vue-loader": "^11.1.4",
+    "vue-template-compiler": "^2.2.2",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0"
   }

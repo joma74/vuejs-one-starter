@@ -1,10 +1,9 @@
 <template>
 <div class="container content">
-    <h1>My Project List</h1>
+    <h1>My Projects</h1>
     <ul>
         <li v-for="project in projects.projectArray" v-text="project.name"></li>
     </ul>
-    <hr>
     <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
         <p class="control">
             <label for="name" class="label">Project Name:</label>
@@ -39,9 +38,13 @@ axiosCookieJarSupport(axios);
 
 export default {
     name: 'app',
+    computed: {
+        projects: function() {
+            return this.$store.getters.projects;
+        }
+    },
     data() {
         return {
-            projects: new Projects(this.$refs.toastr),
             form: new Form({
                 name: '',
                 description: ''
@@ -54,7 +57,9 @@ export default {
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-full-width";
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        this.projects.updateProjectList('/api/projects');
+        this.$store.dispatch('UPDATE_PROJECT_LIST', {
+            url: '/api/projects'
+        });
     },
     components: {
         'vue-toastr': Toastr
@@ -64,7 +69,9 @@ export default {
             let $scope = this;
 
             let updateProjectList = function() {
-                $scope.projects.updateProjectList('/api/projects');
+                $scope.$store.dispatch('UPDATE_PROJECT_LIST', {
+                    url: '/api/projects'
+                });
             };
 
             this.form.submit('/api/projects')

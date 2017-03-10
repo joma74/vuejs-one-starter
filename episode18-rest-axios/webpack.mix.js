@@ -16,7 +16,7 @@ mix
     .sass('src/assets/app.sass', 'dist/')
     .less('node_modules/vue-toastr/src/vue-toastr.less', 'dist/')
     .sourceMaps()
-    .extract(['vue', 'axios', 'vue-toastr'])
+    .extract(['vue', 'vuex', 'axios', 'vue-toastr'])
     .webpackConfig({
         node: {
             console: true,
