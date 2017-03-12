@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Errors from './Errors';
+import Vue from 'vue';
 
 class Form {
 
@@ -11,10 +12,6 @@ class Form {
         }
 
         this.fieldErrors = new Errors();
-    }
-
-    setToastr(toastr) {
-        this.toastr = toastr;
     }
 
     reset() {
@@ -59,11 +56,8 @@ class Form {
                     $scope.fieldErrors.record(err.response.data.fieldErrors);
                 } else {
                     console.error(err.stack || err);
-                    $scope.toastr.Add({
-                        msg: err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url: ''),
-                        type: "error"
-                    });
-                    throw err;
+                    let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
+                    throw Error(msg);
                 }
             });
     }

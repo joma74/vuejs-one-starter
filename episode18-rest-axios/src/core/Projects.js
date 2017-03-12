@@ -1,15 +1,10 @@
 import axios from 'axios';
-import Toastr from 'vue-toastr';
+import Vue from 'vue';
 
 class Projects {
 
     constructor() {
         this.projectArray = [];
-
-    }
-
-    setToastr(toastr) {
-        this.toastr = toastr;
     }
 
     /**
@@ -21,7 +16,7 @@ class Projects {
     updateProjectList(url) {
         const $scope = this;
         let getProjects = function() {
-            return axios.get('/api/projects', {
+            return axios.get(url, {
                     withCredentials: true
                 })
                 .catch((err) => {
@@ -33,14 +28,11 @@ class Projects {
         };
 
         return getProjects()
-            .then((response) => updateProjectList(response))
+            //.then((response) => updateProjectList(response))
             .catch((err) => {
                 console.error(err.stack || err);
-                $scope.toastr.Add({
-                    msg: err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url: ''),
-                    type: "error"
-                });
-
+                let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
+                throw new Error(msg);
             });
     }
 

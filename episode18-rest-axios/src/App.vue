@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Form from './core/Form';
 import Projects from './core/Projects';
 import Toastr from 'vue-toastr';
@@ -33,6 +34,10 @@ import axios from 'axios';
 
 const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
 const tough = require('tough-cookie');
+
+import {
+    updateProjectListAction
+} from './ActionTypes'
 
 axiosCookieJarSupport(axios);
 
@@ -51,14 +56,20 @@ export default {
             })
         }
     },
+    created: function() {
+        this.$eventHub.$on('on-failure', this.toastrAddError)
+    },
+    beforeDestroy: function() {
+        this.$eventHub.$off('on-failure', this.toastrAddError)
+    },
     mounted() {
-        this.projects.setToastr(this.$refs.toastr);
-        this.form.setToastr(this.$refs.toastr);
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-full-width";
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        this.$store.dispatch('UPDATE_PROJECT_LIST', {
-            url: '/api/projects'
+        this.$store.dispatch( // dispatch with an object
+            updateProjectListAction('/api/projects')
+        ).catch((err) => {
+            Vue.prototype.$eventHub.$emit('on-failure', err.message);
         });
     },
     components: {
@@ -69,14 +80,23 @@ export default {
             let $scope = this;
 
             let updateProjectList = function() {
-                $scope.$store.dispatch('UPDATE_PROJECT_LIST', {
-                    url: '/api/projects'
-                });
+                $scope.$store.dispatch( // dispatch with an object
+                    updateProjectListAction('/api/projects')
+                );
             };
 
             this.form.submit('/api/projects')
-                .then(updateProjectList);
+                .then(updateProjectList)
+                .catch((err) => {
+                    Vue.prototype.$eventHub.$emit('on-failure', err.message);
+                });
 
+        },
+        toastrAddError(msg) {
+            this.$refs.toastr.Add({
+                msg: msg,
+                type: "error"
+            });
         }
     }
 }
