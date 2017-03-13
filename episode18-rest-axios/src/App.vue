@@ -26,7 +26,6 @@
 <script>
 import Vue from 'vue';
 import Form from './core/Form';
-import Projects from './core/Projects';
 import Toastr from 'vue-toastr';
 require('vue-toastr/src/vue-toastr.less');
 
@@ -35,11 +34,11 @@ import axios from 'axios';
 const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
 const tough = require('tough-cookie');
 
-import {
-    updateProjectListAction
-} from './ActionTypes'
-
 axiosCookieJarSupport(axios);
+
+import {
+    doUpdateProjectList
+} from './ActionTypes'
 
 export default {
     name: 'app',
@@ -66,11 +65,7 @@ export default {
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-full-width";
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        this.$store.dispatch( // dispatch with an object
-            updateProjectListAction('/api/projects')
-        ).catch((err) => {
-            Vue.prototype.$eventHub.$emit('on-failure', err.message);
-        });
+        doUpdateProjectList(this.$store);
     },
     components: {
         'vue-toastr': Toastr
@@ -79,14 +74,9 @@ export default {
         onSubmit() {
             let $scope = this;
 
-            let updateProjectList = function() {
-                $scope.$store.dispatch( // dispatch with an object
-                    updateProjectListAction('/api/projects')
-                );
-            };
-
             this.form.submit('/api/projects')
-                .then(updateProjectList)
+                // doUpdateProjectList is a promise, so do not call too early
+                .then(doUpdateProjectList.bind(null, this.$store))
                 .catch((err) => {
                     Vue.prototype.$eventHub.$emit('on-failure', err.message);
                 });

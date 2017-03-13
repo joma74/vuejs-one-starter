@@ -1,10 +1,21 @@
 import {
     UPDATE_PROJECTLIST
-} from './core/MutationTypes'
+} from './core/MutationTypes';
+import Vue from 'vue';
 
-export const updateProjectListAction = (url) => {
+const PROJECT_URI = '/api/projects';
+
+export const updateProjectListActionParam = (url) => {
     return {
         type: UPDATE_PROJECTLIST,
         url: url
     }
+}
+
+export const doUpdateProjectList = ($store) => {
+    $store.dispatch( // dispatch with an object
+        updateProjectListActionParam(PROJECT_URI)
+    ).catch((err) => {
+        Vue.prototype.$eventHub.$emit('on-failure', err.message);
+    });
 }
