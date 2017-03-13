@@ -20,20 +20,12 @@ class Projects {
                     withCredentials: true
                 })
                 .catch((err) => {
-                    throw err;
+                    console.error(err.stack || err);
+                    let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
+                    throw Error(msg);
                 });
         };
-        let updateProjectList = function(response) {
-            $scope.projectArray = response.data.projects;
-        };
-
-        return getProjects()
-            //.then((response) => updateProjectList(response))
-            .catch((err) => {
-                console.error(err.stack || err);
-                let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
-                throw new Error(msg);
-            });
+        return getProjects();
     }
 
 }

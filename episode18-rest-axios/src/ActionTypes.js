@@ -1,6 +1,7 @@
 import {
     UPDATE_PROJECTLIST
 } from './core/MutationTypes';
+
 import Vue from 'vue';
 
 const PROJECT_URI = '/api/projects';
