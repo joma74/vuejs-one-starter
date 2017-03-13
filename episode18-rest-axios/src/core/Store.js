@@ -34,7 +34,7 @@ export const Store = new Vuex.Store({
         // {state, rootState, commit, dispatch, getters}
         UPDATE_PROJECTLIST(ctx, dispatchParamO) {
             return new Promise((resolve, reject) => {
-                ctx.state.projects.updateProjectList(dispatchParamO.url)
+                ctx.state.projects.getProjects(dispatchParamO.url)
                     .then((response) => {
                         ctx.commit(UPDATE_PROJECTLIST, response);
                         resolve();
@@ -45,7 +45,7 @@ export const Store = new Vuex.Store({
         },
         PUT_PROJECT(ctx, dispatchParamO) {
             return new Promise((resolve, reject) => {
-                ctx.state.projects.putProject(dispatchParamO.url, dispatchParamO.payLoad)
+                ctx.state.projects.putProject(dispatchParamO.url, dispatchParamO.newProject)
                     .then(() => {
                         resolve();
                     }).catch((err) => {

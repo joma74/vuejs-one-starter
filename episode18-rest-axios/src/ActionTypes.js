@@ -14,11 +14,11 @@ export const updateProjectListActionParam = (url) => {
     }
 }
 
-export const putProjectActionParam = (url, payLoad) => {
+export const putProjectActionParam = (url, newProject) => {
     return {
         type: PUT_PROJECT,
         url: url,
-        payLoad: payLoad
+        newProject: newProject
     }
 }
 

@@ -3,5 +3,12 @@
   "libs": [
     "browser"
   ],
-  "plugins": {}
+  "plugins": {
+    "doc_comment": {
+      "fullDocs": true,
+      "strong": false
+    }
+  },
+  "loadEagerly": [],
+  "dontLoad": []
 }

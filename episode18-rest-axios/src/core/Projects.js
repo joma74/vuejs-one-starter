@@ -8,41 +8,67 @@ class Projects {
     }
 
     /**
-     * [updateProjectList description]
-     * @method updateProjectList
-     * @param  {string} url to update from
-     * @return {Promise} return the promise
+     * Get a list of all projects. If a http error occurs, this error
+     * is rethrown as is. If a network error occurs, an new error with
+     * a special message is returned.
+     * @method getProjects
+     * @param  {string} url to get projects from
+     * @throws with err.msg
+     * @return {Promise} return the executing promise
      */
-    updateProjectList(url) {
-        let getProjects = function() {
+    getProjects(url) {
+        let getProjects = function(rethrowWithMsgFrom) {
             return axios.get(url, {
                     withCredentials: true
                 })
                 .catch((err) => {
-                    console.error(err.stack || err);
-                    let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
-                    throw Error(msg);
+                    rethrowWithMsgFrom(err);
                 });
         };
-        return getProjects();
+        return getProjects(this._rethrowWithMsgFrom);
     }
 
-    putProject(url, payload) {
-        let putProject = function() {
-            return axios.put(url, payload, {
+    /**
+     * Put a new project to the list. If a http error occurs, this error
+     * is rethrown as is. If a network error occurs, an new error with
+     * a special message is returned.
+     * @method putProject
+     * @param  {string} url to put the new project to
+     * @param  {Object} newProject the new project
+     * @param  {string} newProject.name the name of the new project
+     * @param  {string} newProject.description the description of the new project
+     * @throws with err.response or with err.msg
+     * @return {Promise} return the executing promise
+     */
+    putProject(url, newProject) {
+        let putProject = function(rethrowWithMsgFrom) {
+            return axios.put(url, newProject, {
                     withCredentials: true
                 })
                 .catch((err) => {
                     if (err.response) {
                         throw err;
                     } else {
-                        console.error(err.stack || err);
-                        let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
-                        throw Error(msg);
+                        rethrowWithMsgFrom(err);
                     }
                 });
         };
-        return putProject();
+        return putProject(this._rethrowWithMsgFrom);
+    }
+
+    /**
+     * Rethrow a new error with a new msg. If the given err
+     * contains a config property(from axios) a special message is
+     * built: {err.message} for {err.config.method} on {err.config.url}
+     * e.g. Network Error for get on http://localhost:9095/rest-spring-server/api/projects
+     * @method _rethrowWithMsgFrom
+     * @param  {Error} err the error
+     * @throws a new error with a msg
+     */
+    _rethrowWithMsgFrom(err) {
+        console.error(err.stack || err);
+        let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
+        throw Error(msg);
     }
 }
 
