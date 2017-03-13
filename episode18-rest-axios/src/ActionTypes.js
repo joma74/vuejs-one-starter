@@ -12,10 +12,10 @@ export const updateProjectListActionParam = (url) => {
     }
 }
 
-export const doUpdateProjectList = ($store) => {
+export const doUpdateProjectList = ($store, $eventHub) => {
     $store.dispatch( // dispatch with an object
         updateProjectListActionParam(PROJECT_URI)
     ).catch((err) => {
-        Vue.prototype.$eventHub.$emit('on-failure', err.message);
+        $eventHub.$emit('on-failure', err.message);
     });
 }

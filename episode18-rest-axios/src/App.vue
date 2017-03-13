@@ -65,7 +65,7 @@ export default {
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-full-width";
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        doUpdateProjectList(this.$store);
+        doUpdateProjectList(this.$store, this.$eventHub);
     },
     components: {
         'vue-toastr': Toastr
@@ -76,7 +76,7 @@ export default {
 
             this.form.submit('/api/projects')
                 // doUpdateProjectList is a promise, so do not call too early
-                .then(doUpdateProjectList.bind(null, this.$store))
+                .then(doUpdateProjectList.bind(null, this.$store, this.$eventHub))
                 .catch((err) => {
                     Vue.prototype.$eventHub.$emit('on-failure', err.message);
                 });
