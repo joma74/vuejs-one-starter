@@ -7,14 +7,14 @@ import Vue from 'vue';
 
 const PROJECT_URI = '/api/projects';
 
-export const updateProjectListActionParam = (url) => {
+const withUpdateProjectListActionParam = (url) => {
     return {
         type: UPDATE_PROJECTLIST,
         url: url
     }
 }
 
-export const putProjectActionParam = (url, newProject) => {
+const withPutProjectActionParam = (url, newProject) => {
     return {
         type: PUT_PROJECT,
         url: url,
@@ -24,7 +24,7 @@ export const putProjectActionParam = (url, newProject) => {
 
 export const doUpdateProjectList = ($store, $eventHub) => {
     $store.dispatch( // dispatch with an object
-        updateProjectListActionParam(PROJECT_URI)
+        withUpdateProjectListActionParam(PROJECT_URI)
     ).catch((err) => {
         $eventHub.$emit('on-failure', err.message);
     });
@@ -32,11 +32,11 @@ export const doUpdateProjectList = ($store, $eventHub) => {
 
 export const doPutProject = ($store, $eventHub, form) => {
     $store.dispatch( // dispatch with an object
-        putProjectActionParam(PROJECT_URI, form.getPayload())
+        withPutProjectActionParam(PROJECT_URI, form.getPayload())
     ).then(() => {
         form.reset();
         $store.dispatch( // dispatch with an object
-            updateProjectListActionParam(PROJECT_URI));
+            withUpdateProjectListActionParam(PROJECT_URI));
     }).catch((err) => {
         if (err.response) {
             console.info(err.response);
