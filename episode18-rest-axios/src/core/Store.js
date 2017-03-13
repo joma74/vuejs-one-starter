@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Projects from './Projects';
 import {
-    UPDATE_PROJECTLIST
+    UPDATE_PROJECTLIST,
+    PUT_PROJECT
 } from './MutationTypes'
 
 Vue.use(Vuex);
@@ -36,6 +37,16 @@ export const Store = new Vuex.Store({
                 ctx.state.projects.updateProjectList(dispatchParamO.url)
                     .then((response) => {
                         ctx.commit(UPDATE_PROJECTLIST, response);
+                        resolve();
+                    }).catch((err) => {
+                        reject(err);
+                    });
+            });
+        },
+        PUT_PROJECT(ctx, dispatchParamO) {
+            return new Promise((resolve, reject) => {
+                ctx.state.projects.putProject(dispatchParamO.url, dispatchParamO.payLoad)
+                    .then(() => {
                         resolve();
                     }).catch((err) => {
                         reject(err);

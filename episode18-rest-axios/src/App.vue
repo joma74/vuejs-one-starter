@@ -2,7 +2,7 @@
 <div class="container content">
     <h1>My Projects</h1>
     <ul>
-        <li v-for="project in projects.projectArray" v-text="project.name"></li>
+        <li v-for="project in projects.projectArray" v-text="'Name: ' + project.name + ' Description: ' + project.description"></li>
     </ul>
     <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
         <p class="control">
@@ -37,7 +37,8 @@ const tough = require('tough-cookie');
 axiosCookieJarSupport(axios);
 
 import {
-    doUpdateProjectList
+    doUpdateProjectList,
+    doPutProject
 } from './ActionTypes'
 
 export default {
@@ -72,15 +73,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            let $scope = this;
-
-            this.form.submit('/api/projects')
-                // doUpdateProjectList is a promise, so do not call too early
-                .then(doUpdateProjectList.bind(null, this.$store, this.$eventHub))
-                .catch((err) => {
-                    Vue.prototype.$eventHub.$emit('on-failure', err.message);
-                });
-
+            doPutProject(this.$store, this.$eventHub, this.form);
         },
         toastrAddError(msg) {
             this.$refs.toastr.Add({

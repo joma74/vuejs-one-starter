@@ -14,7 +14,6 @@ class Projects {
      * @return {Promise} return the promise
      */
     updateProjectList(url) {
-        const $scope = this;
         let getProjects = function() {
             return axios.get(url, {
                     withCredentials: true
@@ -28,6 +27,23 @@ class Projects {
         return getProjects();
     }
 
+    putProject(url, payload) {
+        let putProject = function() {
+            return axios.put(url, payload, {
+                    withCredentials: true
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        throw err;
+                    } else {
+                        console.error(err.stack || err);
+                        let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
+                        throw Error(msg);
+                    }
+                });
+        };
+        return putProject();
+    }
 }
 
 export default Projects;

@@ -1,1 +1,2 @@
 export const UPDATE_PROJECTLIST = 'UPDATE_PROJECTLIST';
+export const PUT_PROJECT = 'PUT_PROJECT';
