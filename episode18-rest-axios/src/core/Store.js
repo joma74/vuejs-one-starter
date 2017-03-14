@@ -3,7 +3,9 @@ import Vuex from 'vuex';
 import Projects from './Projects';
 import {
     UPDATE_PROJECTLIST,
-    PUT_PROJECT
+    PUT_PROJECT,
+    DELETE_PROJECT,
+    DELETE_PROJECT_SUCCESS
 } from './MutationTypes'
 
 Vue.use(Vuex);
@@ -27,6 +29,17 @@ export const Store = new Vuex.Store({
         ) {
             //state.projects.updateProjectList(dispatchParamO.url);
             state.projects.projectArray = response.data.projects;
+        },
+        [DELETE_PROJECT_SUCCESS](
+            state,
+            projectKey
+        ) {
+            let _projectArray = state.projects.projectArray;
+            for (let i = _projectArray.length - 1; i--;) {
+                if (_projectArray[i].key === projectKey) {
+                    _projectArray.splice(i, 1);
+                }
+            }
         }
     },
     actions: {
@@ -52,6 +65,20 @@ export const Store = new Vuex.Store({
                         reject(err);
                     });
             });
+        },
+        DELETE_PROJECT(ctx, dispatchParamO) {
+            return new Promise((resolve, reject) => {
+                let encodedProjectKey = encodeURIComponent(dispatchParamO.projectKey);
+                ctx.state.projects.deleteProject(dispatchParamO.url + '/' + encodedProjectKey)
+                    .then(() => {
+                        resolve();
+                    }).catch((err) => {
+                        reject(err);
+                    });
+            });
+        },
+        DELETE_PROJECT_SUCCESS(ctx, dispatchParamO) {
+            ctx.commit(DELETE_PROJECT_SUCCESS, dispatchParamO.projectKey);
         }
     }
 });

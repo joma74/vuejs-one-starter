@@ -1,9 +1,5 @@
 <template>
 <div class="container content">
-    <h1>My Projects</h1>
-    <ul>
-        <li v-for="project in projects.projectArray" v-text="'Name: ' + project.name + ' Description: ' + project.description"></li>
-    </ul>
     <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
         <p class="control">
             <label for="name" class="label">Project Name:</label>
@@ -19,6 +15,13 @@
             <button class="button is-primary" :disabled="form.fieldErrors.any()">Create</button>
         </p>
     </form>
+    <h1>
+      <span class="title is-2" style="vertical-align:middle">My Projects</span>
+      <a class="icon is-medium" style="vertical-align:middle"><i class="fa fa-refresh"></i></a>
+    </h1>
+    <div class="columns is-multiline">
+        <projectcard-component v-for="(project, index, key) in projects.projectArray" v-bind:project="project" v-bind:index="index" v-bind:key="project.key" v-on:doDelete="doDelete(project.key, index)"></projectcard-component>
+    </div>
     <vue-toastr ref="toastr"></vue-toastr>
 </div>
 </template>
@@ -27,6 +30,7 @@
 import Vue from 'vue';
 import Form from './core/Form';
 import Toastr from 'vue-toastr';
+import ProjectCard from './ProjectCard.vue';
 require('vue-toastr/src/vue-toastr.less');
 
 import axios from 'axios';
@@ -38,7 +42,8 @@ axiosCookieJarSupport(axios);
 
 import {
     doUpdateProjectList,
-    doPutProject
+    doPutProject,
+    doDeleteProject
 } from './ActionTypes'
 
 export default {
@@ -69,11 +74,15 @@ export default {
         doUpdateProjectList(this.$store, this.$eventHub);
     },
     components: {
-        'vue-toastr': Toastr
+        'vue-toastr': Toastr,
+        'projectcard-component': ProjectCard
     },
     methods: {
         onSubmit() {
             doPutProject(this.$store, this.$eventHub, this.form);
+        },
+        doDelete(selectedProjectKey) {
+            doDeleteProject(this.$store, this.$eventHub, selectedProjectKey)
         },
         toastrAddError(msg) {
             this.$refs.toastr.Add({
@@ -84,7 +93,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

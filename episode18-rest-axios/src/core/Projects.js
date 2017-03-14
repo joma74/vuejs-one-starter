@@ -56,6 +56,22 @@ class Projects {
         return putProject(this._rethrowWithMsgFrom);
     }
 
+    deleteProject(url) {
+        let deleteProject = function(rethrowWithMsgFrom) {
+            return axios.delete(url, {
+                    withCredentials: true
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        throw err;
+                    } else {
+                        rethrowWithMsgFrom(err);
+                    }
+                });
+        };
+        return deleteProject(this._rethrowWithMsgFrom);
+    }
+
     /**
      * Rethrow a new error with a new msg. If the given err
      * contains a config property(from axios) a special message is

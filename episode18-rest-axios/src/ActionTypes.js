@@ -1,20 +1,24 @@
 import {
     UPDATE_PROJECTLIST,
-    PUT_PROJECT
+    PUT_PROJECT,
+    DELETE_PROJECT,
+    DELETE_PROJECT_SUCCESS
 } from './core/MutationTypes';
 
 import Vue from 'vue';
 
 const PROJECT_URI = '/api/projects';
 
-const withUpdateProjectListActionParam = (url) => {
+const ANIMATION_WAITTIME_MS = 1000;
+
+const updateProjectList_Action = (url) => {
     return {
         type: UPDATE_PROJECTLIST,
         url: url
     }
 }
 
-const withPutProjectActionParam = (url, newProject) => {
+const putProject_Action = (url, newProject) => {
     return {
         type: PUT_PROJECT,
         url: url,
@@ -22,21 +26,36 @@ const withPutProjectActionParam = (url, newProject) => {
     }
 }
 
+const deleteProject_Action = (url, projectKey) => {
+    return {
+        type: DELETE_PROJECT,
+        url: url,
+        projectKey: projectKey
+    }
+}
+
+const deleteProject_OnSuccess_Action = (projectKey) => {
+    return {
+        type: DELETE_PROJECT_SUCCESS,
+        projectKey: projectKey
+    }
+}
+
 export const doUpdateProjectList = ($store, $eventHub) => {
     $store.dispatch( // dispatch with an object
-        withUpdateProjectListActionParam(PROJECT_URI)
+        updateProjectList_Action(PROJECT_URI)
     ).catch((err) => {
         $eventHub.$emit('on-failure', err.message);
     });
 }
 
 export const doPutProject = ($store, $eventHub, form) => {
-    $store.dispatch( // dispatch with an object
-        withPutProjectActionParam(PROJECT_URI, form.getPayload())
+    return $store.dispatch( // dispatch with an object
+        putProject_Action(PROJECT_URI, form.getPayload())
     ).then(() => {
         form.reset();
         $store.dispatch( // dispatch with an object
-            withUpdateProjectListActionParam(PROJECT_URI));
+            updateProjectList_Action(PROJECT_URI));
     }).catch((err) => {
         if (err.response) {
             console.info(err.response);
@@ -44,5 +63,22 @@ export const doPutProject = ($store, $eventHub, form) => {
         } else {
             $eventHub.$emit('on-failure', err.message);
         }
+    });
+}
+
+export const doDeleteProject = ($store, $eventHub, projectKey) => {
+    return $store.dispatch( // dispatch with an object
+        deleteProject_Action(PROJECT_URI, projectKey)
+    ).then(() => {
+        $eventHub.$emit('on-deleted', projectKey);
+        setTimeout(function() {
+            $store.dispatch(
+                deleteProject_OnSuccess_Action(projectKey)
+            )
+        }, ANIMATION_WAITTIME_MS);
+    }).catch((err) => {
+        $eventHub.$emit('on-failure', err.message);
+        $store.dispatch( // dispatch with an object
+            updateProjectList_Action(PROJECT_URI));
     });
 }
