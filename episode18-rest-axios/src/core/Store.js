@@ -35,10 +35,11 @@ export const Store = new Vuex.Store({
             projectKey
         ) {
             let _projectArray = state.projects.projectArray;
-            for (let i = _projectArray.length - 1; i--;) {
-                if (_projectArray[i].key === projectKey) {
-                    _projectArray.splice(i, 1);
-                }
+            let index = _projectArray.findIndex(project => project.key === projectKey);
+            if (index >= 0) {
+                _projectArray.splice(index, 1);
+            } else {
+                console.warn(`Project for key ${projectKey} unexpectedly not found.`);
             }
         }
     },
