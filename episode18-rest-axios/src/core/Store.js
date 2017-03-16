@@ -46,7 +46,7 @@ export const Store = new Vuex.Store({
     actions: {
         // The handler function receives a context object that exposes
         // {state, rootState, commit, dispatch, getters}
-        REFRESH_PROJECTS(ctx, dispatchParamO) {
+        [REFRESH_PROJECTS](ctx, dispatchParamO) {
             return new Promise((resolve, reject) => {
                 ctx.state.projects.getProjects(dispatchParamO.url)
                     .then((response) => {
@@ -57,7 +57,7 @@ export const Store = new Vuex.Store({
                     });
             });
         },
-        PUT_PROJECT(ctx, dispatchParamO) {
+        [PUT_PROJECT](ctx, dispatchParamO) {
             return new Promise((resolve, reject) => {
                 ctx.state.projects.putProject(dispatchParamO.url, dispatchParamO.newProject)
                     .then(() => {
@@ -67,7 +67,7 @@ export const Store = new Vuex.Store({
                     });
             });
         },
-        DELETE_PROJECT(ctx, dispatchParamO) {
+        [DELETE_PROJECT](ctx, dispatchParamO) {
             return new Promise((resolve, reject) => {
                 let encodedProjectKey = encodeURIComponent(dispatchParamO.projectKey);
                 ctx.state.projects.deleteProject(dispatchParamO.url + '/' + encodedProjectKey)
@@ -78,7 +78,7 @@ export const Store = new Vuex.Store({
                     });
             });
         },
-        DELETE_PROJECT_SUCCESS(ctx, dispatchParamO) {
+        [DELETE_PROJECT_SUCCESS](ctx, dispatchParamO) {
             ctx.commit(DELETE_PROJECT_SUCCESS, dispatchParamO.projectKey);
         }
     }

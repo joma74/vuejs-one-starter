@@ -47,24 +47,15 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import Form from './core/Form';
-import Toastr from 'vue-toastr';
-import ProjectCard from './ProjectCard.vue';
-require('vue-toastr/src/vue-toastr.less');
-
-import axios from 'axios';
-
-const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
-const tough = require('tough-cookie');
-
-axiosCookieJarSupport(axios);
-
 import {
     doRefreshProjects,
     doPutProject,
     doDeleteProject
 } from './ActionTypes'
+import Form from './core/Form';
+import ProjectCard from './ProjectCard.vue';
+import Toastr from 'vue-toastr';
+import Vue from 'vue';
 
 export default {
     name: 'app',
@@ -85,18 +76,20 @@ export default {
         }
     },
     created: function() {
-        this.$eventHub.$on('on-failure', this.toastrAddError)
-        this.$eventHub.$on('on-success', this.toastrAddSuccess)
+        this.$eventHub.$on('on-failure', this.toastrAdd("error", this))
+        this.$eventHub.$on('on-success', this.toastrAdd("success", this))
     },
     beforeDestroy: function() {
-        this.$eventHub.$off('on-failure', this.toastrAddError)
-        this.$eventHub.$off('on-success', this.toastrAddSuccess)
+        this.$eventHub.$off('on-failure', this.toastrAdd("error", this))
+        this.$eventHub.$off('on-success', this.toastrAdd("success", this))
     },
     mounted() {
+        // doRefreshProjects uses toastr on success and on failure, so needs
+        // to be called in mounted
+        doRefreshProjects(this.$store, this.$eventHub)
+        // config is set on component instance, so must be mounted
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-right";
-        axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        doRefreshProjects(this.$store, this.$eventHub);
     },
     components: {
         'vue-toastr': Toastr,
@@ -112,17 +105,14 @@ export default {
         doRefreshProjects() {
             doRefreshProjects(this.$store, this.$eventHub);
         },
-        toastrAddError(msg) {
-            this.$refs.toastr.Add({
-                msg: msg,
-                type: "error"
-            });
-        },
-        toastrAddSuccess(msg) {
-            this.$refs.toastr.Add({
-                msg: msg,
-                type: "success"
-            });
+        toastrAdd(type) {
+            let ctx = this;
+            return function(msg) {
+                ctx.$refs.toastr.Add({
+                    msg: msg,
+                    type: type
+                });
+            }
         }
     }
 }

@@ -5,11 +5,14 @@ import {
     DELETE_PROJECT_SUCCESS
 } from './core/MutationTypes';
 
+
+import {
+  DI_PROJECT_URI_NAME,
+  DI_ANIMATION_WAITTIME_MS_NAME
+} from './core/AppConstants';
+
 import Vue from 'vue';
-
-const PROJECT_URI = '/api/projects';
-
-const ANIMATION_WAITTIME_MS = 1000;
+import {default as bm} from 'vue-inject';
 
 const refreshProjects_Action = (url) => {
     return {
@@ -43,7 +46,7 @@ const deleteProject_OnSuccess_Action = (projectKey) => {
 
 export const doRefreshProjects = ($store, $eventHub) => {
     $store.dispatch( // dispatch with an object
-        refreshProjects_Action(PROJECT_URI)
+        refreshProjects_Action(bm.get(DI_PROJECT_URI_NAME))
     ).then(() => {
         $eventHub.$emit('on-success', 'Projects have been refreshed');
     }).catch((err) => {
@@ -53,12 +56,12 @@ export const doRefreshProjects = ($store, $eventHub) => {
 
 export const doPutProject = ($store, $eventHub, form) => {
     return $store.dispatch( // dispatch with an object
-        putProject_Action(PROJECT_URI, form.getPayload())
+        putProject_Action(bm.get(DI_PROJECT_URI_NAME), form.getPayload())
     ).then(() => {
         $eventHub.$emit('on-success', 'Project has been created');
         form.reset();
         return $store.dispatch( // dispatch with an object
-            refreshProjects_Action(PROJECT_URI));
+            refreshProjects_Action(bm.get(DI_PROJECT_URI_NAME)));
     }).catch((err) => {
         if (err.response) { // validation errors
             console.info(err.response);
@@ -72,7 +75,7 @@ export const doPutProject = ($store, $eventHub, form) => {
 
 export const doDeleteProject = ($store, $eventHub, projectKey) => {
     return $store.dispatch( // dispatch with an object
-        deleteProject_Action(PROJECT_URI, projectKey)
+        deleteProject_Action(bm.get(DI_PROJECT_URI_NAME), projectKey)
     ).then(() => {
         $eventHub.$emit('on-deleted', projectKey);
         $eventHub.$emit('on-success', 'Project has been deleted');
@@ -80,10 +83,10 @@ export const doDeleteProject = ($store, $eventHub, projectKey) => {
             $store.dispatch(
                 deleteProject_OnSuccess_Action(projectKey)
             )
-        }, ANIMATION_WAITTIME_MS);
+        }, bm.get(DI_ANIMATION_WAITTIME_MS_NAME));
     }).catch((err) => {
         $eventHub.$emit('on-failure', err.message);
         $store.dispatch( // dispatch with an object
-            refreshProjects_Action(PROJECT_URI));
+            refreshProjects_Action(bm.get(DI_PROJECT_URI_NAME)));
     });
 }
