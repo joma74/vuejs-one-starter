@@ -6,19 +6,19 @@
         </div>
     </nav>
 
-    <form method="post" action="/projects" @submit.prevent="onSubmit" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
+    <form method="post" action="/projects" @submit.prevent="doEnterNewProject" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
         <nav class="level">
             <p class="level-item has-text-centered">
                 <button class="button is-primary" :disabled="form.fieldErrors.any()">Enter</button>
             </p>
         </nav>
         <div class="container is-fluid columns">
-            <p class="control column">
+            <p class="column">
                 <label for="name" class="label">Project Name:</label>
                 <input type="text" id="name" name="name" class="input" v-model="form.name" placeholder="Insert Your Project Name Here...">
                 <span class="help is-danger" v-if="form.fieldErrors.has('name')" v-text="form.fieldErrors.get('name')">This name is invalid</span>
             </p>
-            <p class="control column">
+            <p class="column">
                 <label for="description" class="label">Project Description:</label>
                 <input type="text" id="description" name="description" class="input" v-model="form.description" placeholder="Insert Your Project Description Here...">
                 <span class="help is-danger" v-if="form.fieldErrors.has('description')" v-text="form.fieldErrors.get('description')">This description is invalid</span>
@@ -28,12 +28,13 @@
 
     <nav class="level heading">
         <div class="level-item has-text-centered">
-            <p class="title is-2">My Projects</p>
+            <p class="title is-2">My Projects <span class="tag is-info" style="vertical-align: super">{{ projectsLength }}</span>
+            </p>
         </div>
     </nav>
     <nav class="level">
         <div class="level-item has-text-centered">
-            <a class="button is-primary"><i class="fa fa-refresh"></i></a>
+            <a class="button is-primary" @click="doRefreshProjects"><i class="fa fa-refresh"></i></a>
         </div>
     </nav>
     <div class="container is-fluid">
@@ -60,7 +61,7 @@ const tough = require('tough-cookie');
 axiosCookieJarSupport(axios);
 
 import {
-    doUpdateProjectList,
+    doRefreshProjects,
     doPutProject,
     doDeleteProject
 } from './ActionTypes'
@@ -70,6 +71,9 @@ export default {
     computed: {
         projects: function() {
             return this.$store.getters.projects;
+        },
+        projectsLength: function() {
+            return ("0" + this.$store.getters.projects.projectArray.length).slice(-2);
         }
     },
     data() {
@@ -82,31 +86,42 @@ export default {
     },
     created: function() {
         this.$eventHub.$on('on-failure', this.toastrAddError)
+        this.$eventHub.$on('on-success', this.toastrAddSuccess)
     },
     beforeDestroy: function() {
         this.$eventHub.$off('on-failure', this.toastrAddError)
+        this.$eventHub.$off('on-success', this.toastrAddSuccess)
     },
     mounted() {
         this.$refs.toastr.defaultTimeout = 5000;
-        this.$refs.toastr.defaultPosition = "toast-bottom-full-width";
+        this.$refs.toastr.defaultPosition = "toast-bottom-right";
         axios.defaults.baseURL = 'http://localhost:9095/rest-spring-server';
-        doUpdateProjectList(this.$store, this.$eventHub);
+        doRefreshProjects(this.$store, this.$eventHub);
     },
     components: {
         'vue-toastr': Toastr,
         'projectcard-component': ProjectCard
     },
     methods: {
-        onSubmit() {
+        doEnterNewProject() {
             doPutProject(this.$store, this.$eventHub, this.form);
         },
         doDelete(selectedProjectKey) {
             doDeleteProject(this.$store, this.$eventHub, selectedProjectKey)
         },
+        doRefreshProjects() {
+            doRefreshProjects(this.$store, this.$eventHub);
+        },
         toastrAddError(msg) {
             this.$refs.toastr.Add({
                 msg: msg,
                 type: "error"
+            });
+        },
+        toastrAddSuccess(msg) {
+            this.$refs.toastr.Add({
+                msg: msg,
+                type: "success"
             });
         }
     }

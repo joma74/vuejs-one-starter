@@ -1,5 +1,5 @@
 import {
-    UPDATE_PROJECTLIST,
+    REFRESH_PROJECTS,
     PUT_PROJECT,
     DELETE_PROJECT,
     DELETE_PROJECT_SUCCESS
@@ -11,9 +11,9 @@ const PROJECT_URI = '/api/projects';
 
 const ANIMATION_WAITTIME_MS = 1000;
 
-const updateProjectList_Action = (url) => {
+const refreshProjects_Action = (url) => {
     return {
-        type: UPDATE_PROJECTLIST,
+        type: REFRESH_PROJECTS,
         url: url
     }
 }
@@ -41,10 +41,12 @@ const deleteProject_OnSuccess_Action = (projectKey) => {
     }
 }
 
-export const doUpdateProjectList = ($store, $eventHub) => {
+export const doRefreshProjects = ($store, $eventHub) => {
     $store.dispatch( // dispatch with an object
-        updateProjectList_Action(PROJECT_URI)
-    ).catch((err) => {
+        refreshProjects_Action(PROJECT_URI)
+    ).then(() => {
+        $eventHub.$emit('on-success', 'Projects have been refreshed');
+    }).catch((err) => {
         $eventHub.$emit('on-failure', err.message);
     });
 }
@@ -53,14 +55,16 @@ export const doPutProject = ($store, $eventHub, form) => {
     return $store.dispatch( // dispatch with an object
         putProject_Action(PROJECT_URI, form.getPayload())
     ).then(() => {
+        $eventHub.$emit('on-success', 'Project has been created');
         form.reset();
-        $store.dispatch( // dispatch with an object
-            updateProjectList_Action(PROJECT_URI));
+        return $store.dispatch( // dispatch with an object
+            refreshProjects_Action(PROJECT_URI));
     }).catch((err) => {
-        if (err.response) {
+        if (err.response) { // validation errors
             console.info(err.response);
             form.fieldErrors.record(err.response.data.fieldErrors);
         } else {
+            console.warn(err.stack || err);
             $eventHub.$emit('on-failure', err.message);
         }
     });
@@ -71,6 +75,7 @@ export const doDeleteProject = ($store, $eventHub, projectKey) => {
         deleteProject_Action(PROJECT_URI, projectKey)
     ).then(() => {
         $eventHub.$emit('on-deleted', projectKey);
+        $eventHub.$emit('on-success', 'Project has been deleted');
         setTimeout(function() {
             $store.dispatch(
                 deleteProject_OnSuccess_Action(projectKey)
@@ -79,6 +84,6 @@ export const doDeleteProject = ($store, $eventHub, projectKey) => {
     }).catch((err) => {
         $eventHub.$emit('on-failure', err.message);
         $store.dispatch( // dispatch with an object
-            updateProjectList_Action(PROJECT_URI));
+            refreshProjects_Action(PROJECT_URI));
     });
 }

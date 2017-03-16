@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Projects from './Projects';
 import {
-    UPDATE_PROJECTLIST,
+    REFRESH_PROJECTS,
     PUT_PROJECT,
     DELETE_PROJECT,
     DELETE_PROJECT_SUCCESS
@@ -22,7 +22,7 @@ export const Store = new Vuex.Store({
     },
     mutations: {
         // The handler function always receives ..
-        [UPDATE_PROJECTLIST]( // ES2015 computed property name feature to
+        [REFRESH_PROJECTS]( // ES2015 computed property name feature to
             // use a constant as the function name
             state, // .. state as the first argument
             response // .. and a second payload argument if there is one
@@ -46,11 +46,11 @@ export const Store = new Vuex.Store({
     actions: {
         // The handler function receives a context object that exposes
         // {state, rootState, commit, dispatch, getters}
-        UPDATE_PROJECTLIST(ctx, dispatchParamO) {
+        REFRESH_PROJECTS(ctx, dispatchParamO) {
             return new Promise((resolve, reject) => {
                 ctx.state.projects.getProjects(dispatchParamO.url)
                     .then((response) => {
-                        ctx.commit(UPDATE_PROJECTLIST, response);
+                        ctx.commit(REFRESH_PROJECTS, response);
                         resolve();
                     }).catch((err) => {
                         reject(err);
