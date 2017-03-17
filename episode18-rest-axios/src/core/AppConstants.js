@@ -3,3 +3,4 @@ export const DI_SERVER_URL = 'DI_SERVER_URL';
 export const DI_HTTP_SERVICE = 'DI_HTTP_SERVICE';
 export const DI_ANIMATION_WAITTIME_MS = "DI_ANIMATION_WAITTIME_MS";
 export const DI_EVENT_HUB = "DI_EVENT_HUB";
+export const DI_VUEX_STORE= "DI_VUEX_STORE";

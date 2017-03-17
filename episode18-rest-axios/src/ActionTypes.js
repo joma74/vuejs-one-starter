@@ -9,7 +9,8 @@ import {
 import {
     DI_ANIMATION_WAITTIME_MS,
     DI_EVENT_HUB,
-    DI_PROJECT_URI
+    DI_PROJECT_URI,
+    DI_VUEX_STORE
 } from './core/AppConstants';
 
 import Vue from 'vue';
@@ -47,7 +48,8 @@ const deleteProject_OnSuccess_Action = (projectKey) => {
     }
 }
 
-export const doRefreshProjects = ($store) => {
+export const doRefreshProjects = () => {
+    let $store = bm.get(DI_VUEX_STORE);
     let $eventHub = bm.get(DI_EVENT_HUB);
     let projectUri = bm.get(DI_PROJECT_URI);
     $store.dispatch( // dispatch with an object
@@ -59,7 +61,8 @@ export const doRefreshProjects = ($store) => {
     });
 }
 
-export const doPutProject = ($store, form) => {
+export const doPutProject = (form) => {
+    let $store = bm.get(DI_VUEX_STORE);
     let $eventHub = bm.get(DI_EVENT_HUB);
     let projectUri = bm.get(DI_PROJECT_URI);
     return $store.dispatch( // dispatch with an object
@@ -80,7 +83,8 @@ export const doPutProject = ($store, form) => {
     });
 }
 
-export const doDeleteProject = ($store, projectKey) => {
+export const doDeleteProject = (projectKey) => {
+    let $store = bm.get(DI_VUEX_STORE);
     let $eventHub = bm.get(DI_EVENT_HUB);
     let projectUri = bm.get(DI_PROJECT_URI);
     let animation_waittime_ms = bm.get(DI_ANIMATION_WAITTIME_MS);

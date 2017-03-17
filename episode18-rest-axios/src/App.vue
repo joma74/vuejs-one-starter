@@ -87,6 +87,7 @@ export default {
         // to be called in mounted
         doRefreshProjects(this.$store)
         // config is set on component instance, so must be mounted
+        this.$refs.toastr.defaultCloseOnHover = false;
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-right";
     },
@@ -96,13 +97,13 @@ export default {
     },
     methods: {
         doEnterNewProject() {
-            doPutProject(this.$store, this.form);
+            doPutProject(this.form);
         },
         doDelete(selectedProjectKey) {
-            doDeleteProject(this.$store, selectedProjectKey)
+            doDeleteProject(selectedProjectKey)
         },
         doRefreshProjects() {
-            doRefreshProjects(this.$store);
+            doRefreshProjects();
         },
         toastrAdd(type) {
             let $scope = this;
