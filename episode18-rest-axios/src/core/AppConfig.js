@@ -1,21 +1,25 @@
 import axios from 'axios';
-import {default as bm} from 'vue-inject';
-import { Store } from './Store.js';
+import {
+    default as bm
+} from 'vue-inject';
+import {
+    Store
+} from './Store.js';
 import Vue from 'vue';
 
 import {
-  DI_ANIMATION_WAITTIME_MS,
-  DI_EVENT_HUB,
-  DI_HTTP_SERVICE,
-  DI_PROJECT_URI,
-  DI_SERVER_URL,
-  DI_VUEX_STORE
+    DI_ANIMATION_WAITTIME_MS,
+    DI_EVENT_HUB,
+    DI_HTTP_SERVICE,
+    DI_PROJECT_URI,
+    DI_SERVER_URL,
+    DI_VUEX_STORE
 } from './AppConstants';
 // register DI plugin with Vue
 Vue.use(bm);
-// register event hub as instance
-Vue.prototype.$eventHub  = new Vue();
-bm.constant(DI_EVENT_HUB, Vue.prototype.$eventHub);
+// register event hub
+Vue.prototype.$eventHub = new Vue(); //  event hub as Vue property
+bm.constant(DI_EVENT_HUB, Vue.prototype.$eventHub); //  event hub as DI bean
 // DI value constants
 bm.constant(DI_PROJECT_URI, '/api/projects');
 bm.constant(DI_SERVER_URL, 'http://localhost:9095/rest-spring-server');
@@ -27,4 +31,4 @@ const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support');
 const tough = require('tough-cookie');
 axiosCookieJarSupport(axios);
 axios.defaults.baseURL = bm.get(DI_SERVER_URL); // set axios baseURL
-bm.constant(DI_HTTP_SERVICE, axios);
+bm.constant(DI_HTTP_SERVICE, axios); // axios as DI bean
