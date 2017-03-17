@@ -55,7 +55,6 @@ import {
 import Form from './core/Form';
 import ProjectCard from './ProjectCard.vue';
 import Toastr from 'vue-toastr';
-import Vue from 'vue';
 
 export default {
     name: 'app',
@@ -84,9 +83,9 @@ export default {
         this.$eventHub.$off('on-success', this.toastrAdd("success", this))
     },
     mounted() {
-        // doRefreshProjects uses toastr on success and on failure, so needs
+        // doRefreshProjects uses toastr component on success and on failure, so needs
         // to be called in mounted
-        doRefreshProjects(this.$store, this.$eventHub)
+        doRefreshProjects(this.$store)
         // config is set on component instance, so must be mounted
         this.$refs.toastr.defaultTimeout = 5000;
         this.$refs.toastr.defaultPosition = "toast-bottom-right";
@@ -97,18 +96,18 @@ export default {
     },
     methods: {
         doEnterNewProject() {
-            doPutProject(this.$store, this.$eventHub, this.form);
+            doPutProject(this.$store, this.form);
         },
         doDelete(selectedProjectKey) {
-            doDeleteProject(this.$store, this.$eventHub, selectedProjectKey)
+            doDeleteProject(this.$store, selectedProjectKey)
         },
         doRefreshProjects() {
-            doRefreshProjects(this.$store, this.$eventHub);
+            doRefreshProjects(this.$store);
         },
         toastrAdd(type) {
-            let ctx = this;
+            let $scope = this;
             return function(msg) {
-                ctx.$refs.toastr.Add({
+                $scope.$refs.toastr.Add({
                     msg: msg,
                     type: type
                 });

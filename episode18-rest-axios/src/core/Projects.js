@@ -1,5 +1,10 @@
-import axios from 'axios';
 import Vue from 'vue';
+
+import {
+  DI_HTTP_SERVICE
+} from './AppConstants';
+
+import {default as bm} from 'vue-inject';
 
 class Projects {
 
@@ -18,7 +23,7 @@ class Projects {
      */
     getProjects(url) {
         let getProjects = function(rethrowWithMsgFrom) {
-            return axios.get(url, {
+            return bm.get(DI_HTTP_SERVICE).get(url, {
                     withCredentials: true
                 })
                 .catch((err) => {
@@ -42,7 +47,7 @@ class Projects {
      */
     putProject(url, newProject) {
         let putProject = function(rethrowWithMsgFrom) {
-            return axios.put(url, newProject, {
+            return bm.get(DI_HTTP_SERVICE).put(url, newProject, {
                     withCredentials: true
                 })
                 .catch((err) => {
@@ -58,7 +63,7 @@ class Projects {
 
     deleteProject(url) {
         let deleteProject = function(rethrowWithMsgFrom) {
-            return axios.delete(url, {
+            return bm.get(DI_HTTP_SERVICE).delete(url, {
                     withCredentials: true
                 })
                 .catch((err) => {
