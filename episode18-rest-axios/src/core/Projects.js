@@ -1,10 +1,12 @@
 import Vue from 'vue';
 
 import {
-  DI_HTTP_SERVICE
+    DI_HTTP_SERVICE
 } from './AppConstants';
 
-import {default as bm} from 'vue-inject';
+import {
+    default as bm
+} from 'vue-inject';
 
 class Projects {
 
