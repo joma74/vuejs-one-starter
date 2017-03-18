@@ -34,7 +34,7 @@
     </nav>
     <nav class="level">
         <div class="level-item has-text-centered">
-            <a class="button is-primary" @click="doRefreshProjects"><i class="fa fa-refresh"></i></a>
+            <a class="button is-primary" @click="doRefreshProjects"><i class="icon-arrows-cw"></i></a>
         </div>
     </nav>
     <div class="container is-fluid">

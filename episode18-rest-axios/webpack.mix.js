@@ -14,9 +14,8 @@ let mix = require('laravel-mix');
 mix
     .js('src/main.js', 'dist/')
     .sass('src/assets/app.sass', 'dist/')
-    .less('node_modules/vue-toastr/src/vue-toastr.less', 'dist/')
     .sourceMaps()
-    .extract(['vue', 'vuex', 'axios', 'vue-toastr'])
+    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr','@3846masa/axios-cookiejar-support','tough-cookie'])
     .webpackConfig({
         node: {
             console: true,

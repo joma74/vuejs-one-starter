@@ -7,7 +7,7 @@
             </p>
             <a class="card-header-icon">
                 <span class="icon is-medium" v-on:click="$emit('doDelete')">
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  <i class="icon-trash" aria-hidden="true"></i>
                 </span>
             </a>
         </header>
