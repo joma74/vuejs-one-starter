@@ -15,7 +15,7 @@ mix
     .js('src/main.js', 'dist/')
     .sass('src/assets/app.sass', 'dist/')
     .sourceMaps()
-    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr','@3846masa/axios-cookiejar-support','tough-cookie'])
+    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie'])
     .webpackConfig({
         node: {
             console: true,
@@ -25,7 +25,12 @@ mix
         }
     })
     .options({
-        processCssUrls: true // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+        processCssUrls: true, // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+        uglify: {
+            compress: {
+                warnings: false
+            }
+        }
     });
 
 // Full API
