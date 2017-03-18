@@ -17,6 +17,23 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# build for production with minification
+npm run build
+
+# run http-server with build artefacts on localhost:8089
+npm run prod-test
 ```
 
-For detailed explanation on how things get loaded, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Build result
+
+``` bash
+DONE  Compiled successfully in 14756ms1:16:21 AM
+
+           Asset       Size  Chunks                    Chunk Names
+  dist/vendor.js     310 kB    0, 2  [emitted]  [big]  dist/vendor
+    dist/main.js      13 kB    1, 2  [emitted]         dist/main
+dist/manifest.js    1.35 kB       2  [emitted]         dist/manifest
+    dist/app.css     169 kB    1, 2  [emitted]         dist/main
+mix-manifest.json  158 bytes          [emitted]     
+```
