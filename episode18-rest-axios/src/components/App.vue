@@ -6,7 +6,7 @@
         </div>
     </nav>
 
-    <form method="post" action="/projects" @submit.prevent="doEnterNewProject" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
+    <form method="post" action="/projects" @submit.prevent="doPutProject(form)" @keydown="form.fieldErrors.clear($event.target.name)" autocomplete="off">
         <nav class="level">
             <p class="level-item has-text-centered">
                 <button class="button is-primary" :disabled="form.fieldErrors.any()">Enter</button>
@@ -39,7 +39,7 @@
     </nav>
     <div class="container is-fluid">
         <div class="columns is-multiline is-fluid">
-            <projectcard-component v-for="(project, index, key) in projects.projectArray" v-bind:project="project" v-bind:index="index" v-bind:key="project.key" v-on:doDelete="doDelete(project.key, index)"></projectcard-component>
+            <projectcard-component v-for="(project, index, key) in projects.projectArray" v-bind:project="project" v-bind:index="index" v-bind:key="project.key" v-on:EMIT-DELETE-PROJECT="doDeleteProject(project.key, index)"></projectcard-component>
         </div>
     </div>
     <vue-toastr ref="toastr"></vue-toastr>
@@ -51,10 +51,11 @@ import {
     doRefreshProjects,
     doPutProject,
     doDeleteProject
-} from './ActionTypes'
-import Form from './core/Form';
-import ProjectCard from './ProjectCard.vue';
-import Toastr from 'vue-toastr';
+} from '../thunk/projects-thunk'
+import * as evt from "../thunk/event-types"
+import Form from '../core/Form';
+import ProjectCard from './ProjectCard.vue'
+import Toastr from 'vue-toastr'
 
 export default {
     name: 'app',
@@ -63,7 +64,7 @@ export default {
             return this.$store.getters.projects;
         },
         projectsLength: function() {
-            return ("0" + this.$store.getters.projects.projectArray.length).slice(-2);
+            return ("0" + this.$store.getters.projectsLength).slice(-2);
         }
     },
     data() {
@@ -75,12 +76,12 @@ export default {
         }
     },
     created: function() {
-        this.$eventHub.$on('on-failure', this.toastrAdd("error", this))
-        this.$eventHub.$on('on-success', this.toastrAdd("success", this))
+        this.$eventHub.$on(evt.ON_FAILURE, this.toastrAdd("error", this))
+        this.$eventHub.$on(evt.ON_SUCCESS, this.toastrAdd("success", this))
     },
     beforeDestroy: function() {
-        this.$eventHub.$off('on-failure', this.toastrAdd("error", this))
-        this.$eventHub.$off('on-success', this.toastrAdd("success", this))
+        this.$eventHub.$off(evt.ON_FAILURE, this.toastrAdd("error", this))
+        this.$eventHub.$off(evt.ON_SUCCESS, this.toastrAdd("success", this))
     },
     mounted() {
         // doRefreshProjects uses toastr component on success and on failure, so needs
@@ -96,15 +97,9 @@ export default {
         'projectcard-component': ProjectCard
     },
     methods: {
-        doEnterNewProject() {
-            doPutProject(this.form);
-        },
-        doDelete(selectedProjectKey) {
-            doDeleteProject(selectedProjectKey)
-        },
-        doRefreshProjects() {
-            doRefreshProjects();
-        },
+        doPutProject,
+        doDeleteProject,
+        doRefreshProjects,
         toastrAdd(type) {
             let $scope = this;
             return function(msg) {

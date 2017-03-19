@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import App from './App.vue';
-import { Store } from './core/Store.js';
+import App from './components/App.vue';
+import { Store } from './store/index';
 
-require('./core/AppConfig.js');
+require('./core/AppConfig');
 
 new Vue({
   store: Store,

@@ -4,9 +4,8 @@ import {
 } from 'vue-inject';
 import {
     Store
-} from './Store.js';
+} from '../store/index';
 import Vue from 'vue';
-
 import {
     DI_ANIMATION_WAITTIME_MS,
     DI_EVENT_HUB,
@@ -15,6 +14,8 @@ import {
     DI_SERVER_URL,
     DI_VUEX_STORE
 } from './AppConstants';
+
+
 // register DI plugin with Vue
 Vue.use(bm);
 // register event hub
