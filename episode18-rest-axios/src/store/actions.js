@@ -51,7 +51,9 @@ const actions = {
             let encodedProjectKey = encodeURIComponent(dispatchParamO.projectKey);
             svc.deleteProject(dispatchParamO.url + '/' + encodedProjectKey)
                 .then(() => {
-                    resolve();
+                    ctx.dispatch( // dispatch with an object
+                        deleteProject_OnSuccess_Action(dispatchParamO.projectKey)
+                    ).then(resolve, reject);
                 }).catch((err) => {
                     reject(err);
                 });
