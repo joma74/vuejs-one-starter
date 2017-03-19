@@ -6,7 +6,7 @@
                 {{project.name}}
             </p>
             <a class="card-header-icon">
-                <span class="icon is-medium" v-on:click="emitDeleted">
+                <span class="icon is-medium" v-on:click="emitDelete">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
             </a>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import * as evt from "../thunk/event-types"
+import * as thunk from "../thunk/thunk-types"
 
 export default {
     name: 'projectcard-component',
@@ -34,16 +34,16 @@ export default {
         }
     },
     created: function() {
-        this.$eventHub.$on(evt.ON_DELETED, this.setDeleted)
+        this.$eventHub.$on(thunk.ON_DELETED, this.setDeleted)
     },
     beforeDestroy: function() {
-        this.$eventHub.$off(evt.ON_DELETED, this.setDeleted)
+        this.$eventHub.$off(thunk.ON_DELETED, this.setDeleted)
     },
     methods: {
-        emitDeleted(){ // moved to methods as evt is unknown to the template
+        emitDelete(){ // moved to methods as thunk is unknown to the template
           // the parent component knows the context of this event
           // t.i. project and it's index the gui list
-          this.$emit(evt.EMIT_DELETE);
+          this.$emit(thunk.ON_DELETE);
         },
         setDeleted(projectKey) {
             if (this.project.key === projectKey) {

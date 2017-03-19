@@ -39,7 +39,7 @@
     </nav>
     <div class="container is-fluid">
         <div class="columns is-multiline is-fluid">
-            <projectcard-component v-for="(project, index, key) in projects.projectArray" v-bind:project="project" v-bind:index="index" v-bind:key="project.key" v-on:EMIT-DELETE-PROJECT="doDeleteProject(project.key, index)"></projectcard-component>
+            <projectcard-component v-for="(project, index, key) in projects.projectArray" v-bind:project="project" v-bind:index="index" v-bind:key="project.key" v-on:ON_DELETE="doDeleteProject(project.key, index)"></projectcard-component>
         </div>
     </div>
     <vue-toastr ref="toastr"></vue-toastr>
@@ -52,7 +52,7 @@ import {
     doPutProject,
     doDeleteProject
 } from '../thunk/projects-thunk'
-import * as evt from "../thunk/event-types"
+import * as thunk from "../thunk/thunk-types"
 import Form from '../core/Form';
 import ProjectCard from './ProjectCard.vue'
 import Toastr from 'vue-toastr'
@@ -76,12 +76,12 @@ export default {
         }
     },
     created: function() {
-        this.$eventHub.$on(evt.ON_FAILURE, this.toastrAdd("error", this))
-        this.$eventHub.$on(evt.ON_SUCCESS, this.toastrAdd("success", this))
+        this.$eventHub.$on(thunk.ON_FAILURE, this.toastrAdd("error", this))
+        this.$eventHub.$on(thunk.ON_SUCCESS, this.toastrAdd("success", this))
     },
     beforeDestroy: function() {
-        this.$eventHub.$off(evt.ON_FAILURE, this.toastrAdd("error", this))
-        this.$eventHub.$off(evt.ON_SUCCESS, this.toastrAdd("success", this))
+        this.$eventHub.$off(thunk.ON_FAILURE, this.toastrAdd("error", this))
+        this.$eventHub.$off(thunk.ON_SUCCESS, this.toastrAdd("success", this))
     },
     mounted() {
         // doRefreshProjects uses toastr component on success and on failure, so needs
