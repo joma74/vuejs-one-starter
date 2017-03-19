@@ -64,13 +64,14 @@ export const doDeleteProject = (projectKey) => {
         $eventHub.$emit(thunk.ON_DELETED, projectKey);
         $eventHub.$emit(thunk.ON_SUCCESS, 'Project has been deleted');
         setTimeout(function() {
-            $store.dispatch(
+            $store.dispatch( // dispatch with an object
                 deleteProject_OnSuccess_Action(projectKey)
             )
         }, animation_waittime_ms);
     }).catch((err) => {
         $eventHub.$emit(thunk.ON_FAILURE, err.message);
         $store.dispatch( // dispatch with an object
-            refreshProjects_Action(projectUri));
+            refreshProjects_Action(projectUri)
+        )
     });
 }
