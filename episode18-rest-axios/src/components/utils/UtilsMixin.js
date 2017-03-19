@@ -1,9 +1,9 @@
-import * as Filters from './Filters';
+import * as Formatter from './Formatter';
 
 let allMethods = {
 }
 
-allMethods[Filters.formatZeroPadded.name] = Filters.formatZeroPadded;
+allMethods[Formatter.formatZeroPadded.name] = Formatter.formatZeroPadded;
 
 export default {
     methods: allMethods
