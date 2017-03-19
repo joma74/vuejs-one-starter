@@ -28,7 +28,7 @@
 
     <nav class="level heading">
         <div class="level-item has-text-centered">
-            <p class="title is-2">My Projects <span class="tag is-info" style="vertical-align: super">{{ projectsLength }}</span>
+            <p class="title is-2">My Projects <span class="tag is-info" style="vertical-align: super">{{ formatZeroPadded(this.projectsLength) }}</span>
             </p>
         </div>
     </nav>
@@ -53,18 +53,20 @@ import {
     doDeleteProject
 } from '../thunk/projects-thunk'
 import * as thunk from "../thunk/thunk-types"
+import UtilsMixin from './utils/UtilsMixin';
 import Form from '../core/Form';
 import ProjectCard from './ProjectCard.vue'
 import Toastr from 'vue-toastr'
 
 export default {
     name: 'app',
+    mixins: [UtilsMixin],
     computed: {
         projects: function() {
             return this.$store.getters.projects;
         },
         projectsLength: function() {
-            return ("0" + this.$store.getters.projectsLength).slice(-2);
+            return this.$store.getters.projectsLength;
         }
     },
     data() {
