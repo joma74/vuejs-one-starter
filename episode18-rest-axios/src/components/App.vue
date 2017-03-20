@@ -57,6 +57,8 @@ import UtilsMixin from './utils/UtilsMixin';
 import Form from '../core/Form';
 import ProjectCard from './ProjectCard.vue'
 import Toastr from 'vue-toastr'
+require('vue-toastr/dist/vue-toastr.css'); // necessary for dev and build, hot
+// does without it ?!
 
 export default {
     name: 'app',

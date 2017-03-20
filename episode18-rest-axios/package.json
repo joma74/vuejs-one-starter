@@ -6,9 +6,9 @@
   "private": true,
   "scripts": {
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open",
-    "dev": "cross-env NODE_ENV=development webpack --progress",
-    "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks --optimize-minimize > ./dist/build.log",
-    "prod-test": "http-server -o -p 8089 -a localhost"
+    "dev": "cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./dist/build.log",
+    "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./dist/build.log",
+    "dist-test": "http-server -o -p 8089 -a localhost"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.3",
