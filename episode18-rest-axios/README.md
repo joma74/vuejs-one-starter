@@ -29,7 +29,7 @@ npm run prod-test
 
 ### uglify with default - Non-Functional (baseline)
 
-Non-functional because call of formatZeroPadded() from <template> to my Mixin 'UtilsMixin' get's *mis-mangeled*
+Non-functional because call of `formatZeroPadded()` from `<template>` to my Mixin 'UtilsMixin' get's *mis-mangeled*
 
 ``` js
 uglify: {
@@ -51,7 +51,7 @@ mix-manifest.json  158 bytes          [emitted]
 
 ### uglify with vue-cli - Non-Functional (+/-0 %)
 
-Non-functional because call of formatZeroPadded() from <template> to my Mixin 'UtilsMixin' get's *mis-mangeled*
+Non-functional because call of `formatZeroPadded()` from `<template>` to my Mixin 'UtilsMixin' get's *mis-mangeled*
 
 _From <https://github.com/vuejs/vue-cli/blob/master/bin/vue-build>_
 
