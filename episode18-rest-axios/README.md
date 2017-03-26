@@ -27,7 +27,7 @@ npm run prod-test
 
 ## Build result
 
-### uglify with default - Non-Functional (baseline)
+### uglify with default (baseline)
 
 Non-functional because call of `formatZeroPadded()` from `<template>` to my Mixin 'UtilsMixin' get's *mis-mangeled*
 
@@ -37,21 +37,19 @@ uglify: {
 ```
 
 ``` bash
-DONE  Compiled successfully in 14756ms
+DONE  Compiled successfully in 18202ms
 
            Asset       Size  Chunks                    Chunk Names
-  dist/vendor.js     310 kB    0, 2  [emitted]  [big]  dist/vendor
-    dist/main.js      13 kB    1, 2  [emitted]         dist/main
-dist/manifest.js    1.35 kB       2  [emitted]         dist/manifest
-    dist/app.css     169 kB    1, 2  [emitted]         dist/main
+  dist/vendor.js     299 kB    0, 2  [emitted]  [big]  dist/vendor
+    dist/main.js    22.9 kB    1, 2  [emitted]         dist/main
+dist/manifest.js    1.36 kB       2  [emitted]         dist/manifest
+    dist/app.css     170 kB    1, 2  [emitted]         dist/main
 mix-manifest.json  158 bytes          [emitted]
                    ________
                    ~ 493 kB      
 ```
 
-### uglify with vue-cli - Non-Functional (+/-0 %)
-
-Non-functional because call of `formatZeroPadded()` from `<template>` to my Mixin 'UtilsMixin' get's *mis-mangeled*
+### uglify with vue-cli
 
 _From <https://github.com/vuejs/vue-cli/blob/master/bin/vue-build>_
 
@@ -89,7 +87,7 @@ mix-manifest.json  158 bytes          [emitted]
                     ~ 493 kB   
 ```
 
-### uglify with compress-and-mangle keep_fnames - Functional  (+ 6%)
+### uglify with compress-and-mangle keep_fnames (+ 6%)
 
 Functional, but is a minimum + 6% code size
 
@@ -128,7 +126,7 @@ mix-manifest.json  158 bytes          [emitted]
                     ~ 524 kB      
 ```
 
-### uglify with mangle except  - Functional (+ 2%)
+### uglify with mangle except (+ 2%)
 
 Functional, + 2% code size is tolerable, but tweak is too specific
 
