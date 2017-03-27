@@ -8,7 +8,7 @@
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open",
     "dev": "cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./dist/build.log",
     "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./dist/build.log",
-    "dist-test": "http-server -o -p 8089 -a localhost"
+    "dist-test": "http-server -d -o -p 8089 -a localhost -c-1"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.3",
@@ -29,8 +29,10 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "http-server": "^0.9.0",
+    "js-beautify": "^1.6.12",
     "jsdom": "^9.12.0",
     "laravel-mix": "^0.8.1",
+    "sinon": "^2.1.0",
     "vue-inject": "^0.3.2",
     "vue-loader": "^11.1.4",
     "vue-template-compiler": "^2.2.2",
