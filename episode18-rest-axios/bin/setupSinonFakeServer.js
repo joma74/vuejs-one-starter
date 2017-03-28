@@ -26,13 +26,19 @@ var onGET = function(xhr) {
         },
         JSON.stringify(fake_response))
 };
-var onDELETE = function(xhr, id) {
-    xhr.respond(200)
+var onDELETE = function(xhr, projectKey) {
+    xhr.respond(200);
+    let index = fake_response.projects.findIndex(project => project.key === projectKey);
+    if (index >= 0) {
+        fake_response.projects.splice(index, 1);
+    } else {
+        console.warn(`Project with key ${projectKey} is defunct`);
+    }
 };
 var onPUT = function(xhr) {
     xhr.respond(200);
     fake_response.projects.push({
-        key: fake_response.projects.length,
+        key: fake_response.projects.length.toString(),
         name: "Helga",
         description: "Oma",
         lastModifiedOn: "23.03.2017"
