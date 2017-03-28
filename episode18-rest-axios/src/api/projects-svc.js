@@ -1,6 +1,6 @@
 import {
     DI_HTTP_SERVICE
-} from '../core/AppConstants'
+} from '../core/AppConstantNames'
 import {
     default as bm
 } from 'vue-inject'

@@ -13,7 +13,12 @@ import {
     DI_PROJECT_URI,
     DI_SERVER_URL,
     DI_VUEX_STORE
-} from './AppConstants';
+} from './AppConstantNames';
+import {
+    PROJECT_URI,
+    SERVER_URL,
+    ANIMATION_WAITTIME_MS
+} from './AppConstantValues';
 
 
 // register DI plugin with Vue
@@ -22,9 +27,9 @@ Vue.use(bm);
 Vue.prototype.$eventHub = new Vue(); //  event hub as Vue property
 bm.constant(DI_EVENT_HUB, Vue.prototype.$eventHub); //  event hub as DI bean
 // DI value constants
-bm.constant(DI_PROJECT_URI, '/api/projects');
-bm.constant(DI_SERVER_URL, 'http://localhost:9095/rest-spring-server');
-bm.constant(DI_ANIMATION_WAITTIME_MS, 1000);
+bm.constant(DI_PROJECT_URI, C_PROJECT_URI);
+bm.constant(DI_SERVER_URL, C_SERVER_URL);
+bm.constant(DI_ANIMATION_WAITTIME_MS, C_ANIMATION_WAITTIME_MS);
 // vuex store as DI bean
 bm.constant(DI_VUEX_STORE, Store);
 // configure cookie support for axios - backend is RESTless stateful!

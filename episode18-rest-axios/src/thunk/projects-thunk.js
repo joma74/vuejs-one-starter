@@ -3,7 +3,7 @@ import {
     DI_EVENT_HUB,
     DI_PROJECT_URI,
     DI_VUEX_STORE
-} from '../core/AppConstants';
+} from '../core/AppConstantNames';
 
 import {
     refreshProjects_Action,
