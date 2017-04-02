@@ -15,9 +15,9 @@ import {
     DI_VUEX_STORE
 } from './AppConstantNames';
 import {
-    PROJECT_URI,
-    SERVER_URL,
-    ANIMATION_WAITTIME_MS
+    C_PROJECT_URI,
+    C_SERVER_URL,
+    N_ANIMATION_WAITTIME_MS
 } from './AppConstantValues';
 
 
@@ -29,7 +29,7 @@ bm.constant(DI_EVENT_HUB, Vue.prototype.$eventHub); //  event hub as DI bean
 // DI value constants
 bm.constant(DI_PROJECT_URI, C_PROJECT_URI);
 bm.constant(DI_SERVER_URL, C_SERVER_URL);
-bm.constant(DI_ANIMATION_WAITTIME_MS, C_ANIMATION_WAITTIME_MS);
+bm.constant(DI_ANIMATION_WAITTIME_MS, N_ANIMATION_WAITTIME_MS);
 // vuex store as DI bean
 bm.constant(DI_VUEX_STORE, Store);
 // configure cookie support for axios - backend is RESTless stateful!
