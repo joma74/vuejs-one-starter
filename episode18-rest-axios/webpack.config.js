@@ -332,7 +332,9 @@ if (Mix.notifications) {
 if (Mix.copy) {
     Mix.copy.forEach(copy => {
         module.exports.plugins.push(
-            new plugins.CopyWebpackPlugin([copy])
+            new plugins.CopyWebpackPlugin([copy], {
+                debug: true
+            })
         );
     });
 }
