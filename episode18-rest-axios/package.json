@@ -5,10 +5,11 @@
   "author": "joma74 <dev-mails@gmx.net>",
   "private": true,
   "scripts": {
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open",
+    "fake-trans": "node bin/transformHtmlFake.js",
+    "hot": "npm run fake-trans && cross-env NODE_ENV=development webpack-dev-server --hot --open",
     "dev": "cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./dist/build.log",
     "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./dist/build.log",
-    "dist-test": "node bin/transformHtmlFake.js && http-server -d -o -p 8089 -a localhost -c-1"
+    "dist-test": "npm run fake-trans && http-server -d -o -p 8089 -a localhost -c-1"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.3",
@@ -31,12 +32,10 @@
     "http-server": "^0.9.0",
     "js-beautify": "^1.6.12",
     "jsdom": "^9.12.0",
-    "laravel-mix": "^0.8.1",
+    "laravel-mix": "0.8.9",
     "sinon": "^2.1.0",
     "vue-inject": "^0.3.2",
     "vue-loader": "^11.1.4",
-    "vue-template-compiler": "^2.2.2",
-    "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0"
+    "vue-template-compiler": "^2.2.2"
   }
 }
