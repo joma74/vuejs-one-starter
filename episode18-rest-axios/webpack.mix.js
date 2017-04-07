@@ -17,7 +17,7 @@ mix
     //.copy('src/main/js/assets/logo.png', 'dist/myapp')
     .sourceMaps()
     .setPublicPath('dist/') // public path required by Mix.js hot detection
-    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie', 'sinon'])
+    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie'])
     .webpackConfig({
         node: {
             console: true,

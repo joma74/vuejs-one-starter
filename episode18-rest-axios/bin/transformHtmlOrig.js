@@ -12,7 +12,7 @@ var doc = jsdom(htmlSource, {
     }
 });
 //
-fs.writeFileSync("./index.html",
+fs.writeFileSync("./dist/index.html",
     beautify_html(serializeDocument(doc), {
         extra_liners: [],
         indent_inner_html: true,

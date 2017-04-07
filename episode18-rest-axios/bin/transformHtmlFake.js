@@ -1,7 +1,7 @@
 var beautify_html = require('js-beautify').html;
 var jsdom = require("jsdom").jsdom;
 var serializeDocument = require("jsdom").serializeDocument;
-var fs = require("fs");
+var fs = require("fs-extra");
 
 var htmlSource = fs.readFileSync("index.o.html", "utf8");
 var doc = jsdom(htmlSource, {
@@ -12,9 +12,12 @@ var doc = jsdom(htmlSource, {
     }
 });
 var fstScriptEl = doc.body.querySelector("script");
-///
+//
+var dist_mayapp_path = "dist/myapp/";
+fs.ensureDirSync(dist_mayapp_path); //like mkdir -p
+fs.copySync("node_modules/sinon/pkg/sinon-no-sourcemaps.js", dist_mayapp_path + "sinon-no-sourcemaps.js");
 var newScriptEl = doc.createElement("script");
-newScriptEl.src = "node_modules/sinon/pkg/sinon.js";
+newScriptEl.src = "myapp/sinon-no-sourcemaps.js";
 doc.body.insertBefore(newScriptEl, fstScriptEl);
 //
 newScriptEl = doc.createElement("script");

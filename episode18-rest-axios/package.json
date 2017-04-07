@@ -4,18 +4,24 @@
   "version": "1.0.0",
   "author": "joma74 <dev-mails@gmx.net>",
   "private": true,
+  "config" :{
+      "content_base": "dist/"
+  },
   "scripts": {
     "fake-trans": "node bin/transformHtmlFake.js",
     "orig-trans": "node bin/transformHtmlOrig.js",
-    "hot": "npm run fake-trans && cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base dist/",
-    "dev": "cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./dist/build.log",
-    "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./dist/build.log",
-    "dist-test": "npm run fake-trans && http-server -d -o -p 8089 -a localhost -c-1 dist/"
+    "clean-dist": "rimraf $npm_package_config_content_base/*",
+    "serve-app": "http-server -d -o -p 8089 -a localhost -c-1 $npm_package_config_content_base",
+    "hot": "npm run clean-dist && npm run fake-trans && cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
+    "dev": "npm run clean-dist && cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "build": "npm run clean-dist && cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "dist-test": "npm run build && npm run fake-trans && npm run serve-app",
+    "dist": "npm run build && npm run orig-trans && npm run serve-app"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.4",
     "axios": "0.16.0",
-    "bulma": "0.4.0",
+    "bulma": "0.3.1",
     "laravel-mix": "0.10.0",
     "vue": "^2.2.0",
     "vue-toastr": "2.0.5",
@@ -30,10 +36,12 @@
     "cross-env": "4.0.0",
     "css-loader": "0.28.0",
     "file-loader": "0.11.1",
+    "fs-extra": "2.1.2",
     "http-server": "0.9.0",
     "js-beautify": "1.6.12",
     "jsdom": "9.12.0",
     "laravel-mix": "0.10.0",
+    "rimraf": "^2.6.1",
     "sinon": "2.1.0",
     "vue-inject": "1.0.0",
     "vue-loader": "11.3.4",
