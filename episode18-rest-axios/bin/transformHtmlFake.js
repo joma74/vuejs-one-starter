@@ -23,7 +23,7 @@ setupSinonFakeServerSource = setupSinonFakeServerSource.split('\n').slice(1).joi
 newScriptEl.textContent = setupSinonFakeServerSource;
 doc.body.insertBefore(newScriptEl, fstScriptEl);
 //
-fs.writeFileSync("./index.html",
+fs.writeFileSync("./dist/index.html",
     beautify_html(serializeDocument(doc), {
         extra_liners: [],
         indent_inner_html: true,

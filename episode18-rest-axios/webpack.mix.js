@@ -12,10 +12,12 @@ let mix = require('laravel-mix');
  */
 
 mix
-    .js('src/main/js/main.js', 'dist/')
-    .sass('src/main/js/assets/app.sass', 'dist/')
+    .js('src/main/js/main.js', 'myapp') // but single dist despite publicPath
+    .sass('src/main/js/assets/app.sass', 'dist/myapp') // double dist from publicPath
+    //.copy('src/main/js/assets/logo.png', 'dist/myapp')
     .sourceMaps()
-    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie'])
+    .setPublicPath('dist/') // public path required by Mix.js hot detection
+    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie', 'sinon'])
     .webpackConfig({
         node: {
             console: true,
@@ -56,6 +58,7 @@ mix
 // mix.combine(files, destination);
 // mix.babel(files, destination); <-- Identical to mix.combine(), but also includes Babel compilation.
 // mix.copy(from, to);
+// mix.copyDirectory(fromDir, toDir);
 // mix.minify(file);
 // mix.sourceMaps(); // Enable sourcemaps
 // mix.version(); // Enable versioning.
@@ -67,5 +70,8 @@ mix
 // mix.then(function () {}) <-- Will be triggered each time Webpack finishes building.
 // mix.options({
 //   extractVueStyles: false, // Extract .vue component styling to file, rather than inline.
-//   processCssUrls: true // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+//   processCssUrls: true, // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+//   purifyCss: false, // Remove unused CSS selectors.
+//   uglify: {}, // Uglify-specific options. https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+//   postCss: [] // Post-CSS options: https://github.com/postcss/postcss/blob/master/docs/plugins.md
 // });

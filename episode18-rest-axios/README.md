@@ -8,21 +8,67 @@
 # install dependencies
 npm install
 
-# serve with hot reload opened at localhost:8080. Run dev first to get the dist
-# folder up to date.
+# generate an index.html version with included fakeServer
+npm run fake-trans
+
+# generate an index.html version without fakeServer
+npm run orig-trans
+
+# run webpack-http-server with hmr
+# - fake-trans version of index.html
+# - build artefacts from hot in-memory served via webpack-http-server
+# - on localhost:8080
 npm run hot
 
 # build for development
 npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production with minification
-npm run build
-
-# run http-server with build artefacts on localhost:8089
+# run http-server with
+# - fake-trans version of index.html
+# - build artefacts from dist
+# - on localhost:8089
 npm run prod-test
+```
+## NOTES
+fakeServer is a component of a js  module called [Sinon.JS](http://sinonjs.org/).
+> (Fake XHR and server) Provides a fake implementation of XMLHttpRequest and provides several interfaces for manipulating objects created by it.
+>
+http://sinonjs.org/releases/v2.0.0/fake-xhr-and-server/
+
+This is my first step for getting frontend tests which will be independent of a backend REST server. The fakeServer component fakes the backend REST service api's XHR responses and does some minor CRUD operation. Just enough to trigger the behaviour changes of the web GUI.
+
+It does so by responding to certain combinations of regexd URLs with REST action verbs while it let's pass through all other requests._That pass through was the key to get around the ```[WDS] Disconnect``` error of the installed [w]ebpack [d]ev [s]erver in hot mode._
+
+The fakeServer configuration and it's data are provided by a generated version of index.html. There are two npm scripts for that. Either use ```npm run fake-trans``` to generate an index.html version with the sinon fakeServer. Or ```npm run orig-trans``` for a index.html version without a fakeServer. Both originate from the checked in version of index.o.html.
+
+## Current dependencies
+
+```
+joma@kopernikus-u:~/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios$ npm list --depth=0 2
+>/dev/null
+episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios
+├── @3846masa/axios-cookiejar-support@0.0.4
+├── animate.css@3.5.2
+├── axios@0.16.0
+├── babel-core@6.24.0
+├── babel-loader@6.4.1
+├── babel-preset-es2015@6.24.0
+├── babel-preset-stage-3@6.22.0
+├── bulma@0.4.0
+├── cross-env@4.0.0
+├── css-loader@0.28.0
+├── file-loader@0.11.1
+├── http-server@0.9.0
+├── js-beautify@1.6.12
+├── jsdom@9.12.0
+├── laravel-mix@0.10.0
+├── sinon@2.1.0
+├── vue@2.2.6
+├── vue-inject@1.0.0
+├── vue-loader@11.3.4
+├── vue-template-compiler@2.2.6
+├── vue-toastr@2.0.5
+└── vuex@2.2.1
 ```
 
 ## Build result

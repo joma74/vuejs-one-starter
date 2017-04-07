@@ -8,8 +8,8 @@
                 </p>
                 <a class="card-header-icon">
                     <span class="icon is-medium" v-on:click="emitDelete">
-                  <i class="icon-trash" aria-hidden="true"></i>
-                </span>
+                        <i class="icon-trash" aria-hidden="true"></i>
+                    </span>
                 </a>
             </header>
             <div class="card-content">
