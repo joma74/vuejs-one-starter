@@ -8,6 +8,9 @@
 # install dependencies
 npm install
 
+# cleans the directory set by npm config 'content_base'
+npm run clean-content-base
+
 # generate an index.html version with included fakeServer
 npm run fake-trans
 
@@ -23,11 +26,20 @@ npm run hot
 # build for development
 npm run dev
 
+# build for production
+npm run build
+
 # run http-server with
 # - fake-trans version of index.html
-# - build artefacts from dist
+# - build artefacts from npm config 'content_base'
 # - on localhost:8089
-npm run prod-test
+npm run dist-test
+
+# run http-server with
+# - orig-trans version of index.html
+# - build artefacts from npm config 'content_base'
+# - on localhost:8089
+npm run dist
 ```
 ## NOTES
 fakeServer is a component of a js  module called [Sinon.JS](http://sinonjs.org/).
@@ -44,8 +56,7 @@ The fakeServer configuration and it's data are provided by a generated version o
 ## Current dependencies
 
 ```
-joma@kopernikus-u:~/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios$ npm list --depth=0 2
->/dev/null
+joma@kopernikus-u:~/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios$ npm list --depth=0 2>/dev/null
 episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios
 ├── @3846masa/axios-cookiejar-support@0.0.4
 ├── animate.css@3.5.2
@@ -54,14 +65,16 @@ episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode
 ├── babel-loader@6.4.1
 ├── babel-preset-es2015@6.24.0
 ├── babel-preset-stage-3@6.22.0
-├── bulma@0.4.0
+├── bulma@0.3.1
 ├── cross-env@4.0.0
 ├── css-loader@0.28.0
 ├── file-loader@0.11.1
+├── fs-extra@2.1.2
 ├── http-server@0.9.0
 ├── js-beautify@1.6.12
 ├── jsdom@9.12.0
 ├── laravel-mix@0.10.0
+├── rimraf@2.6.1
 ├── sinon@2.1.0
 ├── vue@2.2.6
 ├── vue-inject@1.0.0

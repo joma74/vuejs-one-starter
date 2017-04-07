@@ -8,13 +8,13 @@
       "content_base": "dist/"
   },
   "scripts": {
+    "clean-content-base": "rimraf $npm_package_config_content_base/*",
+    "serve-app": "http-server -d -o -p 8089 -a localhost -c-1 $npm_package_config_content_base",
     "fake-trans": "node bin/transformHtmlFake.js",
     "orig-trans": "node bin/transformHtmlOrig.js",
-    "clean-dist": "rimraf $npm_package_config_content_base/*",
-    "serve-app": "http-server -d -o -p 8089 -a localhost -c-1 $npm_package_config_content_base",
-    "hot": "npm run clean-dist && npm run fake-trans && cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
-    "dev": "npm run clean-dist && cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
-    "build": "npm run clean-dist && cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "hot": "npm run clean-content-base && npm run fake-trans && cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
+    "dev": "npm run clean-content-base && cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "build": "npm run clean-content-base && cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
     "dist-test": "npm run build && npm run fake-trans && npm run serve-app",
     "dist": "npm run build && npm run orig-trans && npm run serve-app"
   },
