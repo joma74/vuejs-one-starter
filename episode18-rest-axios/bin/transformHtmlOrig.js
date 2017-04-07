@@ -3,7 +3,7 @@ var jsdom = require("jsdom").jsdom;
 var serializeDocument = require("jsdom").serializeDocument;
 var fs = require("fs");
 
-var htmlSource = fs.readFileSync("index.o.html", "utf8");
+var htmlSource = fs.readFileSync("bin/index.o.html", "utf8");
 var doc = jsdom(htmlSource, {
     features: {
         FetchExternalResources: false,
