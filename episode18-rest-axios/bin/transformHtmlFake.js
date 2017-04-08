@@ -3,6 +3,10 @@ var jsdom = require("jsdom").jsdom;
 var serializeDocument = require("jsdom").serializeDocument;
 var fs = require("fs-extra");
 
+const dist_path = "dist/";
+const myapp_path = "myapp/";
+const dist_mayapp_path = dist_path + myapp_path;
+
 var htmlSource = fs.readFileSync("bin/index.o.html", "utf8");
 var doc = jsdom(htmlSource, {
     features: {
@@ -13,11 +17,10 @@ var doc = jsdom(htmlSource, {
 });
 var fstScriptEl = doc.body.querySelector("script");
 //
-var dist_mayapp_path = "dist/myapp/";
 fs.ensureDirSync(dist_mayapp_path); //like mkdir -p
 fs.copySync("node_modules/sinon/pkg/sinon-no-sourcemaps.js", dist_mayapp_path + "sinon-no-sourcemaps.js");
 var newScriptEl = doc.createElement("script");
-newScriptEl.src = "myapp/sinon-no-sourcemaps.js";
+newScriptEl.src = myapp_path + "sinon-no-sourcemaps.js";
 doc.body.insertBefore(newScriptEl, fstScriptEl);
 //
 newScriptEl = doc.createElement("script");
@@ -26,7 +29,7 @@ setupSinonFakeServerSource = setupSinonFakeServerSource.split('\n').slice(1).joi
 newScriptEl.textContent = setupSinonFakeServerSource;
 doc.body.insertBefore(newScriptEl, fstScriptEl);
 //
-fs.writeFileSync("./dist/index.html",
+fs.writeFileSync(dist_path + "index.html",
     beautify_html(serializeDocument(doc), {
         extra_liners: [],
         indent_inner_html: true,
