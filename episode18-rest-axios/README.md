@@ -83,7 +83,31 @@ episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode
 ├── vue-toastr@2.0.5
 └── vuex@2.2.1
 ```
+## Patches
 
+As of webpack 2 the `copy-webpack-plugin` uses an invalid property which makes
+webpack fail for hot reloading in hmr mode.
+```
+[copy-webpack-plugin] Using older versions of webpack-dev-server, devServer.outputPath must be defined to write to absolute paths
+```
+The offending code is
+```js
+    // copy-webpack-plugin/dist/index.js
+    if (globalRef.output === '/' && compiler.options.devServer && compiler.options.devServer.outputPath) {
+                globalRef.output = compiler.options.devServer.outputPath;
+    }
+```
+Which must be patched with `contentBase` instead of `outputPath`
+```js
+    // copy-webpack-plugin/dist/index.js
+    if (globalRef.output === '/' && compiler.options.devServer && compiler.options.devServer.contentBase) {
+                globalRef.output = compiler.options.devServer.contentBase;
+    }
+```
+Joy. Again.
+```
+ DONE  Compiled successfully in 8774ms
+```
 ## Build result
 
 ### uglify with default (baseline)
