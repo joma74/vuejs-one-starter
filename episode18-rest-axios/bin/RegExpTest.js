@@ -1,13 +1,4 @@
-// total naughty copy of lodash's escapeRegExp.js
-function RegExHelper() {
-    this.reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-    this.quote = function(string) {
-        return string.replace(this.reRegExpChar, '\\$&')
-    }
-}
-var regExHelper = new RegExHelper();
-
-var QUOTED_PROJECT_URI = regExHelper.quote('/api/projects');
+var QUOTED_PROJECT_URI = '/api/projects';
 
 
 /**

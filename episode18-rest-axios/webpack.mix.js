@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let manifestVersionHandler = require('./bin/manifestversionhandler');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,12 +13,21 @@ let mix = require('laravel-mix');
  */
 
 mix
+    .setPublicPath('dist/') // public path required by Mix.js hot detection
     .js('src/main/js/main.js', 'myapp') // but single dist despite publicPath
     .sass('src/main/js/assets/app.sass', 'dist/myapp') // double dist from publicPath
-    //.copy('src/main/js/assets/logo.png', 'dist/myapp')
+    .copy('src/main/js/assets/logo.png', 'dist/myapp')
     .sourceMaps()
-    .setPublicPath('dist/') // public path required by Mix.js hot detection
-    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie'])
+    .extract(['vue', 'vuex', 'vue-inject', 'axios', 'vue-toastr', '@3846masa/axios-cookiejar-support', 'tough-cookie']);
+if (mix.config.inProduction) {
+    mix
+        .version() // only do for production filename: `[name]${isDev ? '' : '[chunkhash:8]'}.js`// https://github.com/webpack/webpack-dev-server/issues/377
+        .then(function() {
+            // only enacted for "production" builds - that is everything except hot. Because versioning is only there supported
+            manifestVersionHandler.doReplace("./dist/index.html", "./dist/mix-manifest.json");
+        })
+}
+mix
     .webpackConfig({
         node: {
             console: true,

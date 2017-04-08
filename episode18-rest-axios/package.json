@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "author": "joma74 <dev-mails@gmx.net>",
   "private": true,
-  "config" :{
-      "content_base": "dist/"
+  "config": {
+    "content_base": "dist/"
   },
   "scripts": {
     "dep-list-installed-0": "npm list --depth=0 2>/dev/null | tee installed-dependencies.log",
@@ -19,11 +19,11 @@
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
     "hot-fake-test": "npm run clean-content-base && npm run fake-trans && npm run hot",
     "hot-test": "npm run clean-content-base && npm run orig-trans && npm run hot",
-    "dev": "npm run clean-content-base && cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
-    "dev-fake-test": "npm run dev && npm run fake-trans && npm run serve-app",
-    "build": "npm run clean-content-base && cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
-    "build-fake-test": "npm run build && npm run fake-trans && npm run serve-app",
-    "build-test": "npm run build && npm run orig-trans && npm run serve-app"
+    "dev": "cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "dev-fake-test": "npm run clean-content-base && npm run fake-trans && npm run dev && npm run serve-app",
+    "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "build-fake-test": "npm run clean-content-base && npm run fake-trans && npm run build && npm run serve-app",
+    "build-test": "npm run clean-content-base && npm run orig-trans && npm run build && npm run serve-app"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.4",
@@ -48,6 +48,7 @@
     "js-beautify": "1.6.12",
     "jsdom": "9.12.0",
     "laravel-mix": "0.10.0",
+    "replace-in-file": "2.5.0",
     "rimraf": "2.6.1",
     "sinon": "2.1.0",
     "vue-inject": "1.0.0",

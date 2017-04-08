@@ -24,7 +24,7 @@ newScriptEl.src = myapp_path + "sinon-no-sourcemaps.js";
 doc.body.insertBefore(newScriptEl, fstScriptEl);
 //
 newScriptEl = doc.createElement("script");
-var setupSinonFakeServerSource = fs.readFileSync("bin/setupSinonFakeServer.js", "utf8");
+var setupSinonFakeServerSource = fs.readFileSync("bin/setupSinonFakeServer.js.tpl", "utf8");
 setupSinonFakeServerSource = setupSinonFakeServerSource.split('\n').slice(1).join('\n');
 newScriptEl.textContent = setupSinonFakeServerSource;
 doc.body.insertBefore(newScriptEl, fstScriptEl);
