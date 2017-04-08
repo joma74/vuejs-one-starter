@@ -2,6 +2,22 @@ var sinon = require("sinon");
 
 var fakeServer = sinon.fakeServer.create();
 fakeServer.respondImmediately = true;
+fakeServer.xhr.useFilters = true;
+// total naughty copy of lodash's escapeRegExp.js
+function RegExHelper() {
+    this.reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+    this.quote = function(string) {
+        return string.replace(this.reRegExpChar, '\\$&')
+    }
+}
+var C_PROJECT_URI = "/api/projects";
+var QUOTED_PROJECT_URI = new RegExHelper().quote(C_PROJECT_URI);
+var daRegex = new RegExp(QUOTED_PROJECT_URI);
+
+fakeServer.xhr.addFilter(function(method, url) {
+    //whenever the this returns true the request will not faked
+    return !url.match(new RegExp(QUOTED_PROJECT_URI));
+});
 var fake_response = {
     projects: [{
         key: "1",
@@ -46,16 +62,16 @@ var onPUT = function(xhr) {
 };
 fakeServer.respondWith(
     "GET",
-    /.*\/api\/projects/,
+    new RegExp(QUOTED_PROJECT_URI),
     onGET
 );
 fakeServer.respondWith(
     "DELETE",
-    /.*\/api\/projects\/(\d+)/,
+    new RegExp(QUOTED_PROJECT_URI + "\/(\\d+)"),
     onDELETE
 );
 fakeServer.respondWith(
     "PUT",
-    /.*\/api\/projects/,
+    new RegExp(QUOTED_PROJECT_URI),
     onPUT
 );
