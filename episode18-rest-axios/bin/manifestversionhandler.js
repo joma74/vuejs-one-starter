@@ -24,9 +24,6 @@ manifestversionhandler.doReplace = function(replaceIntoFile, mixManifestVersionF
         let arrayFrom = [];
         let arrayTo = [];
 
-
-        debugger;
-
         for (var defaultName in mixManifestVersion) {
             arrayFrom.push(new RegExp(defaultName, "g"));
             arrayTo.push(mixManifestVersion[defaultName]);
