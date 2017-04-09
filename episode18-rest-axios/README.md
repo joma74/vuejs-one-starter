@@ -122,9 +122,10 @@ Joy. Again.
 - #2 patch has non-explicit implementation
 - #3 patch works-for-me, for others needs triage
   - feeling not in the field to propose that as pull request
-  - ask laravel-mix maintainers about triage, as of common interest
+  - ask laravel-mix maintainers about triage, as of common interest. See
     - https://github.com/JeffreyWay/laravel-mix/issues/313
     - https://github.com/JeffreyWay/laravel-mix/issues/63
+    - https://github.com/JeffreyWay/laravel-mix/pull/239
   - share the maybe unknown fact that `copy-webpack-plugin` - starting as of
     Version 3.0.0 - in hmr mode does NOT write physical files any more. See this [note](https://github.com/kevlened/copy-webpack-plugin#this-doesnt-copy-my-files-with-webpack-dev-server)
     on their git page.
