@@ -1,6 +1,8 @@
 # episode18-rest-axios
 
 > A Vue.js project
+> Built with webpack2 broken down by laravel-mix
+> Uses xhr fake for front end testing
 
 ## Build Setup
 
