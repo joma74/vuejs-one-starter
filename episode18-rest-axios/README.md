@@ -85,11 +85,19 @@ episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode
 ```
 ## Patches
 
-As of webpack 2 the `copy-webpack-plugin` uses an invalid property which makes
-webpack fail for hot reloading in hmr mode.
+### copy-webpack-plugin in hmr mode fails
+
+As of webpack 2 the [`copy-webpack-plugin`](https://github.com/kevlened/copy-webpack-plugin)
+uses an invalid property which makes webpack fail for hot reloading in hmr mode. The in-browser console warns and then WDS disconnects.
 ```
 [copy-webpack-plugin] Using older versions of webpack-dev-server, devServer.outputPath must be defined to write to absolute paths
 ```
+Additionally that message  is very misleading. It should be :speak_no_evil:
+```
+[copy-webpack-plugin] Using outdated versions of copy-webpack-plugin, devServer.outputPath is defined to write to absolute paths. Will break and disconnect you shortly.
+```
+:Sarkasm-off:
+
 The offending code is
 ```js
     // copy-webpack-plugin/dist/index.js
@@ -97,7 +105,7 @@ The offending code is
                 globalRef.output = compiler.options.devServer.outputPath;
     }
 ```
-Which must be patched with `contentBase` instead of `outputPath`
+Which may be patched with `contentBase` instead of `outputPath`.
 ```js
     // copy-webpack-plugin/dist/index.js
     if (globalRef.output === '/' && compiler.options.devServer && compiler.options.devServer.contentBase) {
@@ -108,6 +116,23 @@ Joy. Again.
 ```
  DONE  Compiled successfully in 8774ms
 ```
+
+#### Score and Status
+- #1 patch is not compatible with webpack devServer 1.?.? anymore
+- #2 patch has non-explicit implementation
+- #3 patch works-for-me, for others needs triage
+  - feeling not in the field to propose that as pull request
+  - ask laravel-mix maintainers about triage, as of common interest
+    - https://github.com/JeffreyWay/laravel-mix/issues/313
+    - https://github.com/JeffreyWay/laravel-mix/issues/63
+  - share the maybe unknown fact that `copy-webpack-plugin` - starting as of
+    Version 3.0.0 - in hmr mode does NOT write physical files any more. See this [note](https://github.com/kevlened/copy-webpack-plugin#this-doesnt-copy-my-files-with-webpack-dev-server)
+    on their git page.
+- #4 evaluate why the then failing error in `copy-webpack-plugin` does not
+    display an error detail message in the node console. Only ERROR and some
+    empty lines.
+- #5 share back pending - triage, issue and pull request in planning
+
 ## Build result
 
 ### uglify with default (baseline)
