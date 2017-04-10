@@ -3,6 +3,7 @@ let glob = require('glob');
 let webpack = require('webpack');
 let Mix = require('laravel-mix').config;
 let webpackPlugins = require('laravel-mix').plugins;
+// let BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 /*
  |--------------------------------------------------------------------------
@@ -76,6 +77,8 @@ module.exports.output = Mix.output();
  */
 
 let plugins = [];
+
+// plugins.push(new BundleAnalyzerPlugin())
 
 if (Mix.options.extractVueStyles) {
     var vueExtractTextPlugin = Mix.vueExtractTextPlugin();

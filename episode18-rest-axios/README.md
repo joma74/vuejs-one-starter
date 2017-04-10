@@ -127,6 +127,16 @@ Joy. Again.
  DONE  Compiled successfully in 8774ms
 ```
 
+A diff was created by
+```bash
+diff -uN node_modules/copy-webpack-plugin/dist/index.js node_modules/copy-webpack-plugin/dist/index.js.hmrworksagain > docs/patch.hmrwork
+sagain.copywebpackplugin-dist-index.js
+```
+Which can be applied as patch by
+```bash
+npm run apply-patches
+```
+
 #### Score and Status
 - #1 patch is not compatible with webpack devServer 1.?.? anymore
 - #2 patch has non-explicit implementation

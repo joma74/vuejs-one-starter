@@ -9,8 +9,9 @@
   },
   "scripts": {
     "dep-list-installed-0": "npm list --depth=0 2>/dev/null | tee installed-dependencies.log",
-    "clean-upgrade": "npm-check-updates -u && npm run clean-install && npm dep-list-installed-0",
-    "clean-install": "rimraf node_modules/* && npm install && npm dep-list-installed-0",
+    "clean-upgrade": "npm-check-updates -u && npm run clean-install && npm run dep-list-installed-0",
+    "clean-install": "rimraf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0",
+    "apply-patches": "patch -p0 < docs/patch.hmrworksagain.copywebpackplugin-dist-index.js",
     "debug": "node --inspect --debug-brk node_modules/.bin/webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
     "serve-app": "http-server -d -o -p 8089 -a localhost -c-1 $npm_package_config_content_base",
     "fake-trans": "node bin/transformHtmlFake.js",
@@ -22,8 +23,10 @@
     "dev": "cross-env NODE_ENV=development webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
     "dev-fake-test": "npm run clean-content-base && npm run fake-trans && npm run dev && npm run serve-app",
     "build": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks > ./$npm_package_config_content_base/build.log",
+    "build-profile": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks --profile --json > ./$npm_package_config_content_base/webpack-stats.json",
     "build-fake-test": "npm run clean-content-base && npm run fake-trans && npm run build && npm run serve-app",
-    "build-test": "npm run clean-content-base && npm run orig-trans && npm run build && npm run serve-app"
+    "build-test": "npm run clean-content-base && npm run orig-trans && npm run build && npm run serve-app",
+    "run-install": "npm run clean-install && npm run dev-fake-test"
   },
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "0.0.4",
@@ -54,6 +57,7 @@
     "sinon": "2.1.0",
     "vue-inject": "1.0.0",
     "vue-loader": "11.3.4",
-    "vue-template-compiler": "2.2.6"
+    "vue-template-compiler": "2.2.6",
+    "webpack-bundle-analyzer": "^2.3.1"
   }
 }
