@@ -39,7 +39,7 @@ mix
     .options({
         processCssUrls: true, // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
         uglify: {
-            sourceMap: true,
+            sourceMap: false,
             compress: {
                 warnings: false,
                 conditionals: true,
@@ -54,7 +54,8 @@ mix
             },
             comments: false,
             sourceMapInline: false
-        }
+        },
+        purifyCss: true
     });
 
 // Full API

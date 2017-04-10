@@ -60,15 +60,19 @@ The fakeServer configuration and it's data are provided by a generated version o
 ## Current dependencies
 
 ```
-joma@kopernikus-u:~/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios$ npm list --depth=0 2>/dev/null
+joma@kopernikus-u:~/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios$ npm run dep-list-installed-0
+
+> episode18-rest-axios@1.0.0 dep-list-installed-0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios
+> npm list --depth=0 2>/dev/null | tee installed-dependencies.log
+
 episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode18-rest-axios
 ├── @3846masa/axios-cookiejar-support@0.0.4
 ├── animate.css@3.5.2
 ├── axios@0.16.0
-├── babel-core@6.24.0
+├── babel-core@6.24.1
 ├── babel-loader@6.4.1
-├── babel-preset-es2015@6.24.0
-├── babel-preset-stage-3@6.22.0
+├── babel-preset-es2015@6.24.1
+├── babel-preset-stage-3@6.24.1
 ├── bulma@0.3.1
 ├── cross-env@4.0.0
 ├── css-loader@0.28.0
@@ -78,6 +82,8 @@ episode18-rest-axios@1.0.0 /home/joma/entwicklung/nodews/vuejs-laracasts/episode
 ├── js-beautify@1.6.12
 ├── jsdom@9.12.0
 ├── laravel-mix@0.10.0
+├── purifycss-webpack@0.6.0
+├── replace-in-file@2.5.0
 ├── rimraf@2.6.1
 ├── sinon@2.1.0
 ├── vue@2.2.6
@@ -276,4 +282,21 @@ dist/manifest.js    1.37 kB       2  [emitted]         dist/manifest
 mix-manifest.json  158 bytes          [emitted]    
                    ________
                     ~ 503 kB      
+```
+### uglify with purifyCss (- 13%)
+```js
+purifyCss: true
+```
+```bash
+DONE  Compiled successfully in 15012ms11:24:32 PM
+
+                                Asset       Size  Chunks                    Chunk Names
+ myapp/vendor.718b867f8f32fc1a578a.js     305 kB       0  [emitted]  [big]  myapp/vendor
+   myapp/main.40a19e42ea0531f8a834.js      46 kB       1  [emitted]         myapp/main
+myapp/manifest.d41d8cd98f00b204e980.js    1.46 kB       2  [emitted]         myapp/manifest
+  /myapp/app.68776a10934531d189df.css    73.7 kB       1  [emitted]         myapp/main
+                    mix-manifest.json  250 bytes          [emitted]         
+                       myapp/logo.png    6.85 kB          [emitted]
+                                        ________
+                                        ~ 429 kB
 ```

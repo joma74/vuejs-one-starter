@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dep-list-installed-0": "npm list --depth=0 2>/dev/null | tee installed-dependencies.log",
-    "clean-upgrade": "npm-check-updates -u && npm run clean-install",
-    "clean-install": "rimraf node_modules/* && npm install",
+    "clean-upgrade": "npm-check-updates -u && npm run clean-install && npm dep-list-installed-0",
+    "clean-install": "rimraf node_modules/* && npm install && npm dep-list-installed-0",
     "debug": "node --inspect --debug-brk node_modules/.bin/webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
     "serve-app": "http-server -d -o -p 8089 -a localhost -c-1 $npm_package_config_content_base",
     "fake-trans": "node bin/transformHtmlFake.js",
@@ -48,6 +48,7 @@
     "js-beautify": "1.6.12",
     "jsdom": "9.12.0",
     "laravel-mix": "0.10.0",
+    "purifycss-webpack": "^0.6.0",
     "replace-in-file": "2.5.0",
     "rimraf": "2.6.1",
     "sinon": "2.1.0",
