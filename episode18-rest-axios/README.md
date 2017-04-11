@@ -9,41 +9,39 @@
 ## Build Setup
 
 ``` bash
-# install dependencies
-npm install
+# run clean-install and test production build with fake data
+npm run run-install
 
 # cleans the directory set by npm config 'content_base'
-npm run clean-content-base
+npm run clean-install
 
-# generate an index.html version with included fakeServer
-npm run fake-trans
-
-# generate an index.html version without fakeServer
-npm run orig-trans
-
-# run webpack-http-server with hmr
+# generate an index.html version with included fakeServer, plus run in browser
+# with webpack hmr | dev | production settings.
+# @hmr run webpack-http-server in hmr mode with webpack dev settings
 # - fake-trans version of index.html
 # - build artefacts from hot in-memory served via webpack-http-server
 # - on localhost:8080
-npm run hot
-
-# build for development
-npm run dev
-
-# build for production
-npm run build
-
-# run http-server with
+# @dev run http-server with webpack dev settings
 # - fake-trans version of index.html
 # - build artefacts from npm config 'content_base'
 # - on localhost:8089
-npm run dist-test
-
-# run http-server with
-# - orig-trans version of index.html
+# @build run http-server with webpack production settings
+# - fake-trans version of index.html
 # - build artefacts from npm config 'content_base'
 # - on localhost:8089
-npm run dist
+npm run hot-fake-test
+| npm run dev-fake-test
+| npm run build-fake-test
+
+# same as npm run *-fake-test, but without a fakeServer. Generate an index.html
+# version as in production(without fakeServer), plus run in browser
+# with webpack hmr | production settings.
+npm run hot-test
+| npm run build-test
+
+# output webpack stats aka dependency tree under dist
+npm run build-profile
+
 ```
 ## NOTES
 fakeServer is a component of a js  module called [Sinon.JS](http://sinonjs.org/).
@@ -158,7 +156,7 @@ npm run apply-patches
 
 ### uglify with default (baseline)
 
-Non-functional because call of `formatZeroPadded()` from `<template>` to my Mixin 'UtilsMixin' get's *mis-mangeled*
+Non-functional because call of `formatZeroPadded()` from `<template>` to my Mixin 'UtilsMixin' **was** getting mis-mangeled. See [Template to Mixin Call gets mis-mangled  (#5238)](https://github.com/vuejs/vue/issues/5238#issuecomment-287951935).
 
 ``` js
 uglify: {
