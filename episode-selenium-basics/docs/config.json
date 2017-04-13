@@ -1,0 +1,8 @@
+{
+    "file" : "target/test/js/xunit.xml",
+    "consoleOutput" : {
+      "suite" : true,
+      "test" : true,
+      "fail" : false
+    }
+}

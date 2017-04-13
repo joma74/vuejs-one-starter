@@ -1,18 +1,38 @@
 {
-  "name": "episode-selenium-basics",
-  "version": "1.0.0",
-  "description": "javascript selenium basics",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "selenium",
-    "javascript"
-  ],
-  "author": "joma74 <dev-mails@gmx.net>",
-  "license": "ISC",
-  "devDependencies": {
-    "selenium-webdriver": "^3.3.0"
-  }
+    "name": "episode-selenium-basics",
+    "version": "1.0.0",
+    "description": "javascript selenium basics",
+    "scripts": {
+        "dep-list-installed-0": "npm list --depth=0 2>/dev/null | tee target/installed-dependencies.log",
+        "clean-upgrade": "npm-check-updates -u && npm run clean-install && npm run dep-list-installed-0",
+        "preinstall": "npm install rimraf@^2.6.1",
+        "apply-patches": "echo 'Dear npm, do not halt just because i am empty'",
+        "install-chromedriver": "wget -qO- https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip | bsdtar -xf- -C libs/",
+        "clean-install": "npm run preinstall && rimraf -rf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0",
+        "test": "nohup mocha -t 5000 -R xunit-file --harmony_async_await src/test/js/*_test.js </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
+    },
+    "keywords": [
+        "selenium",
+        "javascript"
+    ],
+    "config": {
+        "xunit_out_file": "target/test/js/xunit.xml",
+        "mocha_out_file": "target/test/js/mocha-output.txt",
+        "xunit-file": {
+            "file": "target/test/js/xunit.xml",
+            "consoleOutput": {
+                "suite": true,
+                "test": true,
+                "fail": false
+            }
+        }
+
+    },
+    "author": "joma74 <dev-mails@gmx.net>",
+    "license": "ISC",
+    "devDependencies": {
+        "mocha": "^3.2.0",
+        "selenium-webdriver": "^3.3.0",
+        "xunit-file": "^1.0.0"
+    }
 }
