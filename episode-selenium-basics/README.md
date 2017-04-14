@@ -58,6 +58,8 @@ The only downside of this option was: i am using the `Atom IDE` with the package
 ```
 The following screencast shows an `Atom IDE` before starting `npm run test` in the terminal. This will run two suites with tests, both of which are copied from the `Selenium Webdriver` javascript examples. The console outputs the suite and test names currently executed. Activating the `Workspace Switcher` shows an overview of all workspaces. In the upper right workspace where i have fixed the chrome-browser window  into, you can see the chrome browser window popping on/off as being driven by the selenium tests.
 
+![Demo browser in another workspace](docs/selenium-Movingthebrowsertoanotherworkspace_3.gif?raw=true)
+
 ## Current dependencies
 
 ```shell
