@@ -6,9 +6,10 @@
         "dep-list-installed-0": "npm list --depth=0 2>/dev/null | tee target/installed-dependencies.log",
         "clean-upgrade": "npm-check-updates -u && npm run clean-install && npm run dep-list-installed-0",
         "preinstall": "npm install rimraf@^2.6.1",
-        "apply-patches": "echo 'Dear npm, do not halt just because i am empty'",
-        "install-chromedriver": "wget -qO- https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip | bsdtar -xf- -C libs/",
-        "clean-install": "npm run preinstall && rimraf -rf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0",
+        "apply-patches": "patch -p0 < patches/patch.relativeconfig.xunit-file.js",
+        "make-projstruct": "mkdir -p $npm_package_config_target_test_dir",
+        "install-chromedriver": "wget -qO- https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip | bsdtar -xpf- -C libs/",
+        "clean-install": "npm run preinstall && rimraf node_modules/* && npm run preinstall && rimraf target/* && npm install && npm run apply-patches && npm run dep-list-installed-0 && npm run make-projstruct",
         "test": "nohup mocha -t 5000 -R xunit-file --harmony_async_await src/test/js/*_test.js </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
     },
     "keywords": [
@@ -17,16 +18,9 @@
     ],
     "config": {
         "xunit_out_file": "target/test/js/xunit.xml",
+        "target_test_dir": "target/test/js/",
         "mocha_out_file": "target/test/js/mocha-output.txt",
-        "xunit-file": {
-            "file": "target/test/js/xunit.xml",
-            "consoleOutput": {
-                "suite": true,
-                "test": true,
-                "fail": false
-            }
-        }
-
+        "target_path": "target/"
     },
     "author": "joma74 <dev-mails@gmx.net>",
     "license": "ISC",
