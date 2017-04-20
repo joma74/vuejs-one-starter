@@ -9,18 +9,20 @@
         "apply-patches": "patch -p0 < patches/patch.relativeconfig.xunit-file.js",
         "make-projstruct": "mkdir -p $npm_package_config_target_test_dir",
         "install-chromedriver": "wget -qO- https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip | bsdtar -xpf- -C libs/",
-        "clean-install": "npm run preinstall && rimraf node_modules/* && npm run preinstall && rimraf target/* && npm install && npm run apply-patches && npm run dep-list-installed-0 && npm run make-projstruct",
-        "test": "nohup mocha -t 5000 -R xunit-file --harmony_async_await src/test/js/*_test.js </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
+        "clean-install": "npm run preinstall && rimraf $npm_package_config_target_dir/* && rimraf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0 && npm run make-projstruct && npm run install-chromedriver",
+        "test": "mocha -t 5000 --harmony_async_await src/test/js/*_test.js",
+        "test-debug": "npm run test -- --inspect=9876 --debug-brk",
+        "test-in-bg": "nohup npm run test -- -R xunit-file </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
     },
     "keywords": [
         "selenium",
         "javascript"
     ],
     "config": {
-        "xunit_out_file": "target/test/js/xunit.xml",
+        "target_dir": "target/",
         "target_test_dir": "target/test/js/",
-        "mocha_out_file": "target/test/js/mocha-output.txt",
-        "target_path": "target/"
+        "xunit_out_file": "target/test/js/xunit.xml",
+        "mocha_out_file": "target/test/js/mocha-output.txt"
     },
     "author": "joma74 <dev-mails@gmx.net>",
     "license": "ISC",

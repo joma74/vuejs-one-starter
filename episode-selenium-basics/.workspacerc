@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+function storeNmbinPATH
+{
+    if [ -d "$PWD" ]; then
+        export PATH=$PWD/node_modules/.bin:$PATH;
+    fi
+}
+function storeLibsPATH
+{
+    export PATH=$PWD/libs:$PATH;
+}
+OLDPATH=$PATH;
+storeNmbinPATH;
+storeLibsPATH;
