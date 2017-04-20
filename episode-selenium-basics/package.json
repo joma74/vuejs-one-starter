@@ -8,7 +8,7 @@
         "preinstall": "npm install rimraf@^2.6.1",
         "apply-patches": "patch -p0 < patches/patch.relativeconfig.xunit-file.js",
         "make-projstruct": "mkdir -p $npm_package_config_target_test_dir",
-        "install-chromedriver": "wget -qO- https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip | bsdtar -xpf- -C libs/",
+        "install-chromedriver": "wget -qO- $npm_package_config_chromedriver_dl_url | bsdtar -xpf- -C libs/ && chmod u+x libs/chromedriver",
         "clean-install": "npm run preinstall && rimraf $npm_package_config_target_dir/* && rimraf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0 && npm run make-projstruct && npm run install-chromedriver",
         "test": "mocha -t 5000 --harmony_async_await src/test/js/*_test.js",
         "test-debug": "npm run test -- --inspect=9876 --debug-brk",
@@ -22,7 +22,8 @@
         "target_dir": "target/",
         "target_test_dir": "target/test/js/",
         "xunit_out_file": "target/test/js/xunit.xml",
-        "mocha_out_file": "target/test/js/mocha-output.txt"
+        "mocha_out_file": "target/test/js/mocha-output.txt",
+        "chromedriver_dl_url": "https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip"
     },
     "author": "joma74 <dev-mails@gmx.net>",
     "license": "ISC",
