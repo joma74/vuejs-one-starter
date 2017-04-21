@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 function storeNmbinPATH
 {
-    if [ -d "$PWD" ]; then
-        export PATH=$PWD/node_modules/.bin:$PATH;
-    fi
+    export PATH=$(npm bin):$PATH;
 }
 function storeLibsPATH
 {
