@@ -52,10 +52,8 @@ This solution works-for-me on Unity on Ubuntu 14.04 LTS with multi-workspace sup
 
 Unity has a so-called compiz configuration settings manager executing by the name of `ccsm`. `ccsm` enables you to fixate, on which workspace a window by a given window class name is placed. Remarkably workspaces are there named `Viewports`, so my second workspace is configured by `X Viewport Positions=2` and `Y Viewport Positions=1` found under the `Place Windows -> Windows with fixed viewport` menu.
 
-The only downside of this option was: i am using the `Atom IDE` with the package `platformio-ide-terminal` where i start the selenium tests via npm run test. Unfortunately `platformio-ide-terminal` 'steals' the focus whenever a new browser window opens. The solution to this downside was to add `nohup` and `tee` to the mix.
-```js
-"test": "nohup mocha -t 5000 -R xunit-file --harmony_async_await src/test/js/*_test.js </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
-```
+The only downside of this option was: i am using the `Atom IDE` with the package `platformio-ide-terminal` where i start the selenium tests via npm run test. Unfortunately `Ubuntu Unity` 'steals' the focus whenever a new browser window opens. The solution to this downside is to run `ccsm` again and set `General Options -> Focus & Raise Detection -> Focus Prevention Level` to `Very High`.
+
 The following screencast shows an `Atom IDE` before starting `npm run test` in the terminal. This will run two suites with tests, both of which are copied from the `Selenium Webdriver` javascript examples. The console outputs the suite and test names currently executed. Activating the `Workspace Switcher` shows an overview of all workspaces. In the upper right workspace where i have fixed the chrome-browser window  into, you can see the chrome browser window popping on/off as being driven by the selenium tests.
 
 ![Demo browser in another workspace](docs/selenium-Movingthebrowsertoanotherworkspace_3.gif?raw=true)

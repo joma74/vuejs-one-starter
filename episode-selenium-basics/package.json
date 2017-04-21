@@ -12,7 +12,7 @@
         "clean-install": "npm run preinstall && rimraf $npm_package_config_target_dir/* && rimraf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0 && npm run make-projstruct && npm run install-chromedriver",
         "test": "mocha -t 5000 --harmony_async_await src/test/js/*_test.js",
         "test-debug": "npm run test -- --inspect=9876 --debug-brk",
-        "test-in-bg": "nohup npm run test -- -R xunit-file </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
+        "test-in-bg": "npm run test -- -R xunit-file </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
     },
     "keywords": [
         "selenium",
