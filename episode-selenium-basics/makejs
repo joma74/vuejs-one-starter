@@ -63,8 +63,8 @@ target[install_projstruct] = function() {
 target[install_chromedriver] = function() {
   logExecutingTarget(install_chromedriver);
   shell.exec('wget -qO- $npm_package_config_chromedriver_dl_url \
-  | bsdtar -xpf- -C $npm_package_config_libs_dir/ \
-  && chmod u+x $npm_package_config_libs_dir/chromedriver');
+  | bsdtar -xpf- -C $npm_package_config_libs_dir/ ');
+  shell.chmod('u+x', shell.env['npm_package_config_libs_dir'] + '/chromedriver');
 };
 
 target[list_installed] = function() {
