@@ -1,35 +1,36 @@
 {
-    "name": "episode-selenium-basics",
-    "version": "1.0.0",
-    "description": "javascript selenium basics",
-    "scripts": {
-        "dep-list-installed-0": "npm list --depth=0 2>/dev/null | tee target/installed-dependencies.log",
-        "clean-upgrade": "npm-check-updates -u && npm run clean-install && npm run dep-list-installed-0",
-        "preinstall": "npm install rimraf@^2.6.1",
-        "apply-patches": "patch -p0 < patches/patch.relativeconfig.xunit-file.js",
-        "make-projstruct": "mkdir -p $npm_package_config_target_test_dir",
-        "install-chromedriver": "wget -qO- $npm_package_config_chromedriver_dl_url | bsdtar -xpf- -C libs/ && chmod u+x libs/chromedriver",
-        "clean-install": "npm run preinstall && rimraf $npm_package_config_target_dir/* && rimraf node_modules/* && npm install && npm run apply-patches && npm run dep-list-installed-0 && npm run make-projstruct && npm run install-chromedriver",
-        "test": "mocha -t 5000 --harmony_async_await src/test/js/*_test.js",
-        "test-debug": "npm run test -- --inspect=9876 --debug-brk",
-        "test-in-bg": "npm run test -- -R xunit-file </dev/null 2>&1 | tee $npm_package_config_mocha_out_file"
-    },
-    "keywords": [
-        "selenium",
-        "javascript"
-    ],
-    "config": {
-        "target_dir": "target/",
-        "target_test_dir": "target/test/js/",
-        "xunit_out_file": "target/test/js/xunit.xml",
-        "mocha_out_file": "target/test/js/mocha-output.txt",
-        "chromedriver_dl_url": "https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip"
-    },
-    "author": "joma74 <dev-mails@gmx.net>",
-    "license": "ISC",
-    "devDependencies": {
-        "mocha": "^3.2.0",
-        "selenium-webdriver": "^3.3.0",
-        "xunit-file": "^1.0.0"
-    }
+  "name": "episode-selenium-basics",
+  "version": "1.0.0",
+  "description": "javascript selenium basics",
+  "scripts": {
+    "list-installed": "npm run _make list:installed",
+    "patch-apply": "npm run _make patch:apply",
+    "make-all": "npm install shelljs@^0.7.7 -s && npm run _make",
+    "make-help": "./makejs --help",
+    "_make": "./makejs",
+    "test": "npm run _make test",
+    "test-debug": "npm run _make test:debug",
+    "test-surefire": "npm run _make test:surefire"
+  },
+  "keywords": [
+    "selenium",
+    "javascript"
+  ],
+  "config": {
+    "libs_dir": "libs/",
+    "nodesmodules_dir": "node_modules/",
+    "target_dir": "target/",
+    "target_test_dir": "target/test/js/",
+    "xunit_out_file": "target/test/js/xunit.xml",
+    "mocha_out_file": "target/test/js/mocha-output.txt",
+    "chromedriver_dl_url": "https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip"
+  },
+  "author": "joma74 <dev-mails@gmx.net>",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "selenium-webdriver": "^3.4.0",
+    "shelljs": "^0.7.7",
+    "xunit-file": "^1.0.0"
+  }
 }

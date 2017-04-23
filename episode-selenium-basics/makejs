@@ -1,0 +1,90 @@
+#! /usr/bin/env node
+
+const shell = require("shelljs");
+require("shelljs/make");
+
+set('-e'); // any non-0 exit code results in a thrown error
+set('-v');
+
+const install_clean = 'install:clean';
+const install_install = 'install:install';
+const patch_apply = 'patch:apply';
+const install_projstruct = 'install:projstruct';
+const install_chromedriver = 'install:chromedriver';
+const list_installed = "list:installed";
+//
+const test_run = "test:run";
+const test_debug = "test:debug";
+const test_surefire = "test:surefire";
+
+var logExecutingTarget = function(targetName){
+  console.log('--- ' + targetName + ' ---');
+}
+
+target.all = function() {
+  target[install_clean]();
+  target[install_install]();
+  target[patch_apply]();
+  target[install_projstruct]();
+  target[install_chromedriver]();
+  target[list_installed]();
+};
+
+target[install_clean] = function() {
+  logExecutingTarget(install_clean);
+  shell.rm('-rf', shell.env['npm_package_config_libs_dir']);
+  shell.rm('-rf', shell.env['npm_package_config_target_dir']);
+  // lastly, remove myself
+  shell.rm('-rf', shell.env['npm_package_config_nodesmodules_dir']);
+};
+
+target[install_install] = function() {
+  logExecutingTarget(install_install);
+  shell.exec('npm install -s');
+};
+
+
+target[patch_apply] = function() {
+  logExecutingTarget(patch_apply);
+  set('+e');
+  // exitCodes 0 and 1 of patch are 'okay'. 1 means the patch has already been applied
+  if(shell.exec('patch -p0 < patches/patch.relativeconfig.xunit-file.js').code > 1) {
+    throw new Error(exitCode);
+  }
+  set('-e');
+};
+
+target[install_projstruct] = function() {
+  logExecutingTarget(install_projstruct);
+  shell.mkdir('-p', shell.env['npm_package_config_target_test_dir']);
+  shell.mkdir('-p', shell.env['npm_package_config_libs_dir']);
+};
+
+target[install_chromedriver] = function() {
+  logExecutingTarget(install_chromedriver);
+  shell.exec('wget -qO- $npm_package_config_chromedriver_dl_url \
+  | bsdtar -xpf- -C $npm_package_config_libs_dir/ \
+  && chmod u+x $npm_package_config_libs_dir/chromedriver');
+};
+
+target[list_installed] = function() {
+  logExecutingTarget(list_installed);
+  shell.exec('npm list --depth=0 2>/dev/null | tee $npm_package_config_target_dir/installed-dependencies.log');
+};
+
+target[test_run] = target["test"] = function(params = "", postChain = "") {
+  logExecutingTarget(test_run);
+  let command = `mocha -t 5000 ${params} --harmony_async_await src/test/js/*_test.js ${postChain}`;
+  console.log(command);
+  shell.exec(command);
+};
+
+target[test_debug] = function() {
+  logExecutingTarget(test_debug);
+  target["test:run"]("--inspect=9876 --debug-brk");
+};
+
+target[test_surefire] = function() {
+  logExecutingTarget(test_surefire);
+  target["test:run"]("-R xunit-file </dev/null 2>&1", "| tee $npm_package_config_mocha_out_file");
+};
