@@ -31,6 +31,8 @@
     "mocha": "^3.2.0",
     "selenium-webdriver": "^3.4.0",
     "shelljs": "^0.7.7",
+    "unzipper": "^0.8.8",
+    "wget-improved": "^1.4.0",
     "xunit-file": "^1.0.0"
   }
 }
