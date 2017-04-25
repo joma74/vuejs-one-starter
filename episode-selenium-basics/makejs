@@ -43,7 +43,7 @@ target[install_clean] = function() {
 
 target[install_install] = function() {
   logExecutingTarget(install_install);
-  shell.exec('npm install -s');
+  shell.exec('yarn install -s');
 };
 
 
@@ -89,7 +89,7 @@ target[install_chromedriver] = function() {
 
 target[list_installed] = function() {
   logExecutingTarget(list_installed);
-  shell.exec('npm list --depth=0 2>/dev/null | tee $npm_package_config_target_dir/installed-dependencies.log');
+  shell.exec('yarn list --depth=0 2>/dev/null | tee $npm_package_config_target_dir/installed-dependencies.log');
 };
 
 target[test_run] = target["test"] = function(params = "", postChain = "") {

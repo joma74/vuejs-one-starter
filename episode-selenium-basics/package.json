@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "javascript selenium basics",
   "scripts": {
-    "list-installed": "npm run _make list:installed",
-    "patch-apply": "npm run _make patch:apply",
-    "make-all": "npm install shelljs@^0.7.7 -s && npm run _make",
+    "list-installed": "yarn run _make list:installed",
+    "patch-apply": "yarn run _make patch:apply",
+    "make-install": "yarn add shelljs@^0.7.7 -s && yarn run _make",
     "make-help": "./makejs --help",
     "_make": "./makejs",
-    "test": "npm run _make test",
-    "test-debug": "npm run _make test:debug",
-    "test-surefire": "npm run _make test:surefire"
+    "test": "yarn run _make test",
+    "test-debug": "yarn run _make test:debug",
+    "test-surefire": "yarn run _make test:surefire"
   },
   "keywords": [
     "selenium",
