@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+function storeNmbinPATH
+{
+    export PATH=$(npm bin):$PATH;
+}
+function storeLibsPATH
+{
+    export PATH=$PWD/libs:$PATH;
+}
+OLDPATH=$PATH;
+storeNmbinPATH;
+storeLibsPATH;
