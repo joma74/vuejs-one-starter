@@ -21,6 +21,11 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    // force a semicolon at the end
+    'semi': [2, 'always'],
+    'no-multiple-empty-lines': 0,
+    'indent': ['warn', 2],
+    'operator-linebreak': 1
   }
-}
+};

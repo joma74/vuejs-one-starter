@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,8 +12,29 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('src/app.js', 'dist/')
-   .sass('src/app.scss', 'dist/');
+let CONTENT_BASE = 'target/';
+let MAIN_JS = 'main/js/';
+let SRC_BASE = 'src/' + MAIN_JS;
+let TARGET_BASE = CONTENT_BASE + MAIN_JS;
+
+mix
+  .setPublicPath(CONTENT_BASE)
+  .js(SRC_BASE + '/app.js', MAIN_JS)
+  .sourceMaps()
+  .extract(['vue', 'vuex'])
+  .webpackConfig({
+    plugins: [
+      new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: 'src/main/html/index.html'
+      })
+    ],
+    devServer: {
+        https: false,
+        port: 8080, // othe than that not supported, as Mix.js has this hardcoded
+        overlay: true
+    }
+  });
 
 // Full API
 // mix.js(src, output);

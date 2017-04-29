@@ -7,6 +7,11 @@ function storeLibsPATH
 {
     export PATH=$PWD/libs:$PATH;
 }
+function storeWsRoot(){
+    export WSROOT=$PWD
+}
 OLDPATH=$PATH;
 storeNmbinPATH;
 storeLibsPATH;
+storeWsRoot;
+

@@ -1,2 +1,5 @@
-build/*.js
+target/*
 config/*.js
+webpack.config.js
+webpack.mix.js
+node_modules/*
