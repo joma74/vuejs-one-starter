@@ -13,8 +13,8 @@ shell.set('-v'); // show effective command
 const INSTALL_CLEAN = 'install:clean';
 const INSTALL_INSTALL = 'install:install';
 const PATCH_APPLY = 'patch:apply';
+const LINK_BIN = 'link:bin';
 const INSTALL_PROJSTRUCT = 'install:projstruct';
-const INSTALL_CHROMEDRIVER = 'install:chromedriver';
 const LIST_INSTALLED = 'list:installed';
 const CHECK_LINT = 'check:lint';
 //
@@ -32,6 +32,7 @@ global.target.all = function () {
   global.target[INSTALL_CLEAN]();
   global.target[INSTALL_INSTALL]();
   global.target[PATCH_APPLY]();
+  global.target[LINK_BIN]();
   global.target[INSTALL_PROJSTRUCT]();
   global.target[LIST_INSTALLED]();
 };
@@ -65,6 +66,14 @@ global.target[INSTALL_PROJSTRUCT] = function () {
   logExecutingTarget(INSTALL_PROJSTRUCT);
   shell.mkdir('-p', shell.env['npm_package_config_content_base']);
 };
+
+global.target[LINK_BIN] = function () {
+  logExecutingTarget(LINK_BIN);
+  shell.pushd('node_modules/.bin');
+  shell.ln('-sf', '../webpack-dev-server/bin/webpack-dev-server.js', 'webpack-dev-server');
+  shell.popd();
+};
+
 
 global.target[LIST_INSTALLED] = function () {
   logExecutingTarget(LIST_INSTALLED);
