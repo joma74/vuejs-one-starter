@@ -26,13 +26,16 @@ mix
     plugins: [
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: 'src/main/html/index.html'
+        template: 'src/main/html/index.html',
+        minify: {
+          collapseWhitespace: true
+        }
       })
     ],
     devServer: {
-        https: false,
-        port: 8080, // othe than that not supported, as Mix.js has this hardcoded
-        overlay: true
+      https: false,
+      port: 8080, // othe than that not supported, as Mix.js has this hardcoded
+      overlay: true
     }
   });
 
