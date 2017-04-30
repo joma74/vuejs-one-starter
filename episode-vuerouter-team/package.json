@@ -7,9 +7,14 @@
     "content_base": "target/"
   },
   "scripts": {
+    "list-installed": "yarn run _make list:installed",
+    "patch-apply": "yarn run _make patch:apply",
+    "make-install": "yarn add shelljs@^0.7.7 -s && yarn run _make",
+    "make-help": "./makejs --help",
     "postinstall": "cd node_modules/.bin && ln -s ../webpack-dev-server/bin/webpack-dev-server.js webpack-dev-server",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
-    "lint": "eslint --ext .js,.vue src/* test/*"
+    "lint": "eslint --ext .js,.vue src/* test/*",
+    "_make": "./makejs",
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

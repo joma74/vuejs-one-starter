@@ -25,7 +25,7 @@ module.exports = {
     // force a semicolon at the end
     'semi': [2, 'always'],
     'no-multiple-empty-lines': 0,
-    'indent': ['warn', 2],
+    'indent': [0, 'off'],
     'operator-linebreak': 1
   }
 };
