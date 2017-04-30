@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 let shell = require('shelljs');
-let make = shell.require('make');
+require('shelljs/make');
 
 // const wget = require('wget-improved');
 // const unzip = require('unzipper');
@@ -16,6 +16,7 @@ const PATCH_APPLY = 'patch:apply';
 const INSTALL_PROJSTRUCT = 'install:projstruct';
 const INSTALL_CHROMEDRIVER = 'install:chromedriver';
 const LIST_INSTALLED = 'list:installed';
+const CHECK_LINT = 'check:lint';
 //
 const TEST_RUN = 'test:run';
 const TEST_DEBUG = 'test:debug';
@@ -27,29 +28,28 @@ var logExecutingTarget = function (targetName) {
   console.log('--- ' + targetName + ' ---');
 };
 
-make.target.all = function () {
-  make.target[INSTALL_CLEAN]();
-  make.target[INSTALL_INSTALL]();
-  make.target[PATCH_APPLY]();
-  make.target[INSTALL_PROJSTRUCT]();
-  make.target[INSTALL_CHROMEDRIVER]();
-  make.target[LIST_INSTALLED]();
+global.target.all = function () {
+  global.target[INSTALL_CLEAN]();
+  global.target[INSTALL_INSTALL]();
+  global.target[PATCH_APPLY]();
+  global.target[INSTALL_PROJSTRUCT]();
+  global.target[LIST_INSTALLED]();
 };
 
-make.target[INSTALL_CLEAN] = function () {
+global.target[INSTALL_CLEAN] = function () {
   logExecutingTarget(INSTALL_CLEAN);
   shell.rm('-rf', shell.env['npm_package_config_content_base']);
   // lastly, remove including myself
-  shell.rm('-rf', shell.env[NODE_MODULES]);
+  shell.rm('-rf', NODE_MODULES);
 };
 
-make.target[INSTALL_INSTALL] = function () {
+global.target[INSTALL_INSTALL] = function () {
   logExecutingTarget(INSTALL_INSTALL);
   shell.exec('yarn install -s'); // -s is silent
 };
 
 
-make.target[PATCH_APPLY] = function () {
+global.target[PATCH_APPLY] = function () {
   logExecutingTarget(PATCH_APPLY);
   shell.set('+e');
   // exitCodes 0 and 1 of patch are 'okay'. 1 means the patch has already been applied
@@ -61,29 +61,34 @@ make.target[PATCH_APPLY] = function () {
   shell.set('-e');
 };
 
-make.target[INSTALL_PROJSTRUCT] = function () {
+global.target[INSTALL_PROJSTRUCT] = function () {
   logExecutingTarget(INSTALL_PROJSTRUCT);
   shell.mkdir('-p', shell.env['npm_package_config_content_base']);
 };
 
-make.target[LIST_INSTALLED] = function () {
+global.target[LIST_INSTALLED] = function () {
   logExecutingTarget(LIST_INSTALLED);
   shell.exec('yarn list --depth=0 2>/dev/null | tee $npm_package_config_content_base/installed-dependencies.log');
 };
 
-make.target[TEST_RUN] = make.target['test'] = function (params = '', postChain = '') {
+global.target[CHECK_LINT] = function () {
+  logExecutingTarget(CHECK_LINT);
+  shell.exec('eslint --ext .js,.vue src/* test/*');
+};
+
+global.target[TEST_RUN] = global.target['test'] = function (params = '', postChain = '') {
   logExecutingTarget(TEST_RUN);
   let command = `mocha -t 5000 ${params} --harmony_async_await src/test/js/*_test.js ${postChain}`;
   console.log(command);
   shell.exec(command);
 };
 
-make.target[TEST_DEBUG] = function () {
+global.target[TEST_DEBUG] = function () {
   logExecutingTarget(TEST_DEBUG);
-  make.target['test:run']('--inspect=9876 --debug-brk');
+  global.target[TEST_RUN]('--inspect=9876 --debug-brk');
 };
 
-make.target[TEST_SUREFIRE] = function () {
+global.target[TEST_SUREFIRE] = function () {
   logExecutingTarget(TEST_SUREFIRE);
-  make.target['test:run']('-R xunit-file </dev/null 2>&1', '| tee $npm_package_config_mocha_out_file');
+  global.target[TEST_RUN]('-R xunit-file </dev/null 2>&1', '| tee $npm_package_config_mocha_out_file');
 };

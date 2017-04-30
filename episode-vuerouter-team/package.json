@@ -13,8 +13,8 @@
     "make-help": "./makejs --help",
     "postinstall": "cd node_modules/.bin && ln -s ../webpack-dev-server/bin/webpack-dev-server.js webpack-dev-server",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
-    "lint": "eslint --ext .js,.vue src/* test/*",
-    "_make": "./makejs",
+    "check-lint": "yarn run _make check:lint",
+    "_make": "./makejs"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
