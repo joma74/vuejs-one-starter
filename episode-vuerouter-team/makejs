@@ -77,7 +77,7 @@ global.target[LINK_BIN] = function () {
 
 global.target[LIST_INSTALLED] = function () {
   logExecutingTarget(LIST_INSTALLED);
-  shell.exec('yarn list --depth=0 2>/dev/null | tee $npm_package_config_content_base/installed-dependencies.log');
+  shell.exec('yarn list --depth=0 2>/dev/null > $npm_package_config_content_base/installed-dependencies.log');
 };
 
 global.target[CHECK_LINT] = function () {
