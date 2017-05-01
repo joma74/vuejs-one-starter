@@ -21,7 +21,7 @@ mix
   .setPublicPath(CONTENT_BASE)
   .js(SRC_BASE + '/app.js', MAIN_JS)
   .sourceMaps()
-  .extract(['vue', 'vuex'])
+  .extract(['vue', 'vuex', 'vue-router'])
   .webpackConfig({
     plugins: [
       new HtmlWebpackPlugin({

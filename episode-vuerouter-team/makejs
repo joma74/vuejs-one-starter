@@ -12,6 +12,7 @@ shell.set('-v'); // show effective command
 
 const INSTALL_CLEAN = 'install:clean';
 const INSTALL_INSTALL = 'install:install';
+const INSTALL_POSTINSTALL = 'install:postinstall';
 const PATCH_APPLY = 'patch:apply';
 const LINK_BIN = 'link:bin';
 const INSTALL_PROJSTRUCT = 'install:projstruct';
@@ -49,6 +50,12 @@ global.target[INSTALL_INSTALL] = function () {
   shell.exec('yarn install -s'); // -s is silent
 };
 
+global.target[INSTALL_POSTINSTALL] = function () {
+  global.target[PATCH_APPLY]();
+  global.target[LINK_BIN]();
+  global.target[INSTALL_PROJSTRUCT]();
+  global.target[LIST_INSTALLED]();
+};
 
 global.target[PATCH_APPLY] = function () {
   logExecutingTarget(PATCH_APPLY);

@@ -12,7 +12,7 @@
     "link-bin": "yarn run _make link:bin",
     "make-install": "yarn add shelljs@^0.7.7 -s && yarn run _make",
     "make-help": "./makejs --help",
-    "postinstall": "cd node_modules/.bin && ln -s ../webpack-dev-server/bin/webpack-dev-server.js webpack-dev-server",
+    "postinstall": "yarn run _make install:postinstall",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
     "check-lint": "yarn run _make check:lint",
     "_make": "./makejs"
