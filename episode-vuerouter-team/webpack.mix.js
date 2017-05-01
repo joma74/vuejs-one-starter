@@ -21,23 +21,28 @@ mix
   .setPublicPath(CONTENT_BASE)
   .js(SRC_BASE + '/app.js', MAIN_JS)
   .sourceMaps()
-  .extract(['vue', 'vuex', 'vue-router'])
-  .webpackConfig({
-    plugins: [
+  .extract(['vue', 'vuex', 'vue-router', 'axios']);
+if (!mix.config.inProduction) {
+  mix
+    .copy('node_modules/sinon/pkg/sinon-no-sourcemaps.js', TARGET_BASE + 'sinon-no-sourcemaps.js')
+    .copy('node_modules/fakerest/dist/FakeRest.min.js', TARGET_BASE + 'FakeRest.min.js')
+}
+mix.webpackConfig({
+  plugins: [
       new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: 'src/main/html/index.html',
-        minify: {
-          collapseWhitespace: true
-        }
-      })
+      filename: 'index.html',
+      template: 'src/main/html/index.html',
+      minify: {
+        collapseWhitespace: true
+      }
+    })
     ],
-    devServer: {
-      https: false,
-      port: 8080, // othe than that not supported, as Mix.js has this hardcoded
-      overlay: true
-    }
-  });
+  devServer: {
+    https: false,
+    port: 8080, // othe than that not supported, as Mix.js has this hardcoded
+    overlay: true
+  }
+});
 
 // Full API
 // mix.js(src, output);

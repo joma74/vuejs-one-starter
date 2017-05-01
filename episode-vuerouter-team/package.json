@@ -13,9 +13,9 @@
     "make-install": "yarn add shelljs@^0.7.7 -s && yarn run _make",
     "make-help": "./makejs --help",
     "postinstall": "yarn run _make install:postinstall",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base",
     "check-lint": "yarn run _make check:lint",
-    "_make": "./makejs"
+    "_make": "./makejs",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --open --content-base $npm_package_config_content_base"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -32,15 +32,18 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "fakerest": "^2.0.0",
     "file-loader": "^0.11.1",
     "html-webpack-plugin": "^2.28.0",
     "laravel-mix": "^0.11.3",
     "shelljs": "^0.7.7",
+    "sinon": "^2.1.0",
     "vue-loader": "^12.0.2",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.3.0"
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "vue": "^2.3.0",
     "vue-router": "^2.5.2",
     "vuex": "^2.3.1"
