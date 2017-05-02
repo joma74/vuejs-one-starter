@@ -12,20 +12,25 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
  |
  */
 
-let CONTENT_BASE = 'target/';
 let MAIN_JS = 'main/js/';
-let SRC_BASE = 'src/' + MAIN_JS;
-let TARGET_BASE = CONTENT_BASE + MAIN_JS;
+let MAIN_RESOURCES = 'main/resources/';
+//
+let CONTENT_BASE = 'target/';
+let SRC_JS = 'src/' + MAIN_JS;
+//
+let TARGET_JS = CONTENT_BASE + MAIN_JS;
+let TARGET_RESOURCES = CONTENT_BASE + MAIN_RESOURCES;
 
 mix
   .setPublicPath(CONTENT_BASE)
-  .js(SRC_BASE + '/app.js', MAIN_JS)
+  .js(SRC_JS + '/app.js', MAIN_JS)
   .sourceMaps()
   .extract(['vue', 'vuex', 'vue-router', 'axios']);
 if (!mix.config.inProduction) {
   mix
-    .copy('node_modules/sinon/pkg/sinon-no-sourcemaps.js', TARGET_BASE + 'sinon-no-sourcemaps.js')
-    .copy('node_modules/fakerest/dist/FakeRest.min.js', TARGET_BASE + 'FakeRest.min.js')
+    .copy('node_modules/sinon/pkg/sinon-no-sourcemaps.js', TARGET_JS + 'sinon-no-sourcemaps.js')
+    .copy('node_modules/fakerest/dist/FakeRest.min.js', TARGET_JS + 'FakeRest.min.js')
+    .copy('src/test/resources/teams.json', TARGET_RESOURCES + 'teams.json');
 }
 mix.webpackConfig({
   plugins: [

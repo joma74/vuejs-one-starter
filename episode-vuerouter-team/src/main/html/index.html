@@ -13,5 +13,20 @@
 
 <script type="text/javascript" src="main/js/sinon-no-sourcemaps.js"></script>
 <script type="text/javascript" src="main/js/FakeRest.min.js"></script>
+<script type="text/javascript">
+  var requestURL = 'main/resources/teams.json';
+  var request = new XMLHttpRequest();
+  request.open('GET', requestURL);
+  request.responseType = 'json';
+  request.send();
+  let data = {};
+  request.onload = function () {
+    data = request.response;
+    window.restServer = new window.FakeRest.Server();
+    window.restServer.init(data);
+    let server = window.sinon.fakeServer.create();
+    server.respondWith(window.restServer.getHandler());
+  };
+</script>
 
 </html>
