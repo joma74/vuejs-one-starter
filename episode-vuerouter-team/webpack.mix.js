@@ -25,7 +25,7 @@ mix
   .setPublicPath(CONTENT_BASE)
   .js(SRC_JS + '/app.js', MAIN_JS)
   .sourceMaps()
-  .extract(['vue', 'vuex', 'vue-router', 'axios']);
+  .extract(['vue', 'vuex', 'vue-router', 'axios', 'vue-inject']);
 if (!mix.config.inProduction) {
   mix
     .copy('node_modules/sinon/pkg/sinon-no-sourcemaps.js', TARGET_JS + 'sinon-no-sourcemaps.js')
