@@ -31,14 +31,16 @@ function _rethrowWithMsgFrom (err) {
  * @throws with err.msg
  * @return {Promise} return the executing promise
  */
-function getTeams(url) {
-    let getProjects = function(rethrowWithMsgFrom) {
-        return bm.get(DI_HTTP_SERVICE).get(url, {
-                withCredentials: true
-            })
+function fetchTeams (url) {
+    let fetchTeams = function (rethrowWithMsgFrom) {
+        return bm.get(DI_HTTP_SERVICE).get(url)
             .catch((err) => {
                 rethrowWithMsgFrom(err);
             });
     };
-    return getProjects(_rethrowWithMsgFrom);
+    return fetchTeams(_rethrowWithMsgFrom);
 }
+
+export {
+    fetchTeams
+};

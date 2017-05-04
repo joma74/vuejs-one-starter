@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as teams from './modules/teams';
-import * as AC from '../../config/AppConstants';
+import C_NODEENV_PRODUCTION from '../../config/AppConstants';
 
 Vue.use(Vuex);
 
@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
   modules: {
     teams: teams
   },
-  strict: (process.env.NODE_ENV !== AC.C_NODEENV_PRODUCTION)
+  strict: (process.env.NODE_ENV !== C_NODEENV_PRODUCTION)
 });
 
 // https://vuex.vuejs.org/en/hot-reload.html
