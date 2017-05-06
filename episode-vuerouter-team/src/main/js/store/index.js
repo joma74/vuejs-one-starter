@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as teams from './modules/teams';
-import C_NODEENV_PRODUCTION from '../../config/AppConstants';
+import C_NODEENV_PRODUCTION from '../config/AppConstants';
 
 Vue.use(Vuex);
 
