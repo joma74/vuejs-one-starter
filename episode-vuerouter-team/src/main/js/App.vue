@@ -31,7 +31,7 @@
   margin-top: 2px;
 }
 
-.router-link-active {
+.router-link-exact-active {
   background-color: #eeeeee;
 }
 
