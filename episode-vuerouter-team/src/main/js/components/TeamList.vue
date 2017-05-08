@@ -23,7 +23,7 @@ import {
 } from '../config/AppConstants';
 export default {
   computed: {
-    ...mapState('teams', ['teams', 'selectedTeam'])
+    ...mapState('teams', {teams: state => state.teams, selectedTeam: state => state.selectedTeam})
   },
   methods: {
     ...mapActions('teams', [FN_FETCH_TEAMS, FN_SELECT_TEAM])
