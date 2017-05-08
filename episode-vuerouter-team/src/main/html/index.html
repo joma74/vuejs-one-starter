@@ -25,8 +25,10 @@
   request.send();
   request.onload = function () {
     let data = request.response;
-    window.fakeRestServer = new window.FakeRest.Server();
+    const fakeRestUrl = 'http://localhost:9095/vuerouter/api'; // do NOT end with forward-slash, else the fakeRest pattern won't match
+    window.fakeRestServer = new window.FakeRest.Server(fakeRestUrl); // fakeRest only handles a single HT-Resource as last url part.
     window.fakeRestServer.init(data);
+    window.fakeRestServer.toggleLogging();
     let sinonfakeServer = window.sinon.fakeServer.create();
     sinonfakeServer.respondImmediately = true; // If set, the server will
     // respond to every request immediately and synchronously. Not suitable for

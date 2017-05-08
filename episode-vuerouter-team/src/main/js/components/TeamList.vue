@@ -1,6 +1,6 @@
 <template>
 <div class="list-group">
-  <router-link v-for="team in teams" :key="team.id" :to="`/teams/${team.id}`" class="list-group-item">
+  <router-link v-for="(team, index, key) in teams" v-bind:key="team.id" v-bind:to="`/teams/${team.id}`" class="list-group-item">
     {{ team.name }}
   </router-link>
 </div>
@@ -8,7 +8,6 @@
 
 <script>
 import {
-  mapState,
   mapActions
 } from 'vuex';
 import {
@@ -23,14 +22,22 @@ import {
 } from '../config/AppConstants';
 export default {
   computed: {
-    ...mapState('teams', {teams: state => state.teams, selectedTeam: state => state.selectedTeam})
+      teams: function () {
+        return this.$store.getters.teams;
+      },
+      selectedTeam: function () {
+        return this.$store.getters.selectedTeam;
+      }
   },
-  methods: {
-    ...mapActions('teams', [FN_FETCH_TEAMS, FN_SELECT_TEAM])
-  },
+  methods: mapActions([
+    FN_FETCH_TEAMS,
+    FN_SELECT_TEAM
+  ]),
   mounted () {
     let teamsUri = bm.get(DI_TEAMS_URI);
-    this.fn_fetchTeams(teamsUri);
+    this.fn_fetchTeams({
+      url: teamsUri
+    });
   }
 };
 </script>

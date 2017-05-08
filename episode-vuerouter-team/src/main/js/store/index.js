@@ -1,20 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import teams from './modules/teams';
-import { C_NODEENV_PRODUCTION } from '../config/AppConstants';
+import {
+  C_NODEENV_PRODUCTION
+} from '../config/AppConstants';
 
 Vue.use(Vuex);
 
-export default {
-  store: new Vuex.Store({
-    modules: {
-      teams: {
-        namespaced: true
-      }
-    },
-    strict: (process.env.NODE_ENV !== C_NODEENV_PRODUCTION)
-  })
-};
+const store = new Vuex.Store({
+  modules: {
+    teams
+  },
+  strict: (process.env.NODE_ENV !== C_NODEENV_PRODUCTION)
+});
 
 // https://vuex.vuejs.org/en/hot-reload.html
 if (module.hot) {
@@ -26,9 +24,10 @@ if (module.hot) {
     // swap in the new actions and mutations
     this.store.hotUpdate({
       modules: {
-        reRequiredTeams,
-        namespaced: true
+        reRequiredTeams
       }
     });
   });
 }
+
+export default store;
