@@ -35,7 +35,7 @@ export default {
   ]),
   mounted () {
     let teamsUri = bm.get(DI_TEAMS_URI);
-    this.fn_fetchTeams({
+    this[FN_FETCH_TEAMS]({
       url: teamsUri
     });
   }
