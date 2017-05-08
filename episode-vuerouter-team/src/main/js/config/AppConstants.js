@@ -1,5 +1,5 @@
 // Names
-export const DI_TEAMS_URI = 'DI_PROJECT_URI';
+export const DI_TEAMS_URI = 'DI_TEAMS_URI';
 export const DI_APPL_URL = 'DI_APPL_URL';
 export const DI_HTTP_SERVICE = 'DI_HTTP_SERVICE';
 export const DI_VUEX_STORE = 'DI_VUEX_STORE';

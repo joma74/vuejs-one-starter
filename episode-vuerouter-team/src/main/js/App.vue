@@ -6,6 +6,11 @@
         <ul class="nav nav-stacked">
           <li>
             <router-link to="/">Home</router-link>
+          </li>
+          <li>
+            <router-link to="/teams">Teams</router-link>
+          </li>
+          <li>
             <router-link to="/about">Abouts</router-link>
           </li>
         </ul>

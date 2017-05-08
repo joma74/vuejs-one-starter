@@ -1,6 +1,8 @@
-import DI_HTTP_SERVICE from '../config/AppConstants';
 import {
-    default as bm
+  DI_HTTP_SERVICE
+} from '../config/AppConstants';
+import {
+  default as bm
 } from 'vue-inject';
 
 /**
@@ -13,13 +15,13 @@ import {
  * @throws a new error with a msg
  */
 function _rethrowWithMsgFrom (err) {
-    if (err.response) {
-        throw err;
-    } else {
-        console.error(err.stack || err);
-        let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
-        throw Error(msg);
-    }
+  if (err.response) {
+    throw err;
+  } else {
+    console.error(err.stack || err);
+    let msg = err.message + (err.config ? ' for ' + err.config.method + ' on ' + err.config.url : '');
+    throw Error(msg);
+  }
 }
 
 /**
@@ -32,15 +34,15 @@ function _rethrowWithMsgFrom (err) {
  * @return {Promise} return the executing promise
  */
 function fetchTeams (url) {
-    let fetchTeams = function (rethrowWithMsgFrom) {
-        return bm.get(DI_HTTP_SERVICE).get(url)
-            .catch((err) => {
-                rethrowWithMsgFrom(err);
-            });
-    };
-    return fetchTeams(_rethrowWithMsgFrom);
+  let fetchTeams = function (rethrowWithMsgFrom) {
+    return bm.get(DI_HTTP_SERVICE).get(url)
+      .catch((err) => {
+        rethrowWithMsgFrom(err);
+      });
+  };
+  return fetchTeams(_rethrowWithMsgFrom);
 }
 
 export {
-    fetchTeams
+  fetchTeams
 };

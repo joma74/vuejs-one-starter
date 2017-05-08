@@ -3,7 +3,14 @@
     "node": true,
     "mocha": true,
     "development": {
-      "presets": ["es2015", "stage-3"]
-    }
+      "presets": [
+        ["es2015", {
+          "modules": "If NOT set (to false), no compile warning are emitted by babel",
+          "modules": false
+        }],
+        ["stage-3"]
+      ]
+    },
+    "debug": true
   }
 }

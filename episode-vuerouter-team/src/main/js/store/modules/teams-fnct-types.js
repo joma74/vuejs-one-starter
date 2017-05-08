@@ -1,2 +1,2 @@
-export const FN_FETCH_TEAMS = 'FN_FETCH_TEAMS';
-export const FN_SELECT_TEAM = 'FN_SELECT_TEAM';
+export const FN_FETCH_TEAMS = 'fn_fetchTeams';
+export const FN_SELECT_TEAM = 'fn_selectTeam';
