@@ -1,6 +1,6 @@
 <template>
 <div class="list-group">
-  <router-link v-for="(team, index, key) in teams" v-bind:key="team.id" v-bind:to="`/teams/${team.id}`" class="list-group-item">
+  <router-link v-for="team in teams" v-bind:key="team.id" v-bind:to="`/teams/${team.id}`" class="list-group-item">
     {{ team.name }}
   </router-link>
 </div>
@@ -20,6 +20,7 @@ import {
 import {
   DI_TEAMS_URI
 } from '../config/AppConstants';
+
 export default {
   computed: {
       teams: function () {

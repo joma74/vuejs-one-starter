@@ -11,7 +11,7 @@ const state = {
 
 const getters = {
   teams: function(state){
-    return state.teams
+    return state.teams;
   },
   selectedTeam: function(state){
     return state.selectedTeam;
@@ -25,8 +25,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       svc.fetchTeams(dispatchParamO.url)
         .then((response) => {
-          commit(FN_FETCH_TEAMS, response); // TODO commit is promisified
-          resolve();
+          return commit(FN_FETCH_TEAMS, response);
         }).catch((err) => {
           reject(err);
         });
@@ -35,7 +34,7 @@ const actions = {
   [FN_SELECT_TEAM]({
     commit
   }, teamKey) {
-    commit(FN_SELECT_TEAM, teamKey);
+    return commit(FN_SELECT_TEAM, teamKey);
   }
 };
 

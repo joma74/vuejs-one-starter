@@ -5,6 +5,8 @@ import router from './router';
 
 require('./config/AppConfig');
 
+Vue.config.performance = true;
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
