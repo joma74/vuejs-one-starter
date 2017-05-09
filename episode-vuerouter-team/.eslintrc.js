@@ -26,6 +26,8 @@ module.exports = {
     'semi': [2, 'always'],
     'no-multiple-empty-lines': 0,
     'indent': [0, 'off'],
-    'operator-linebreak': 1
+    'operator-linebreak': 1,
+    'space-before-function-paren': 0,
+    'space-before-blocks': 0
   }
 };
