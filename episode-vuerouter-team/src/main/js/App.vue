@@ -20,6 +20,9 @@
           <div class="col-xs-4">
             <router-view></router-view>
           </div>
+          <div class="col-xs-8">
+            <router-view name="detail"></router-view>
+          </div>
         </div>
       </div>
     </div>
