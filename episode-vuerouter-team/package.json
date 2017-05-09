@@ -40,7 +40,8 @@
     "sinon": "^2.1.0",
     "vue-loader": "^12.0.2",
     "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.3.0"
+    "vue-template-compiler": "^2.3.0",
+    "webpack-bundle-analyzer": "^2.6.0"
   },
   "dependencies": {
     "axios": "^0.16.1",
