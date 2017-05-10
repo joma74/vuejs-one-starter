@@ -78,6 +78,7 @@ global.target[LINK_BIN] = function () {
   logExecutingTarget(LINK_BIN);
   shell.pushd('node_modules/.bin');
   shell.ln('-sf', '../webpack-dev-server/bin/webpack-dev-server.js', 'webpack-dev-server');
+  shell.ln('-sf', '../webpack/bin/webpack.js', 'webpack');
   shell.popd();
 };
 

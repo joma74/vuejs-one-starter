@@ -15,7 +15,9 @@
     "postinstall": "yarn run _make install:postinstall",
     "check-lint": "yarn run _make check:lint",
     "_make": "./makejs",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --content-base $npm_package_config_content_base"
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --https --content-base $npm_package_config_content_base",
+    "bundle-stats": "cross-env NODE_ENV=production webpack --profile --json > $npm_package_config_content_base/stats.json",
+    "bundle-report": "webpack-bundle-analyzer $npm_package_config_content_base/stats.json"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
