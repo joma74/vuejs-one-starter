@@ -4,3 +4,4 @@ target/
 npm-debug.log
 hot
 mix-manifest.json
+libs/

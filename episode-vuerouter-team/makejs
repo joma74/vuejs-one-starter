@@ -3,6 +3,10 @@
 let shell = require('shelljs');
 require('shelljs/make');
 
+const wget = require('wget-improved');
+const unzip = require('unzipper');
+const fs = require('fs');
+
 // const wget = require('wget-improved');
 // const unzip = require('unzipper');
 // const fs = require('fs');
@@ -16,6 +20,7 @@ const INSTALL_POSTINSTALL = 'install:postinstall';
 const PATCH_APPLY = 'patch:apply';
 const LINK_BIN = 'link:bin';
 const INSTALL_PROJSTRUCT = 'install:projstruct';
+const INSTALL_CHROMDRIVER = 'install:chromedriver';
 const LIST_INSTALLED = 'list:installed';
 const CHECK_LINT = 'check:lint';
 //
@@ -54,6 +59,7 @@ global.target[INSTALL_POSTINSTALL] = function () {
   global.target[PATCH_APPLY]();
   global.target[LINK_BIN]();
   global.target[INSTALL_PROJSTRUCT]();
+  global.target[INSTALL_CHROMDRIVER]();
   global.target[LIST_INSTALLED]();
 };
 
@@ -72,6 +78,7 @@ global.target[PATCH_APPLY] = function () {
 global.target[INSTALL_PROJSTRUCT] = function () {
   logExecutingTarget(INSTALL_PROJSTRUCT);
   shell.mkdir('-p', shell.env['npm_package_config_content_base']);
+  shell.mkdir('-p', shell.env['npm_package_config_libs_dir']);
 };
 
 global.target[LINK_BIN] = function () {
@@ -82,6 +89,27 @@ global.target[LINK_BIN] = function () {
   shell.popd();
 };
 
+global.target[INSTALL_CHROMDRIVER] = function() {
+  logExecutingTarget(INSTALL_CHROMDRIVER);
+  let chromedriverDownloadUrl = shell.env['npm_package_config_chromedriverDownloadUrl'];
+  let targetDir = shell.env['npm_package_config_libs_dir'];
+  let targetFile = targetDir + 'chromedriver';
+  let targetFileAsZip = targetFile + '.zip';
+  var chromedriverDownload = wget.download(chromedriverDownloadUrl, targetFileAsZip);
+  chromedriverDownload.on('error', function(err) {
+    console.log(err);
+    throw err;
+  });
+  chromedriverDownload.on('end', function(output) {
+    fs.createReadStream(targetFileAsZip).pipe(unzip.Extract({
+        path: targetDir
+      }))
+      .on('close', function() {
+        shell.rm(targetFileAsZip);
+        shell.chmod('u+x', targetFile);
+      });
+  });
+};
 
 global.target[LIST_INSTALLED] = function () {
   logExecutingTarget(LIST_INSTALLED);
@@ -97,9 +125,9 @@ global.target[TEST_RUN] = global.target['test'] = function (params = '', postCha
   logExecutingTarget(TEST_RUN);
   let command = `mocha -t 5000 ${params} --compilers js:babel-core/register --harmony_async_await src/test/js/*spec.js ${postChain}`;
   console.log(command);
-  config.fatal = false;
+  shell.config.fatal = false; // try-catch instead
   shell.exec(command);
-  config.fatal = true;
+  shell.config.fatal = true;
 };
 
 global.target[TEST_DEBUG] = function () {
