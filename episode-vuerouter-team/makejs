@@ -95,9 +95,11 @@ global.target[CHECK_LINT] = function () {
 
 global.target[TEST_RUN] = global.target['test'] = function (params = '', postChain = '') {
   logExecutingTarget(TEST_RUN);
-  let command = `mocha -t 5000 ${params} --harmony_async_await src/test/js/*_test.js ${postChain}`;
+  let command = `mocha -t 5000 ${params} --compilers js:babel-core/register --harmony_async_await src/test/js/*spec.js ${postChain}`;
   console.log(command);
+  config.fatal = false;
   shell.exec(command);
+  config.fatal = true;
 };
 
 global.target[TEST_DEBUG] = function () {
