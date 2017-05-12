@@ -10,5 +10,5 @@
 <script>
 export default {
   props: ['id', 'label', 'value']
-}
+};
 </script>

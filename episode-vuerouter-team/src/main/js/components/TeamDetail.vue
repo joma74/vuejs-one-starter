@@ -20,8 +20,7 @@
 </template>
 <script>
 import {
-  mapActions,
-  mapGetters
+  mapActions
 } from 'vuex';
 import {
   FN_SELECT_TEAM
@@ -55,7 +54,7 @@ export default {
       this[FN_SELECT_TEAM](newId);
     }
   }
-}
+};
 </script>
 <style>
 .detail-pane {

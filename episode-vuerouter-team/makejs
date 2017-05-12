@@ -118,7 +118,9 @@ global.target[LIST_INSTALLED] = function () {
 
 global.target[CHECK_LINT] = function () {
   logExecutingTarget(CHECK_LINT);
+  shell.config.fatal = false;
   shell.exec('eslint --ext .js,.vue src/* test/*');
+  shell.config.fatal = true;
 };
 
 global.target[TEST_RUN] = global.target['test'] = function (params = '', postChain = '') {
