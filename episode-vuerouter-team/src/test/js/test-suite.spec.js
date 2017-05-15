@@ -28,7 +28,7 @@ describe('Some Feature', function() {
     devServer.listen(devServerConfig.port);
   });
   after(function() {
-    // devServer && devServer.close();
+    devServer && devServer.close();
   });
   it('is working', async function() {
     chai.config.truncateThreshold = 0; // to show content of actual and expected array
