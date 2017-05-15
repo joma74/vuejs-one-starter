@@ -8,10 +8,15 @@ function storeLibsPATH
     export PATH=$PWD/libs:$PATH;
 }
 function storeWsRoot(){
-    export WSROOT=$PWD
+    export WSROOT=$PWD;
+}
+function unsetProxies(){
+   unset http_proxy;
+   unset https_proxy;
 }
 OLDPATH=$PATH;
 storeNmbinPATH;
 storeLibsPATH;
 storeWsRoot;
+unsetProxies;
 

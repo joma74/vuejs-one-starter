@@ -7,10 +7,6 @@ const wget = require('wget-improved');
 const unzip = require('unzipper');
 const fs = require('fs');
 
-// const wget = require('wget-improved');
-// const unzip = require('unzipper');
-// const fs = require('fs');
-
 shell.set('-e'); // any non-0 exit code results in a thrown error
 shell.set('-v'); // show effective command
 
@@ -67,11 +63,9 @@ global.target[PATCH_APPLY] = function () {
   logExecutingTarget(PATCH_APPLY);
   shell.set('+e');
   // exitCodes 0 and 1 of patch are 'okay'. 1 means the patch has already been applied
-  /*
-      shell.exec('patch -p0 < patches/patch.relativeconfig.xunit-file.js', function (code, output) {
-        if (code > 1) throw new Error(code);
-      });
-  */
+  shell.exec('patch -p0 < patches/patch.relativeconfig.xunit-file.js', function (code, output) {
+    if (code > 1) throw new Error(code);
+  });
   shell.set('-e');
 };
 
@@ -89,22 +83,22 @@ global.target[LINK_BIN] = function () {
   shell.popd();
 };
 
-global.target[INSTALL_CHROMDRIVER] = function() {
+global.target[INSTALL_CHROMDRIVER] = function () {
   logExecutingTarget(INSTALL_CHROMDRIVER);
   let chromedriverDownloadUrl = shell.env['npm_package_config_chromedriverDownloadUrl'];
   let targetDir = shell.env['npm_package_config_libs_dir'];
   let targetFile = targetDir + 'chromedriver';
   let targetFileAsZip = targetFile + '.zip';
   var chromedriverDownload = wget.download(chromedriverDownloadUrl, targetFileAsZip);
-  chromedriverDownload.on('error', function(err) {
+  chromedriverDownload.on('error', function (err) {
     console.log(err);
     throw err;
   });
-  chromedriverDownload.on('end', function(output) {
+  chromedriverDownload.on('end', function (output) {
     fs.createReadStream(targetFileAsZip).pipe(unzip.Extract({
         path: targetDir
       }))
-      .on('close', function() {
+      .on('close', function () {
         shell.rm(targetFileAsZip);
         shell.chmod('u+x', targetFile);
       });
@@ -125,7 +119,7 @@ global.target[CHECK_LINT] = function () {
 
 global.target[TEST_RUN] = global.target['test'] = function (params = '', postChain = '') {
   logExecutingTarget(TEST_RUN);
-  let command = `mocha -t 5000 ${params} --compilers js:babel-core/register --require babel-polyfill --harmony_async_await src/test/js/*spec.js ${postChain}`;
+  let command = `mocha -t 5000 --bail ${params} --compilers js:babel-core/register --require babel-polyfill --harmony_async_await src/test/js/*spec.js ${postChain}`;
   console.log(command);
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);

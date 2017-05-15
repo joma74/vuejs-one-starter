@@ -15,22 +15,23 @@ import webpackDevServer from 'webpack-dev-server';
 import path from 'path';
 import request from 'request';
 
-describe('Some Feature', function() {
+describe('Some Feature', function () {
   let devServer;
   let webpackConfig;
   let devServerConfig;
-  before(function() {
+  before(function (done) {
     process.env.NODE_ENV = 'development';
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     webpackConfig = require(path.join(process.cwd(), './webpack.config.js'));
     devServerConfig = webpackConfig.devServer;
-    devServer = startDevServer(webpackConfig);
+    devServer = startDevServer(webpackConfig, done);
     devServer.listen(devServerConfig.port);
+    done();
   });
-  after(function() {
+  after(function () {
     devServer && devServer.close();
   });
-  it('is working', async function() {
+  it('is working', async function () {
     chai.config.truncateThreshold = 0; // to show content of actual and expected array
     chai.config.showDiff = true;
     let response = await doRequest('https://localhost:8080/');
@@ -39,29 +40,50 @@ describe('Some Feature', function() {
   });
 });
 
-function startDevServer(webpackConfig) {
-  const compiler = webpack(webpackConfig);
+function startDevServer(webpackConfig, done) {
+  const compiler = webpack(webpackConfig, onComplete);
   let devServerConfig = webpackConfig.devServer;
   // console.log(JSON.stringify(devServerConfig));
   devServerConfig['hot'] = true;
-  devServerConfig['stats'] = {
-    colors: true
-  };
+  devServerConfig['stats'] = 'errors-only';
   devServerConfig['quiet'] = true; // like DONE compiled successfully ...
-  devServerConfig['noInfo'] = true; // like Assets Chunks ...
+  devServerConfig['noInfo'] = true; // like Assets, Chunks ...
   // devServerConfig['overlay'] = false; // no effect
   // console.log(JSON.stringify(devServerConfig));
+  function onComplete(error, stats) {
+    let statsConfig = {
+      colors: true,
+      reasons: false,
+      errors: true,
+      errorDetails: false,
+      version: false,
+      performance: false,
+      timings: false,
+      assets: false,
+      chunks: false,
+      hash: false
+    };
+    if (error) { // fatal error
+      done(error);
+    } else if (stats.hasErrors()) { // soft error
+      done(new Error(stats.toString(statsConfig)));
+    } else {
+      done(new Error(stats.toString(statsConfig)));
+    }
+  }
   /* eslint-disable new-cap */
   return new webpackDevServer(compiler, devServerConfig);
 }
 
+
+
 function doRequest(url) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     request(url, {
         rejectUnauthorized: false,
         requestCert: true
       },
-      function(error, res, body) {
+      function (error, res, body) {
         if (!error && res.statusCode === 200) {
           resolve(body);
         } else {
