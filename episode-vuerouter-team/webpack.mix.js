@@ -44,7 +44,6 @@ mix.webpackConfig({
     ],
   devServer: {
     https: true,
-    overlay: true,
     port: 8080 // othe than that not supported, as Mix.js has this hardcoded
   }
 });

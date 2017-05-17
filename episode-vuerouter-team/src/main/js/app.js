@@ -3,7 +3,7 @@ import App from './App';
 import store from './store';
 import router from './router';
 
-require('./config/AppsConfig');
+require('./config/AppConfig');
 
 Vue.config.performance = true;
 
