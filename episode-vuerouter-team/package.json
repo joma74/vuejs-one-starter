@@ -21,8 +21,9 @@
     "test-debug": "yarn run _make test:debug",
     "test-surefire": "yarn run _make test:surefire",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --https --content-base $npm_package_config_content_base",
-    "bundle-stats": "cross-env NODE_ENV=production webpack --profile --json > $npm_package_config_content_base/stats.json",
-    "bundle-report": "webpack-bundle-analyzer $npm_package_config_content_base/stats.json"
+    "bundle-stats": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks --profile --json > $npm_package_config_content_base/stats.json",
+    "bundle-report": "webpack-bundle-analyzer $npm_package_config_content_base/stats.json",
+    "serve-app": "cross-env NODE_ENV=production webpack-dev-server --https --progress --compress --content-base $npm_package_config_content_base"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

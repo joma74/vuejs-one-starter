@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './App';
+import vmApp from './App';
 import store from './store';
 import router from './router';
 
@@ -12,5 +12,5 @@ new Vue({
   el: '#app',
   store: store,
   router: router,
-  render: h => h(App)
+  render: h => h(vmApp)
 });

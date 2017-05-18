@@ -255,6 +255,12 @@ module.exports.resolve = {
   }
 };
 
+if (Mix.inProduction){
+  module.exports.resolve["alias"] = {
+    'vue$': 'vue/dist/vue.runtime.esm.js'
+  }
+};
+
 
 
 /*
