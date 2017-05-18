@@ -119,7 +119,7 @@ global.target[CHECK_LINT] = function () {
 
 global.target[TEST_RUN] = global.target['test'] = function (params = '', postChain = '') {
   logExecutingTarget(TEST_RUN);
-  let command = `mocha -t 5000 --colors ${params} --compilers js:babel-core/register --require babel-polyfill --harmony_async_await src/test/js/*spec.js ${postChain}`;
+  let command = `cross-env NODE_ENV=test  mocha -t 5000 --colors ${params} --compilers js:babel-core/register --require babel-polyfill src/test/js/*spec.js ${postChain}`;
   console.log(command);
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);

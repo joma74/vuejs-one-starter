@@ -243,7 +243,8 @@ module.exports.module = {
  |
  | Here, we may set any options/aliases that affect Webpack's resolving
  | of modules. To begin, we will provide the necessary Vue alias to
- | load the Vue common library. You may delete this, if needed.
+ | load the Vue common library for dev or production . See also
+ | https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds
  |
  */
 
