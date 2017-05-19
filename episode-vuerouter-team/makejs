@@ -21,6 +21,7 @@ const LIST_INSTALLED = 'list:installed';
 const CHECK_LINT = 'check:lint';
 //
 const TEST_RUN = 'test:run';
+const TEST = 'test';
 const TEST_DEBUG = 'test:debug';
 const TEST_SUREFIRE = 'test:surefire';
 //
@@ -117,21 +118,70 @@ global.target[CHECK_LINT] = function () {
   shell.config.fatal = true;
 };
 
-global.target[TEST_RUN] = global.target['test'] = function (params = '', postChain = '') {
+global.target[TEST_RUN] = global.target[TEST] = function (argArr) {
   logExecutingTarget(TEST_RUN);
-  let command = `cross-env NODE_ENV=test  mocha -t 5000 --colors ${params} --compilers js:babel-core/register --require babel-polyfill src/test/js/*spec.js ${postChain}`;
-  console.log(command);
+  let argO = destructureArgs(argArr, {
+    params: '',
+    specSel: '*',
+    postChain: ''
+  });
+  let command = `cross-env NODE_ENV=test  mocha -t 5000 --colors ${argO.params} --compilers js:babel-core/register --require babel-polyfill src/test/js/${argO.specSel}.spec.js ${argO.postChain}`;
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);
   shell.config.fatal = true;
 };
 
-global.target[TEST_DEBUG] = function () {
+global.target[TEST_DEBUG] = function (argArr) {
   logExecutingTarget(TEST_DEBUG);
-  global.target[TEST_RUN]('--inspect=9876 --debug-brk');
+  let argO = destructureArgs(argArr, {
+    params: '--inspect=9876 --debug-brk',
+    specSel: '*',
+    postChain: ''
+  });
+  let argArrI = restructureArgs(argO);
+  global.target[TEST_RUN](restructureArgs(argArrI));
 };
 
-global.target[TEST_SUREFIRE] = function () {
+global.target[TEST_SUREFIRE] = function (argArr) {
   logExecutingTarget(TEST_SUREFIRE);
-  global.target[TEST_RUN]('-R xunit-file </dev/null 2>&1', '| tee $npm_package_config_mocha_out_file');
+  let argO = destructureArgs(argArr, {
+    params: '-R xunit-file </dev/null 2>&1',
+    specSel: '*',
+    postChain: '| tee $npm_package_config_mocha_out_file'
+  });
+  let argArrI = restructureArgs(argO);
+  global.target[TEST_RUN](argArrI);
 };
+
+function destructureArgs(argsArr, defaultsO) {
+  argsArr && argsArr.forEach(function (arg, index) {
+    let arr = arg.split('=');
+    let key = arr[0].toString();
+    let val = arr[1];
+    if (val) {
+      (defaultsO[key] = val);
+    } else if (key) {
+      switch (key) {
+        case 0:
+          defaultsO.params = val;
+          break;
+        case 1:
+          defaultsO.specSel = val;
+          break;
+        case 2:
+          defaultsO.postChain = val;
+          break;
+        default:
+      }
+      defaultsO[index] = key;
+    }
+  });
+  console.log('Transformed argsArr to >>' + JSON.stringify(defaultsO) + '<<');
+  return defaultsO;
+}
+
+function restructureArgs(argsO) {
+  return Object.keys(argsO).map(function (argKey) {
+    return `${argKey}=${argsO[argKey]}`;
+  });
+}
