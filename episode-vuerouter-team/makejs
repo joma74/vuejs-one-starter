@@ -63,9 +63,9 @@ global.target[PATCH_APPLY] = function () {
   logExecutingTarget(PATCH_APPLY);
   shell.set('+e');
   // exitCodes 0 and 1 of patch are 'okay'. 1 means the patch has already been applied
-  // shell.exec('patch -p0 < patches/patch.relativeconfig.xunit-file.js', function (code, output) {
-  //  if (code > 1) throw new Error(code);
-  // });
+  shell.exec('patch -p0 < patches/patch.silentcopy.FileCollection.js', function (code, output) {
+    if (code > 1) throw new Error(code);
+  });
   shell.set('-e');
 };
 
