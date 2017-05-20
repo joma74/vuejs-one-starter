@@ -118,7 +118,7 @@ global.target[CHECK_LINT] = function () {
   shell.config.fatal = true;
 };
 
-global.target[TEST_RUN] = global.target[TEST] = function (argArr) {
+global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run test -- specSel=promisify
   logExecutingTarget(TEST_RUN);
   let argO = destructureArgs(argArr, {
     params: '',
@@ -153,15 +153,25 @@ global.target[TEST_SUREFIRE] = function (argArr) {
   global.target[TEST_RUN](argArrI);
 };
 
+/**
+ * Destructure an array of string arguments to it's object form. This object is
+ * merged into the defaultsO object.
+ * @method destructureArgs
+ * @param  {string[]}      argsArr   of named ['opt2=arg'] or positional ['arg1', 'arg2', 'arg3'] form
+ * @param  {object}        defaultsO the default object the args are merged into
+ * @return {object}                  transformed to object form {opt1: 'arg', opt2: 'arg'}
+ */
 function destructureArgs(argsArr, defaultsO) {
   argsArr && argsArr.forEach(function (arg, index) {
-    let arr = arg.split('=');
-    let key = arr[0].toString();
-    let val = arr[1];
-    if (val) {
+    let key;
+    let val = arg; // if positional form
+    let splitPosition = arg.indexOf('=');
+    if (arg && splitPosition !== -1) { // if named parameter form
+      key = arg.substring(0, splitPosition);
+      val = arg.substring(splitPosition + 1);
       (defaultsO[key] = val);
-    } else if (key) {
-      switch (key) {
+    } else if (arg) {
+      switch (index) {
         case 0:
           defaultsO.params = val;
           break;
@@ -172,14 +182,22 @@ function destructureArgs(argsArr, defaultsO) {
           defaultsO.postChain = val;
           break;
         default:
+          defaultsO[index] = key;
       }
-      defaultsO[index] = key;
+    } else {
+      throw new Error(`Unsupported args form of >>${argsArr}<<`);
     }
   });
   console.log('Transformed argsArr to >>' + JSON.stringify(defaultsO) + '<<');
   return defaultsO;
 }
 
+/**
+ * An array of strings for each arg. Each is of the form 'opt1=arg'.
+ * @method restructureArgs
+ * @param  {object}        argsO args as object
+ * @return {string[]}            transformed to array named form ['opt1=arg', opt2=arg']
+ */
 function restructureArgs(argsO) {
   return Object.keys(argsO).map(function (argKey) {
     return `${argKey}=${argsO[argKey]}`;
