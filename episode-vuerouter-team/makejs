@@ -188,7 +188,7 @@ function destructureArgs(argsArr, defaultsO) {
       throw new Error(`Unsupported args form of >>${argsArr}<<`);
     }
   });
-  console.log('Transformed argsArr to >>' + JSON.stringify(defaultsO) + '<<');
+  // console.log('Transformed argsArr to >>' + JSON.stringify(defaultsO) + '<<');
   return defaultsO;
 }
 
