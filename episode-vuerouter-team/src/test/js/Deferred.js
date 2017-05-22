@@ -17,7 +17,7 @@ export default function Deferred() {
      *
      * @param {anything} value : This value is used to resolve the promise
      * If the value is a Promise then the associated promise assumes the state
-     * of Promise passed as value.
+     * of Promise passed as  value.
      */
     this.resolve = null;
     self.resolve = resolve;
