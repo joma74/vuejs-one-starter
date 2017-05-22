@@ -2,19 +2,16 @@ import {
   describe,
   it
 } from 'mocha';
-
 import {
-  expect,
-  default as chai
+  expect
 } from 'chai';
+import Deferred from './utils/Deferred';
+import { chaiConfig } from './utils/ChaiConfig';
 
-import Deferred from './Deferred';
+chaiConfig.setDefaults();
 
-chai.config.truncateThreshold = 0; // to show content of actual and expected array
-chai.config.showDiff = true;
-
-describe('Promisify', function () {
-  it('a sync returning function with a callback/badimpl', async function () {
+describe('Promisify', function() {
+  it('a sync returning function with a callback/badimpl', async function() {
     let theValue = 0;
     // callback.bind(null, theValue);
     let results = await Promise.all([
@@ -38,7 +35,7 @@ describe('Promisify', function () {
     };
   });
 
-  it('a sync returning function with a callback/resolved', async function () {
+  it('a sync returning function with a callback/resolved', async function() {
     var deferred = new Deferred();
     var dPromise = deferred.promise;
 
@@ -60,7 +57,7 @@ describe('Promisify', function () {
     expect(results).to.deep.equal([2, 1]);
   });
 
-  it('a sync returning function with a callback/rejected', async function () {
+  it('a sync returning function with a callback/rejected', async function() {
     var deferred = new Deferred();
     var dPromise = deferred.promise;
 
@@ -86,7 +83,7 @@ describe('Promisify', function () {
     }
   });
 
-  it('a sync function with a callback/error', async function () {
+  it('a sync function with a callback/error', async function() {
     var deferred = new Deferred();
     var dPromise = deferred.promise;
 
@@ -97,9 +94,9 @@ describe('Promisify', function () {
 
     try {
       expect(await Promise.all([
-        doSth(callback),
-        dPromise
-      ])
+          doSth(callback),
+          dPromise
+        ])
         .then((res) => {
           throw new Error(UNEXPECTED_ERROR_MSG);
         })

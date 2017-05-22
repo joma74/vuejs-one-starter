@@ -4,20 +4,16 @@ import {
   before,
   after
 } from 'mocha';
-
 import {
-  expect,
-  default as chai
+  expect
 } from 'chai';
-
 import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 import path from 'path';
 import request from 'request';
 import remove from 'lodash/remove';
-
-chai.config.truncateThreshold = 0; // to show content of actual and expected array
-chai.config.showDiff = true;
+import { chaiConfig } from './utils/ChaiConfig';
+chaiConfig.setDefaults();
 
 describe('Some Feature', function () {
   let devServer;
