@@ -10,8 +10,8 @@ import { chaiConfig } from './utils/ChaiConfig';
 
 chaiConfig.setDefaults();
 
-describe('Promisify', function() {
-  it('a sync returning function with a callback/badimpl', async function() {
+describe('Synchroniously settle', function() {
+  it('a returning function with it\'s callback/badimpl', async function() {
     let theValue = 0;
     // callback.bind(null, theValue);
     let results = await Promise.all([
@@ -35,7 +35,7 @@ describe('Promisify', function() {
     };
   });
 
-  it('a sync returning function with a callback/resolved', async function() {
+  it('a returning function with it\'s callback/resolved', async function() {
     var deferred = new Deferred();
     var dPromise = deferred.promise;
 
@@ -57,7 +57,7 @@ describe('Promisify', function() {
     expect(results).to.deep.equal([2, 1]);
   });
 
-  it('a sync returning function with a callback/rejected', async function() {
+  it('a returning function with it\'s callback/rejected', async function() {
     var deferred = new Deferred();
     var dPromise = deferred.promise;
 
@@ -83,7 +83,7 @@ describe('Promisify', function() {
     }
   });
 
-  it('a sync function with a callback/error', async function() {
+  it('a returning function with it\'s callback/error', async function() {
     var deferred = new Deferred();
     var dPromise = deferred.promise;
 
