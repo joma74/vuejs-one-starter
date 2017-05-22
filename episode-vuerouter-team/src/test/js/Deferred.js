@@ -8,7 +8,7 @@
  */
 export default function Deferred() {
   var self = this;
-  /* A newly created Pomise object.
+  /* A newly created  Pomise object.
    * Initially in pending state.
    */
   var p = this.promise = new Promise(function (resolve, reject) {
