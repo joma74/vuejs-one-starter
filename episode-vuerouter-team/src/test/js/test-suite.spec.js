@@ -16,6 +16,7 @@ import {
 
 
 import path from 'path';
+import fs from 'fs';
 import WebpackServerSetup from './utils/WebpackServerSetup';
 
 chaiConfig.setDefaults();
@@ -52,6 +53,9 @@ describe('Some Feature', function () {
     let BROWSER_URL = `https://${webpackConfig.devServer.host || 'localhost'}:${webpackConfig.devServer.port}/`;
     // console.log(await doRequest(BROWSER_URL));
     await driver.get(BROWSER_URL);
-    await driver.wait(until.titleIs('vue-routing-team'), 30000);
+    await driver.wait(until.titleIs('vue-routing-team'), 3000);
+    driver.takeScreenshot().then(function (data) {
+      fs.writeFileSync(process.env.npm_package_config_content_base + '/index.png', data, 'base64');
+    });
   }).timeout(30000);
 });
