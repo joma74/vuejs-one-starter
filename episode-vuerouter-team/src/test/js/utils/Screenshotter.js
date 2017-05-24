@@ -10,11 +10,11 @@ export default class Screenshotter {
   }
   async takeAndFileUnder(testName) {
     let screenShot = await this.take();
-    screenShot.fileUnder(testName);
+    screenShot.then(and => and.fileUnder(testName));
   }
   async take() {
     let data = await this.driver.takeScreenshot();
-    return {
+    return Promise.resolve({
       data: data,
       fileUnderDir: this.fileUnderDir,
       fileUnder(testName) {
@@ -24,6 +24,6 @@ export default class Screenshotter {
       normalizeTestName(testName) {
         return testName.replace(/\s+/g, '-').toLowerCase();
       }
-    };
+    });
   }
 }

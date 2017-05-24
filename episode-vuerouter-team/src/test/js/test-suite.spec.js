@@ -55,6 +55,6 @@ describe('Some Feature', function() {
   it('is working', async function() {
     let landingPage = await new LandingPage(driver, LANDING_PAGE_URL).view(2000);
     await landingPage.getNavMenu().navToTeams();
-    await screenShotter.takeAndFileUnder(this.test.fullTitle());
+    await screenShotter.take().then(and => and.fileUnder(this.test.fullTitle()));
   }).timeout(4000);
 });
