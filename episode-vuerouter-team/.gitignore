@@ -8,3 +8,4 @@ libs/
 profiles/firefox/SeleniumUser/*
 !profiles/firefox/SeleniumUser/cert8.db
 !profiles/firefox/SeleniumUser/cert_override.txt
+!profiles/firefox/SeleniumUser/prefs.js
