@@ -1,18 +1,29 @@
 import fs from 'fs';
 
+const SCREENSHOT_IMAGE_TYPE = 'png';
+const FILE_ENCODING_OPTION = 'base64';
+
 export default class Screenshotter {
   constructor(driver, fileUnderDir) {
-      this.driver = driver;
-      this.fileUnderDir = fileUnderDir;
+    this.driver = driver;
+    this.fileUnderDir = fileUnderDir;
   }
-  async take(fileUnderTestName){
-    let self = this;
-    return this.driver.takeScreenshot().then(function(data) {
-      let file = self.fileUnderDir + self.normalizeTestName(fileUnderTestName) + '.png';
-      fs.writeFileSync(file, data, 'base64');
-    });
+  async takeAndFileUnder(testName) {
+    let screenShot = await this.take();
+    screenShot.fileUnder(testName);
   }
-  normalizeTestName(testName){
-    return testName.replace(/\s+/g, '-').toLowerCase();
+  async take() {
+    let data = await this.driver.takeScreenshot();
+    return {
+      data: data,
+      fileUnderDir: this.fileUnderDir,
+      fileUnder(testName) {
+        let file = this.fileUnderDir + this.normalizeTestName(testName) + '.' + SCREENSHOT_IMAGE_TYPE;
+        fs.writeFileSync(file, data, FILE_ENCODING_OPTION);
+      },
+      normalizeTestName(testName) {
+        return testName.replace(/\s+/g, '-').toLowerCase();
+      }
+    };
   }
 }
