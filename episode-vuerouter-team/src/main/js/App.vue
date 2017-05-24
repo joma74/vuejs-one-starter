@@ -2,7 +2,7 @@
 <div id="app">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-2 menu-pane">
+      <section class="col-xs-2 menu-pane" section-test-id="navigation">
         <ul class="nav nav-stacked">
           <li>
             <router-link to="/">Home</router-link>
@@ -14,17 +14,17 @@
             <router-link to="/about">Abouts</router-link>
           </li>
         </ul>
-      </div>
-      <div class="col-xs-10">
+      </section>
+      <section class="col-xs-10" section-test-id="content">
         <div class="row">
-          <div class="col-xs-4">
+          <section class="col-xs-4" section-test-id="team-list">
             <router-view></router-view>
-          </div>
-          <div class="col-xs-8">
+          </section>
+          <section class="col-xs-8" section-test-id="team-detail">
             <router-view name="detail"></router-view>
-          </div>
+          </section>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 </div>
