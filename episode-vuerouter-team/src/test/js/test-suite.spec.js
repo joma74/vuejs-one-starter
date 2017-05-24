@@ -40,6 +40,7 @@ describe('Some Feature', function () {
     webpackServerSetup = new WebpackServerSetup(webpackConfig);
     webpackServerSetup.disableVerbosePlugins();
     await webpackServerSetup.start();
+    // console.log(`FIREFOX_SELENIUMUSER_PROFILE is >>${process.cwd() + '/profiles/firefox/SeleniumUser'}<<`);
     driver = await new webdriver.Builder()
       .forBrowser('firefox')
       .setFirefoxOptions(new firefox.Options().setProfile(FIREFOX_SELENIUMUSER_PROFILE))
@@ -50,12 +51,16 @@ describe('Some Feature', function () {
     await webpackServerSetup.stop();
   });
   it('is working', async function () {
+    let self = this;
+    // let testName = this.test.fullTitle();
     let BROWSER_URL = `https://${webpackConfig.devServer.host || 'localhost'}:${webpackConfig.devServer.port}/`;
     // console.log(await doRequest(BROWSER_URL));
     await driver.get(BROWSER_URL);
-    await driver.wait(until.titleIs('vue-routing-team'), 3000);
-    driver.takeScreenshot().then(function (data) {
-      fs.writeFileSync(process.env.npm_package_config_content_base + '/index.png', data, 'base64');
+    await driver.wait(until.titleIs('vue-routing-team'), 2000);
+    await driver.takeScreenshot().then(function (data) {
+      let imageFileName = self.test.fullTitle().replace(/\s+/g, '-').toLowerCase();
+      let file = `${process.env.npm_package_config_content_base + imageFileName}.png`;
+      fs.writeFileSync(file, data, 'base64');
     });
   }).timeout(30000);
 });

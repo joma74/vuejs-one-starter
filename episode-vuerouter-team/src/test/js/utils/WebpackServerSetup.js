@@ -78,7 +78,7 @@ export default class WebpackServerSetup {
    */
   _configureDevServer() {
     let devServerConfig = this.webpackConfig.devServer;
-    console.log('Base configured devServer config >>' + JSON.stringify(devServerConfig));
+    // console.log('Base configured devServer config >>' + JSON.stringify(devServerConfig));
     // this section has to redo all that is evaluated via CLI node_modules/.bin/webpack-dev-server
     devServerConfig['hot'] = false;
     devServerConfig['hotOnly'] = false;
@@ -91,7 +91,7 @@ export default class WebpackServerSetup {
     devServerConfig['publicPath'] = 'https://localhost:8080/';
     devServerConfig['filename'] = this.webpackConfig.output.filename;
     // devServerConfig['overlay'] = false; // no effect
-    console.log('Final configured devServer config >>' + JSON.stringify(devServerConfig));
+    // console.log('Final configured devServer config >>' + JSON.stringify(devServerConfig));
     return devServerConfig;
   };
   stop() {
