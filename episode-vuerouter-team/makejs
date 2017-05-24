@@ -7,6 +7,7 @@ const wget = require('wget-improved');
 const unzip = require('unzipper');
 const targz = require('targz');
 const fs = require('fs');
+const path = require('path');
 
 shell.set('-e'); // any non-0 exit code results in a thrown error
 shell.set('-v'); // show effective command
@@ -29,32 +30,13 @@ const TEST_SUREFIRE = 'test:surefire';
 //
 const NODE_MODULES = 'node_modules/';
 
-var logExecutingTarget = function(targetName) {
+var logExecutingTarget = function (targetName) {
   console.log('--- ' + targetName + ' ---');
 };
 
-global.target.all = function() {
+global.target.all = function () {
   global.target[INSTALL_CLEAN]();
   global.target[INSTALL_INSTALL]();
-  global.target[PATCH_APPLY]();
-  global.target[LINK_BIN]();
-  global.target[INSTALL_PROJSTRUCT]();
-  global.target[LIST_INSTALLED]();
-};
-
-global.target[INSTALL_CLEAN] = function() {
-  logExecutingTarget(INSTALL_CLEAN);
-  shell.rm('-rf', shell.env['npm_package_config_content_base']);
-  // lastly, remove including myself
-  shell.rm('-rf', NODE_MODULES);
-};
-
-global.target[INSTALL_INSTALL] = function() {
-  logExecutingTarget(INSTALL_INSTALL);
-  shell.exec('yarn install -s'); // -s is silent
-};
-
-global.target[INSTALL_POSTINSTALL] = function() {
   global.target[PATCH_APPLY]();
   global.target[LINK_BIN]();
   global.target[INSTALL_PROJSTRUCT]();
@@ -63,23 +45,54 @@ global.target[INSTALL_POSTINSTALL] = function() {
   global.target[LIST_INSTALLED]();
 };
 
-global.target[PATCH_APPLY] = function() {
+global.target[INSTALL_CLEAN] = function () {
+  logExecutingTarget(INSTALL_CLEAN);
+  let cleaningDir = process.env.npm_package_config_content_base;
+  if (!path.isAbsolute(cleaningDir)) {
+    shell.rm('-rf', cleaningDir);
+  } else {
+    throw new Error(`Denied to remove a non-relative dir pathed >>${cleaningDir}<<`);
+  }
+  cleaningDir = NODE_MODULES;
+  if (!path.isAbsolute(cleaningDir)) {
+    // lastly, remove including myself
+    shell.rm('-rf', cleaningDir);
+  } else {
+    throw new Error(`Denied to remove a non-relative dir pathed >>${cleaningDir}<<`);
+  }
+};
+
+global.target[INSTALL_INSTALL] = function () {
+  logExecutingTarget(INSTALL_INSTALL);
+  shell.exec('yarn install -s'); // -s is silent
+};
+
+global.target[INSTALL_POSTINSTALL] = function () {
+  global.target[PATCH_APPLY]();
+  global.target[LINK_BIN]();
+  global.target[INSTALL_PROJSTRUCT]();
+  global.target[INSTALL_CHROMEDRIVER]();
+  global.target[INSTALL_FIREFOXDRIVER]();
+  global.target[LIST_INSTALLED]();
+};
+
+global.target[PATCH_APPLY] = function () {
   logExecutingTarget(PATCH_APPLY);
   shell.set('+e');
   // exitCodes 0 and 1 of patch are 'okay'. 1 means the patch has already been applied
-  shell.exec('patch -p0 < patches/patch.silentcopy.FileCollection.js', function(code, output) {
+  shell.exec('patch -p0 < patches/patch.silentcopy.FileCollection.js', function (code, output) {
     if (code > 1) throw new Error(code);
   });
   shell.set('-e');
 };
 
-global.target[INSTALL_PROJSTRUCT] = function() {
+global.target[INSTALL_PROJSTRUCT] = function () {
   logExecutingTarget(INSTALL_PROJSTRUCT);
   shell.mkdir('-p', shell.env['npm_package_config_content_base']);
   shell.mkdir('-p', shell.env['npm_package_config_libs_dir']);
 };
 
-global.target[LINK_BIN] = function() {
+global.target[LINK_BIN] = function () {
   logExecutingTarget(LINK_BIN);
   shell.pushd('node_modules/.bin');
   shell.ln('-sf', '../webpack-dev-server/bin/webpack-dev-server.js', 'webpack-dev-server');
@@ -87,44 +100,44 @@ global.target[LINK_BIN] = function() {
   shell.popd();
 };
 
-global.target[INSTALL_CHROMEDRIVER] = function() {
+global.target[INSTALL_CHROMEDRIVER] = function () {
   logExecutingTarget(INSTALL_CHROMEDRIVER);
   let downloadUrl = shell.env['npm_package_config_chromedriverDownloadUrl'];
   let targetDir = shell.env['npm_package_config_libs_dir'];
   let targetFile = targetDir + 'chromedriver';
   let targetFileAsZip = targetFile + '.zip';
   var download = wget.download(downloadUrl, targetFileAsZip);
-  download.on('error', function(err) {
+  download.on('error', function (err) {
     console.log(err);
     throw err;
   });
-  download.on('end', function(output) {
+  download.on('end', function (output) {
     fs.createReadStream(targetFileAsZip).pipe(unzip.Extract({
         path: targetDir
       }))
-      .on('close', function() {
+      .on('close', function () {
         shell.rm(targetFileAsZip);
         shell.chmod('u+x', targetFile);
       });
   });
 };
 
-global.target[INSTALL_FIREFOXDRIVER] = function() {
+global.target[INSTALL_FIREFOXDRIVER] = function () {
   logExecutingTarget(INSTALL_FIREFOXDRIVER);
   let downloadUrl = shell.env['npm_package_config_firefoxdriverDownloadUrl'];
   let targetDir = shell.env['npm_package_config_libs_dir'];
   let targetFile = targetDir + 'geckodriver';
   let targetFileAsTarGz = targetFile + '.tar.gz';
   var download = wget.download(downloadUrl, targetFileAsTarGz);
-  download.on('error', function(err) {
+  download.on('error', function (err) {
     console.log(err);
     throw err;
   });
-  download.on('end', function(output) {
+  download.on('end', function (output) {
     targz.decompress({
       src: targetFileAsTarGz,
       dest: targetDir
-    }, function(err) {
+    }, function (err) {
       if (err) {
         console.log(err);
         throw err;
@@ -135,19 +148,19 @@ global.target[INSTALL_FIREFOXDRIVER] = function() {
   });
 };
 
-global.target[LIST_INSTALLED] = function() {
+global.target[LIST_INSTALLED] = function () {
   logExecutingTarget(LIST_INSTALLED);
   shell.exec('yarn list --depth=0 2>/dev/null > $npm_package_config_content_base/installed-dependencies.log');
 };
 
-global.target[CHECK_LINT] = function() {
+global.target[CHECK_LINT] = function () {
   logExecutingTarget(CHECK_LINT);
   shell.config.fatal = false;
   shell.exec('eslint --ext .js,.vue src/* test/*');
   shell.config.fatal = true;
 };
 
-global.target[TEST_RUN] = global.target[TEST] = function(argArr) { // yarn run test -- specSel=promisify
+global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run test -- specSel=promisify
   logExecutingTarget(TEST_RUN);
   let argO = destructureArgs(argArr, {
     params: '',
@@ -160,7 +173,7 @@ global.target[TEST_RUN] = global.target[TEST] = function(argArr) { // yarn run t
   shell.config.fatal = true;
 };
 
-global.target[TEST_DEBUG] = function(argArr) {
+global.target[TEST_DEBUG] = function (argArr) {
   logExecutingTarget(TEST_DEBUG);
   let argO = destructureArgs(argArr, {
     params: '--inspect=9876 --debug-brk',
@@ -171,7 +184,7 @@ global.target[TEST_DEBUG] = function(argArr) {
   global.target[TEST_RUN](restructureArgs(argArrI));
 };
 
-global.target[TEST_SUREFIRE] = function(argArr) {
+global.target[TEST_SUREFIRE] = function (argArr) {
   logExecutingTarget(TEST_SUREFIRE);
   let argO = destructureArgs(argArr, {
     params: '-R xunit-file </dev/null 2>&1',
@@ -191,7 +204,7 @@ global.target[TEST_SUREFIRE] = function(argArr) {
  * @return {object}                  transformed to object form {opt1: 'arg', opt2: 'arg'}
  */
 function destructureArgs(argsArr, defaultsO) {
-  argsArr && argsArr.forEach(function(arg, index) {
+  argsArr && argsArr.forEach(function (arg, index) {
     let key;
     let val = arg; // if positional form
     let splitPosition = arg.indexOf('=');
@@ -228,7 +241,7 @@ function destructureArgs(argsArr, defaultsO) {
  * @return {string[]}            transformed to array named form ['opt1=arg', opt2=arg']
  */
 function restructureArgs(argsO) {
-  return Object.keys(argsO).map(function(argKey) {
+  return Object.keys(argsO).map(function (argKey) {
     return `${argKey}=${argsO[argKey]}`;
   });
 }

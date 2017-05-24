@@ -14,6 +14,7 @@ import {
   FIREFOX_SELENIUMUSER_PROFILE
 } from './utils/FirefoxConfig';
 import Screenshotter from './utils/Screenshotter';
+import LandingPage from './appcmpnts/LandingPage';
 
 import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
@@ -21,8 +22,6 @@ import WebpackServerSetup from './utils/WebpackServerSetup';
 chaiConfig.setDefaults();
 
 const webdriver = require('selenium-webdriver');
-const By = webdriver.By;
-const until = webdriver.until;
 const WDpromise = webdriver.until;
 const firefox = require('selenium-webdriver/firefox');
 
@@ -32,7 +31,7 @@ describe('Some Feature', function() {
   let driver;
   let webpackServerSetup;
   let screenShotter;
-  let BROWSER_URL;
+  let LANDING_PAGE_URL;
   before(async function() {
     this.timeout(TIMEOUT_BEFORE_MS);
     // process.env.NODE_ENV = 'development';
@@ -46,21 +45,16 @@ describe('Some Feature', function() {
       .forBrowser('firefox')
       .setFirefoxOptions(new firefox.Options().setProfile(FIREFOX_SELENIUMUSER_PROFILE))
       .build();
-    BROWSER_URL = `https://${webpackConfig.devServer.host || 'localhost'}:${webpackConfig.devServer.port}/`;
+    LANDING_PAGE_URL = `https://${webpackConfig.devServer.host || 'localhost'}:${webpackConfig.devServer.port}/`;
     screenShotter = new Screenshotter(driver, process.env.npm_package_config_content_base);
   });
   after(async function() {
-    await driver.quit();
+    // await driver.quit();
     await webpackServerSetup.stop();
   });
   it('is working', async function() {
-    await driver.get(BROWSER_URL);
-    await driver.wait(until.titleIs('vue-routing-team'), 2000);
-    await driver.findElement(
-      By.css("section[section-test-id='navigation']")
-    ).findElement(
-      By.css("a[href='/teams']")
-    ).click();
+    let landingPage = await new LandingPage(driver, LANDING_PAGE_URL).view(2000);
+    await landingPage.getNavMenu().navToTeams();
     await screenShotter.take(this.test.fullTitle());
   }).timeout(4000);
 });

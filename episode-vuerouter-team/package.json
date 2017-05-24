@@ -15,7 +15,7 @@
     "link-bin": "./makejs link:bin",
     "make-install": "yarn add shelljs@^0.7.7 -s && ./makejs",
     "make-help": "./makejs --help",
-    "postinstall": "./makejs install:postinstall",
+    "make-postinstall": "./makejs install:postinstall",
     "check-lint": "./makejs check:lint",
     "test": "./makejs test --",
     "makejs": "./makejs",
