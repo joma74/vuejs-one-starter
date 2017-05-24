@@ -15,7 +15,7 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 let MAIN_JS = 'main/js/';
 let MAIN_RESOURCES = 'main/resources/';
 //
-let CONTENT_BASE = 'target/';
+let CONTENT_BASE = process.env.npm_package_config_content_base || 'target/';
 let SRC_JS = 'src/' + MAIN_JS;
 //
 let TARGET_JS = CONTENT_BASE + MAIN_JS;
@@ -45,6 +45,7 @@ mix.webpackConfig({
   devServer: {
     https: true,
     port: 8080 // othe than that not supported, as Mix.js has this hardcoded
+
   }
 });
 mix.options({

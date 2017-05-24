@@ -36,7 +36,7 @@ export default class WebpackServerSetup {
       // console.log(entry);
     });
   };
-  async start () {
+  async start() {
     const deferred = new Deferred();
     const dPromise = deferred.promise;
 
@@ -66,18 +66,34 @@ export default class WebpackServerSetup {
       }),
       dPromise
     ]);
-    let devServerConfig = this.webpackConfig.devServer;
-    // console.log(JSON.stringify(devServerConfig));
-    devServerConfig['hot'] = true;
-    // devServerConfig['stats'] = 'errors-only';
-    devServerConfig['quiet'] = true; // like DONE compiled successfully ...
-    devServerConfig['noInfo'] = true; // like Assets, Chunks ...
-    // devServerConfig['overlay'] = false; // no effect
-    // console.log(JSON.stringify(devServerConfig));
+    let devServerConfig = this._configureDevServer();
     /* eslint-disable new-cap */
     this.webpackDevServer = new webpackDevServer(compiler, devServerConfig);
     this.webpackDevServer.listen(this.webpackConfig.devServer.port);
   }
+  /**
+   * This method has to redo all that is evaluated via CLI node_modules/.bin/webpack-dev-server
+   * @method _configureDevServer
+   * @return {object}            config for the devServer
+   */
+  _configureDevServer() {
+    let devServerConfig = this.webpackConfig.devServer;
+    console.log('Base configured devServer config >>' + JSON.stringify(devServerConfig));
+    // this section has to redo all that is evaluated via CLI node_modules/.bin/webpack-dev-server
+    devServerConfig['hot'] = false;
+    devServerConfig['hotOnly'] = false;
+    devServerConfig['clientLogLevel'] = 'warning';
+    devServerConfig['stats'] = 'errors-only';
+    devServerConfig['quiet'] = true; // like DONE compiled successfully ...
+    devServerConfig['noInfo'] = true; // like Assets, Chunks ...
+    devServerConfig['contentBase'] = this.webpackConfig.output.path;
+    devServerConfig['host'] = 'localhost';
+    devServerConfig['publicPath'] = 'https://localhost:8080/';
+    devServerConfig['filename'] = this.webpackConfig.output.filename;
+    // devServerConfig['overlay'] = false; // no effect
+    console.log('Final configured devServer config >>' + JSON.stringify(devServerConfig));
+    return devServerConfig;
+  };
   stop() {
     this.webpackDevServer && this.webpackDevServer.close();
   }

@@ -5,3 +5,5 @@ npm-debug.log
 hot
 mix-manifest.json
 libs/
+profiles/firefox/SeleniumUser/*
+!profiles/firefox/SeleniumUser/cert8.db

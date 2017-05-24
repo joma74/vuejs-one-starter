@@ -53,6 +53,7 @@
     "selenium-webdriver": "^3.4.0",
     "shelljs": "^0.7.7",
     "sinon": "^2.1.0",
+    "targz": "^1.0.1",
     "unzipper": "^0.8.8",
     "vue-loader": "^12.0.2",
     "vue-style-loader": "^3.0.1",
@@ -63,7 +64,6 @@
   "dependencies": {
     "axios": "^0.16.1",
     "request": "^2.81.0",
-    "targz": "^1.0.1",
     "vue": "^2.3.0",
     "vue-inject": "^1.0.0",
     "vue-router": "^2.5.2",
