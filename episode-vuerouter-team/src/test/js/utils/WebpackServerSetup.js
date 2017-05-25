@@ -3,9 +3,16 @@ import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 import Deferred from './Deferred';
 
+const HOSTNAME_DEFAULT = 'localhost';
+
 export default class WebpackServerSetup {
-  constructor(webpackConfig) {
+  constructor(webpackConfig, doDisableVerbosePlugins) {
     this.webpackConfig = webpackConfig;
+    if (doDisableVerbosePlugins === true){
+      this.disableVerbosePlugins();
+    }
+    this.devServerConfig = this.webpackConfig.devServer;
+    this._configureDevServer();
     this.webpackDevServer = null;
   }
   disableVerbosePlugins() {
@@ -66,10 +73,10 @@ export default class WebpackServerSetup {
       }),
       dPromise
     ]);
-    let devServerConfig = this._configureDevServer();
     /* eslint-disable new-cap */
-    this.webpackDevServer = new webpackDevServer(compiler, devServerConfig);
-    this.webpackDevServer.listen(this.webpackConfig.devServer.port);
+    this.webpackDevServer = new webpackDevServer(compiler, this.devServerConfig);
+    this.webpackDevServer.listen(this.devServerConfig['port']);
+    return this;
   }
   /**
    * This method has to redo all that is evaluated via CLI node_modules/.bin/webpack-dev-server
@@ -77,23 +84,29 @@ export default class WebpackServerSetup {
    * @return {object}            config for the devServer
    */
   _configureDevServer() {
-    let devServerConfig = this.webpackConfig.devServer;
     // console.log('Base configured devServer config >>' + JSON.stringify(devServerConfig));
     // this section has to redo all that is evaluated via CLI node_modules/.bin/webpack-dev-server
-    devServerConfig['hot'] = false;
-    devServerConfig['hotOnly'] = false;
-    devServerConfig['clientLogLevel'] = 'warning';
-    devServerConfig['stats'] = 'errors-only';
-    devServerConfig['quiet'] = true; // like DONE compiled successfully ...
-    devServerConfig['noInfo'] = true; // like Assets, Chunks ...
-    devServerConfig['contentBase'] = this.webpackConfig.output.path;
-    devServerConfig['host'] = 'localhost';
-    devServerConfig['publicPath'] = 'https://localhost:8080/';
-    devServerConfig['filename'] = this.webpackConfig.output.filename;
+    this.devServerConfig['hot'] = false;
+    this.devServerConfig['hotOnly'] = false;
+    this.devServerConfig['clientLogLevel'] = 'warning';
+    this.devServerConfig['stats'] = 'errors-only';
+    this.devServerConfig['quiet'] = true; // like DONE compiled successfully ...
+    this.devServerConfig['noInfo'] = true; // like Assets, Chunks ...
+    this.devServerConfig['contentBase'] = this.webpackConfig.output.path;
+    this.devServerConfig['host'] = HOSTNAME_DEFAULT;
+    this.devServerConfig['publicPath'] = this._configureBaseUrl();
+    this.devServerConfig['filename'] = this.webpackConfig.output.filename;
     // devServerConfig['overlay'] = false; // no effect
-    // console.log('Final configured devServer config >>' + JSON.stringify(devServerConfig));
-    return devServerConfig;
+    // console.log('Final configured devServer config >>' + JSON.stringify(this.devServerConfig));
   };
+  _configureBaseUrl(){
+    let protocolPart = (this.devServerConfig['https'] === true ? 'https' : 'http');
+    let baseURL = `${protocolPart}://${this.webpackConfig.devServer.host || HOSTNAME_DEFAULT}:${this.webpackConfig.devServer.port}/`;
+    return baseURL;
+  }
+  getBaseUrl(){
+    return this.devServerConfig['publicPath'];
+  }
   stop() {
     this.webpackDevServer && this.webpackDevServer.close();
   }

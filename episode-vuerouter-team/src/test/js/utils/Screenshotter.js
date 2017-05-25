@@ -23,6 +23,16 @@ export default class Screenshotter {
       },
       normalizeTestName(testName) {
         return testName.replace(/\s+/g, '-').toLowerCase();
+      },
+      toString() {
+        return JSON.toString(this, function (key, value) {
+          if (key === 'data') {
+            let binaryData = this[key];
+            return `binaryData[${binaryData.length}]`;
+          } else {
+            return value;
+          }
+        }, 2);
       }
     });
   }
