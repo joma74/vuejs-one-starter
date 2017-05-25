@@ -12,7 +12,10 @@ const path = require('path');
 shell.set('-e'); // any non-0 exit code results in a thrown error
 shell.set('-v'); // show effective command
 
+const ALL = 'all';
+const INSTALL_ALL = 'install:all';
 const INSTALL_CLEAN = 'install:clean';
+const CLEAN_INSTALL = 'install:clean_install:all';
 const INSTALL_INSTALL = 'install:install';
 const INSTALL_POSTINSTALL = 'install:postinstall';
 const PATCH_APPLY = 'patch:apply';
@@ -34,15 +37,13 @@ var logExecutingTarget = function (targetName) {
   console.log('--- ' + targetName + ' ---');
 };
 
-global.target.all = function () {
-  global.target[INSTALL_CLEAN]();
+global.target[ALL] = global.target[INSTALL_ALL] = function () {
   global.target[INSTALL_INSTALL]();
-  global.target[PATCH_APPLY]();
-  global.target[LINK_BIN]();
-  global.target[INSTALL_PROJSTRUCT]();
-  global.target[INSTALL_CHROMEDRIVER]();
-  global.target[INSTALL_FIREFOXDRIVER]();
-  global.target[LIST_INSTALLED]();
+};
+
+global.target[CLEAN_INSTALL] = function () {
+  global.target[INSTALL_CLEAN]();
+  global.target[INSTALL_ALL]();
 };
 
 global.target[INSTALL_CLEAN] = function () {
@@ -64,7 +65,7 @@ global.target[INSTALL_CLEAN] = function () {
 
 global.target[INSTALL_INSTALL] = function () {
   logExecutingTarget(INSTALL_INSTALL);
-  shell.exec('yarn install -s'); // -s is silent
+  shell.exec('yarn install'); // -s is silent
 };
 
 global.target[INSTALL_POSTINSTALL] = function () {

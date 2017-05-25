@@ -13,9 +13,9 @@
     "list-installed": "./makejs list:installed",
     "patch-apply": "./makejs patch:apply",
     "link-bin": "./makejs link:bin",
-    "make-install": "yarn add shelljs@^0.7.7 -s && ./makejs",
+    "make-clean-install": "./makejs install:clean_install:all",
     "make-help": "./makejs --help",
-    "make-postinstall": "./makejs install:postinstall",
+    "postinstall": "./makejs install:postinstall",
     "check-lint": "./makejs check:lint",
     "test": "./makejs test --",
     "makejs": "./makejs",
@@ -70,7 +70,7 @@
     "vuex": "^2.3.0"
   },
   "engines": {
-    "node": ">= 6.5.0",
-    "yarn": ">= 0.22.0"
+    "node": ">= 7.9.0",
+    "yarn": ">= 0.24.5"
   }
 }
