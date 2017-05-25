@@ -10,9 +10,7 @@ import {
 import {
   TIMEOUT_BEFORE_MS
 } from './utils/MochaConfig';
-import {
-  FIREFOX_SELENIUMUSER_PROFILE
-} from './utils/FirefoxConfig';
+import WebdriverConfig from './utils/WebdriverConfig';
 import Screenshotter from './utils/Screenshotter';
 import LandingPage from './appcmpnts/LandingPage';
 
@@ -20,12 +18,6 @@ import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
 
 chaiConfig.setDefaults();
-
-const webdriver = require('selenium-webdriver');
-const WDpromise = webdriver.until;
-const firefox = require('selenium-webdriver/firefox');
-
-WDpromise.USE_PROMISE_MANAGER = false;
 
 describe('Some Feature', function() {
   let driver;
@@ -38,10 +30,7 @@ describe('Some Feature', function() {
     let webpackConfig = require(path.join(process.cwd(), '/webpack.config.js'));
     webpackServerSetup = await new WebpackServerSetup(webpackConfig, true).start();
     // console.log(`FIREFOX_SELENIUMUSER_PROFILE is >>${process.cwd() + '/profiles/firefox/SeleniumUser'}<<`);
-    driver = await new webdriver.Builder()
-      .forBrowser('firefox')
-      .setFirefoxOptions(new firefox.Options().setProfile(FIREFOX_SELENIUMUSER_PROFILE))
-      .build();
+    driver = await new WebdriverConfig().getDriver();
     screenShotter = new Screenshotter(driver, process.env.npm_package_config_content_base);
   });
   after(async function() {

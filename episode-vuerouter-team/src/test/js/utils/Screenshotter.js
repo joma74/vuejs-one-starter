@@ -1,7 +1,7 @@
 import fs from 'fs';
 
-const SCREENSHOT_IMAGE_TYPE = 'png';
-const FILE_ENCODING_OPTION = 'base64';
+export const SCREENSHOT_IMAGE_TYPE = 'png';
+export const FILE_ENCODING_OPTION = 'base64';
 
 export default class Screenshotter {
   constructor(driver, fileUnderDir) {

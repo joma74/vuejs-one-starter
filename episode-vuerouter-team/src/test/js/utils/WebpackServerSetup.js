@@ -3,7 +3,7 @@ import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 import Deferred from './Deferred';
 
-const HOSTNAME_DEFAULT = 'localhost';
+export const HOSTNAME_DEFAULT = 'localhost';
 
 export default class WebpackServerSetup {
   constructor(webpackConfig, doDisableVerbosePlugins) {
