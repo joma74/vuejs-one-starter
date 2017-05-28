@@ -179,7 +179,7 @@ global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run 
     specSel: '*',
     postChain: ''
   });
-  let command = `cross-env NODE_ENV=test BABEL_ENV=test  mocha -t 5000 --colors ${argO.params} --reporter mocha-multi-reporters --reporter-options configFile=mocha-multireporters.config.js --compilers js:babel-core/register --require babel-polyfill src/test/js/${argO.specSel}.spec.js ${argO.postChain}`;
+  let command = `cross-env NODE_ENV=test BABEL_ENV=test mocha --opts src/test/mocha.opts --colors ${argO.params} src/test/js/${argO.specSel}.spec.js ${argO.postChain}`;
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);
   shell.config.fatal = true;

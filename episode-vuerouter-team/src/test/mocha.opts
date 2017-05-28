@@ -1,0 +1,6 @@
+--timeout 5000
+--reporter mocha-multi
+--reporter mocha-multi-reporters
+--reporter-options configFile=mocha-multireporters.config.js
+--compilers js:babel-core/register
+--require babel-polyfill
