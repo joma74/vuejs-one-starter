@@ -26,6 +26,7 @@ const INSTALL_FIREFOXDRIVER = 'install:firefoxdriver';
 const LIST_INSTALLED = 'list:installed';
 const CHECK_LINT = 'check:lint';
 //
+const TEST_CLEAN = 'test:clean';
 const TEST_RUN = 'test:run';
 const TEST = 'test';
 const TEST_DEBUG = 'test:debug';
@@ -161,6 +162,16 @@ global.target[CHECK_LINT] = function () {
   shell.config.fatal = true;
 };
 
+global.target[TEST_CLEAN] = function (argArr) {
+  logExecutingTarget(TEST_CLEAN);
+  let cleaningDir = process.env.npm_package_config_allure_results_base;
+  if (!path.isAbsolute(cleaningDir)) {
+    shell.rm('-rf', cleaningDir);
+  } else {
+    throw new Error(`Denied to remove a non-relative dir pathed >>${cleaningDir}<<`);
+  }
+};
+
 global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run test -- specSel=promisify
   logExecutingTarget(TEST_RUN);
   let argO = destructureArgs(argArr, {
@@ -168,7 +179,7 @@ global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run 
     specSel: '*',
     postChain: ''
   });
-  let command = `cross-env NODE_ENV=test BABEL_ENV=test  mocha -t 5000 --colors ${argO.params} --reporter mocha-multi-reporters --reporter-options configFile=mocha-multireporters.config.json --compilers js:babel-core/register --require babel-polyfill src/test/js/${argO.specSel}.spec.js ${argO.postChain}`;
+  let command = `cross-env NODE_ENV=test BABEL_ENV=test  mocha -t 5000 --colors ${argO.params} --reporter mocha-multi-reporters --reporter-options configFile=mocha-multireporters.config.js --compilers js:babel-core/register --require babel-polyfill src/test/js/${argO.specSel}.spec.js ${argO.postChain}`;
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);
   shell.config.fatal = true;
