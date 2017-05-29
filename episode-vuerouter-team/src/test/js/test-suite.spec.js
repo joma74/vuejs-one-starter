@@ -42,18 +42,20 @@ describe('Application spec', function () {
     await webpackServerSetup.stop();
   });
   it('expect to open landing page', async function () {
-    allure.addLabel('severity', 'critical');
+    allure.story('Show landing page');
+    allure.addLabel('severity', 'blocker');
     let landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
     await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
-    await allure.createStep('show landing page', async() => screenShotter.take()
+    await allure.createStep('show landing page', async(screenShotName) => screenShotter.take()
       .then(
         and => {
-          allure.createAttachment('landing page', and.getBinaryDataAsBuffer());
+          allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
         })
-    )(); // <- da iffe
+    )('landing-page-screenshot'); // <- da iffe
   });
   it('expect to show team list', async function () {
     allure.story('Show team list');
+    allure.addLabel('severity', 'critical');
     let landingPage;
     await allure.createStep('show landing page', async() => {
       landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
@@ -62,11 +64,11 @@ describe('Application spec', function () {
     await allure.createStep('activate Teams', async() => {
       await landingPage.getNavMenu().navToTeams();
     })();
-    await allure.createStep('show team list', async() => screenShotter.take()
+    await allure.createStep('show team list', async(screenShotName) => screenShotter.take()
       .then(
         and => {
-          allure.createAttachment('team list', and.getBinaryDataAsBuffer());
+          allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
         })
-    )(); // <- da iffe
+    )('team-list-screenshot'); // <- da iffe
   });
 });
