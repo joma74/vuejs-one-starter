@@ -21,6 +21,12 @@ export default class Screenshotter {
         let file = this.fileUnderDir + this.normalizeTestName(testName) + '.' + SCREENSHOT_IMAGE_TYPE;
         fs.writeFileSync(file, data, FILE_ENCODING_OPTION);
       },
+      getBinaryData() {
+        return data;
+      },
+      getBinaryDataAsBuffer(){
+        return Buffer.from(data, FILE_ENCODING_OPTION);
+      },
       normalizeTestName(testName) {
         return testName.replace(/\s+/g, '-').toLowerCase();
       },

@@ -1,1 +1,1 @@
-export const TIMEOUT_BEFORE_MS = 10000;
+export const TIMEOUT_BEFORE_MS = 10 * 1000;

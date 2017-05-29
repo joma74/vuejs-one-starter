@@ -19,4 +19,7 @@ export default class LandingPage {
   getNavMenu() {
     return this.navMenu;
   }
+  getBaseUrl() {
+    return this.pageUrl;
+  }
 };
