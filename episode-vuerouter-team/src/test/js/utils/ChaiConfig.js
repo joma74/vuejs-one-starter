@@ -9,3 +9,5 @@ class ChaiConfig{
 }
 
 export let chaiConfig = new ChaiConfig();
+
+export { expect } from 'chai';

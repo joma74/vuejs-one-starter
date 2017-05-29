@@ -23,3 +23,5 @@ export default class LandingPage {
     return this.pageUrl;
   }
 };
+
+export { NavMenuItemEnum } from './NavMenu';

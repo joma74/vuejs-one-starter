@@ -7,14 +7,17 @@ import {
   after
 } from 'mocha';
 import {
-  chaiConfig
+  chaiConfig,
+  expect
 } from './utils/ChaiConfig';
 import {
   TIMEOUT_BEFORE_MS
 } from './utils/MochaConfig';
 import WebdriverConfig from './utils/WebdriverConfig';
 import Screenshotter from './utils/Screenshotter';
-import LandingPage from './appcmpnts/LandingPage';
+import LandingPage, {
+  NavMenuItemEnum
+} from './appcmpnts/LandingPage';
 
 import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
@@ -24,7 +27,7 @@ chaiConfig.setDefaults();
 describe('Application spec', function () {
   let driver;
   let webpackServerSetup;
-  let screenShotter;
+  let takeScreenshot;
   before(async function () {
     this.timeout(TIMEOUT_BEFORE_MS);
     // process.env.NODE_ENV = 'development';
@@ -35,23 +38,24 @@ describe('Application spec', function () {
     // allure.addEnvironment('landingPage', webpackServerSetup.getBaseUrl());
     // console.log(`FIREFOX_SELENIUMUSER_PROFILE is >>${process.cwd() + '/profiles/firefox/SeleniumUser'}<<`);
     driver = await new WebdriverConfig().getDriver();
-    screenShotter = new Screenshotter(driver, process.env.npm_package_config_content_base);
+    let screenShotter = new Screenshotter(driver, process.env.npm_package_config_content_base);
+    takeScreenshot = allure.createStep('take screenshot', async(screenShotName) => screenShotter.take()
+      .then(
+        and => {
+          allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
+        })
+    );
   });
   after(async function () {
     await driver.quit();
     await webpackServerSetup.stop();
   });
-  it('expect to open landing page', async function () {
+  it('expect to show landing page', async function () {
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
     let landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
     await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
-    await allure.createStep('show landing page', async(screenShotName) => screenShotter.take()
-      .then(
-        and => {
-          allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
-        })
-    )('landing-page-screenshot'); // <- da iffe
+    await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
   it('expect to show team list', async function () {
     allure.story('Show team list');
@@ -61,14 +65,17 @@ describe('Application spec', function () {
       landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
       await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     })();
-    await allure.createStep('activate Teams', async() => {
+    await allure.createStep('check number of nav items', async() => {
+      expect(3).to.equal(await landingPage.getNavMenu().getNumberOfNavItems());
+    })();
+    await allure.createStep('check nav item "Teams" exists', async() => {
+      let navItemTeams = await landingPage.getNavMenu().getNavItemFor(NavMenuItemEnum.TEAMS);
+      allure.createAttachment('nav item content for team', await navItemTeams.getAttribute('innerHTML'));
+      expect(navItemTeams).to.exist;
+    })();
+    await allure.createStep('activate nav item "Teams"', async() => {
       await landingPage.getNavMenu().navToTeams();
     })();
-    await allure.createStep('show team list', async(screenShotName) => screenShotter.take()
-      .then(
-        and => {
-          allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
-        })
-    )('team-list-screenshot'); // <- da iffe
+    await takeScreenshot('team-list-screenshot'); // <- da iffe
   });
 });
