@@ -24,6 +24,7 @@ import WebpackServerSetup from './utils/WebpackServerSetup';
 
 chaiConfig.setDefaults();
 
+/* eslint-disable no-unused-expressions */
 describe('Application spec', function () {
   let driver;
   let webpackServerSetup;
