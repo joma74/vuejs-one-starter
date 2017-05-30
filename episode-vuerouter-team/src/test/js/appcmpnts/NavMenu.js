@@ -7,18 +7,20 @@ export default class NavMenuPO {
     this.driver = driver;
     this.navMenu = By.css("section[section-test-id='navigation']");
     this.navMenuListItems = By.css('ul li');
-    this.navMenuItemTeams = By.css("a[href='/teams']");
   }
   async navToTeams() {
     await this.driver
       .findElement(this.navMenu)
-      .findElement(this.navMenuItemTeams)
+      .findElement(this._getNavItemByCSSFor(NavMenuItemEnum.TEAMS))
       .click();
   }
   async getNavItemFor(navMenuItemNumber) {
     return await this.driver
       .findElement(this.navMenu)
-      .findElement(By.css(`a[href='${NavMenuItemEnum.properties[navMenuItemNumber].href}']`));
+      .findElement(this._getNavItemByCSSFor(navMenuItemNumber));
+  }
+  _getNavItemByCSSFor(navMenuItemNumber){
+    return By.css(`a[href='${NavMenuItemEnum.properties[navMenuItemNumber].href}']`);
   }
   async getNumberOfNavItems() {
     let menuListElement = await this.driver

@@ -13,7 +13,9 @@ import {
 import {
   TIMEOUT_BEFORE_MS
 } from './utils/MochaConfig';
-import WebdriverConfig from './utils/WebdriverConfig';
+import WebdriverConfig, {
+  getHtmlFrom
+} from './utils/WebdriverConfig';
 import Screenshotter from './utils/Screenshotter';
 import LandingPage, {
   NavMenuItemEnum
@@ -25,11 +27,11 @@ import WebpackServerSetup from './utils/WebpackServerSetup';
 chaiConfig.setDefaults();
 
 /* eslint-disable no-unused-expressions */
-describe('Application spec', function () {
+describe('Application spec', function() {
   let driver;
   let webpackServerSetup;
   let takeScreenshot;
-  before(async function () {
+  before(async function() {
     this.timeout(TIMEOUT_BEFORE_MS);
     // process.env.NODE_ENV = 'development';
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -47,18 +49,18 @@ describe('Application spec', function () {
         })
     );
   });
-  after(async function () {
+  after(async function() {
     await driver.quit();
     await webpackServerSetup.stop();
   });
-  it('expect to show landing page', async function () {
+  it('expect to show landing page', async function() {
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
     let landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
     await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
-  it('expect to show team list', async function () {
+  it('expect to show team list', async function() {
     allure.story('Show team list');
     allure.addLabel('severity', 'critical');
     let landingPage;
@@ -71,7 +73,7 @@ describe('Application spec', function () {
     })();
     await allure.createStep('check nav item "Teams" exists', async() => {
       let navItemTeams = await landingPage.getNavMenu().getNavItemFor(NavMenuItemEnum.TEAMS);
-      allure.createAttachment('nav item content for team', await navItemTeams.getAttribute('innerHTML'));
+      allure.createAttachment('web element content', await getHtmlFrom(navItemTeams));
       expect(navItemTeams).to.exist;
     })();
     await allure.createStep('activate nav item "Teams"', async() => {

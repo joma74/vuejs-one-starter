@@ -21,3 +21,7 @@ export default class WebdriverConfig {
       .build();
   }
 }
+
+export function getHtmlFrom(webElement) {
+  return webElement.getAttribute('outerHTML');
+}
