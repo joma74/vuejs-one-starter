@@ -47,12 +47,9 @@ describe('Application spec', function() {
     webpackServerSetup = await new WebpackServerSetup(webpackConfig, true).start();
     webdriverConfig = new WebdriverConfig();
     let screenShotter = new Screenshotter(await webdriverConfig.getDriver(), process.env.npm_package_config_content_base);
-    takeScreenshot = allure.createStep('take screenshot', async(screenShotName) => screenShotter.take()
-      .then(
-        and => {
-          allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
-        })
-    );
+    takeScreenshot = allure.createStep('take screenshot', async(screenShotName) => {
+          allure.createAttachment(screenShotName, (await screenShotter.take()).getBinaryDataAsBuffer());
+    });
     saveBrowserLog = allure.createStep('save browser log', async(logName) => {
       allure.createAttachment(`${logName}.browser.log`, await webdriverConfig.getBrowserLog());
     });
@@ -61,7 +58,7 @@ describe('Application spec', function() {
     });
   });
   after(async function() {
-    // webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
+    webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
     // ONLY to the last method, so parenthese right away. else null/undefined.
     await webpackServerSetup.stop();
   });
