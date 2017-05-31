@@ -37,9 +37,14 @@ export default class WebdriverConfig {
   }
   /**
    * Creates a new webdriver
-   * - for firefox
+   * - for firefox and chrome
    * - using FIREFOX_SELENIUMUSER_PROFILE
-   * - with ALL logging in browser enabled
+   * - for both browser enabled logging types of
+   * -- BROWSER
+   * -- DRIVER
+   * -- CLIENT
+   * If no other override applies e.g. environment variable SELENIUM_BROWSER=xyz,
+   * the BROWSER defaults to chrome.
    * @method _createNewDriver
    * @return {Promise.<webdriver>} the new webdriver.
    */
@@ -47,7 +52,6 @@ export default class WebdriverConfig {
     let loggingPrefs = new webdriver.logging.Preferences();
     loggingPrefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.DEBUG);
     loggingPrefs.setLevel(webdriver.logging.Type.DRIVER, webdriver.logging.Level.INFO);
-    loggingPrefs.setLevel(webdriver.logging.Type.SERVER, webdriver.logging.Level.INFO);
     loggingPrefs.setLevel(webdriver.logging.Type.CLIENT, webdriver.logging.Level.INFO);
     let firefoxCapabilities = webdriver.Capabilities.firefox();
     firefoxCapabilities.setLoggingPrefs(loggingPrefs);
@@ -65,7 +69,7 @@ export default class WebdriverConfig {
   /**
    * Get the Log from the browser.
    * @method getBrowserLog
-   * @return {Promise.<String>[]}     an array of JSON stringified log messages
+   * @return {Promise.<String>[]}     an array of JSON-stringified log messages
    */
   async getBrowserLog() {
     if (this.driver === null || this.driver === undefined) {
