@@ -27,11 +27,12 @@ import WebpackServerSetup from './utils/WebpackServerSetup';
 chaiConfig.setDefaults();
 
 /* eslint-disable no-unused-expressions */
-describe('Application spec', function() {
-  let driver;
+describe('Application spec', function () {
+  let webdriverConfig;
   let webpackServerSetup;
   let takeScreenshot;
-  before(async function() {
+  let saveBrowserLog;
+  before(async function () {
     this.timeout(TIMEOUT_BEFORE_MS);
     // process.env.NODE_ENV = 'development';
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -40,32 +41,41 @@ describe('Application spec', function() {
     // console.log('webpackServerSetup.getBaseUrl() >> ' + webpackServerSetup.getBaseUrl());
     // allure.addEnvironment('landingPage', webpackServerSetup.getBaseUrl());
     // console.log(`FIREFOX_SELENIUMUSER_PROFILE is >>${process.cwd() + '/profiles/firefox/SeleniumUser'}<<`);
-    driver = await new WebdriverConfig().getDriver();
-    let screenShotter = new Screenshotter(driver, process.env.npm_package_config_content_base);
+    webdriverConfig = new WebdriverConfig();
+    let screenShotter = new Screenshotter(await webdriverConfig.getDriver(), process.env.npm_package_config_content_base);
     takeScreenshot = allure.createStep('take screenshot', async(screenShotName) => screenShotter.take()
       .then(
         and => {
           allure.createAttachment(screenShotName, and.getBinaryDataAsBuffer());
         })
     );
+    saveBrowserLog = allure.createStep('save browser log', async(logName) => {
+      allure.createAttachment(logName, await webdriverConfig.getBrowserLog());
+    });
   });
-  after(async function() {
-    await driver.quit();
+  after(async function () {
+    console.log('this.driver >>' + JSON.stringify(await webdriverConfig.getDriver()));
+    await webdriverConfig.getDriver().quit();
     await webpackServerSetup.stop();
   });
-  it('expect to show landing page', async function() {
+  afterEach(async function () {
+    await saveBrowserLog(new Date().toISOString());
+  });
+  it('expect to show landing page', async function () {
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
-    let landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
+    let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
+    console.log('this.driver >>' + JSON.stringify(await webdriverConfig.getDriver()));
     await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
-  it('expect to show team list', async function() {
+  it('expect to show team list', async function () {
     allure.story('Show team list');
     allure.addLabel('severity', 'critical');
     let landingPage;
     await allure.createStep('show landing page', async() => {
-      landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
+      landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
+      console.log('this.driver >>' + JSON.stringify(await webdriverConfig.getDriver()));
       await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     })();
     await allure.createStep('check number of nav items', async() => {
