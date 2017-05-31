@@ -30,7 +30,6 @@ const TEST_CLEAN = 'test:clean';
 const TEST_RUN = 'test:run';
 const TEST = 'test';
 const TEST_DEBUG = 'test:debug';
-const TEST_SUREFIRE = 'test:surefire';
 //
 const NODE_MODULES = 'node_modules/';
 
@@ -175,11 +174,12 @@ global.target[TEST_CLEAN] = function (argArr) {
 global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run test -- specSel=promisify
   logExecutingTarget(TEST_RUN);
   let argO = destructureArgs(argArr, {
-    params: '',
+    envVars: 'SELENIUM_BROWSER=chrome',
+    mochaPreParams: '',
     specSel: '*',
-    postChain: ''
+    mochaPostParams: ''
   });
-  let command = `cross-env NODE_ENV=test BABEL_ENV=test DEBUG=mocha mocha --opts src/test/mocha.opts --colors ${argO.params} src/test/js/${argO.specSel}.spec.js ${argO.postChain}`;
+  let command = `cross-env NODE_ENV=test BABEL_ENV=test ${argO.envVars} mocha --opts src/test/mocha.opts --colors ${argO.mochaPreParams} src/test/js/${argO.specSel}.spec.js ${argO.mochaPostParams}`;
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);
   shell.config.fatal = true;
@@ -188,23 +188,13 @@ global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run 
 global.target[TEST_DEBUG] = function (argArr) {
   logExecutingTarget(TEST_DEBUG);
   let argO = destructureArgs(argArr, {
-    params: '--inspect=9876 --debug-brk',
+    envVars: 'SELENIUM_BROWSER=chrome',
+    mochaPreParams: '--inspect=9876 --debug-brk',
     specSel: '*',
-    postChain: ''
+    mochaPostParams: ''
   });
   let argArrI = restructureArgs(argO);
   global.target[TEST_RUN](restructureArgs(argArrI));
-};
-
-global.target[TEST_SUREFIRE] = function (argArr) {
-  logExecutingTarget(TEST_SUREFIRE);
-  let argO = destructureArgs(argArr, {
-    params: '-R xunit-file </dev/null 2>&1',
-    specSel: '*',
-    postChain: '| tee $npm_package_config_mocha_out_file'
-  });
-  let argArrI = restructureArgs(argO);
-  global.target[TEST_RUN](argArrI);
 };
 
 /**
@@ -227,13 +217,16 @@ function destructureArgs(argsArr, defaultsO) {
     } else if (arg) {
       switch (index) {
         case 0:
-          defaultsO.params = val;
+          defaultsO.envVars = val;
           break;
         case 1:
-          defaultsO.specSel = val;
+          defaultsO.mochaPreParams = val;
           break;
         case 2:
-          defaultsO.postChain = val;
+          defaultsO.specSel = val;
+          break;
+        case 3:
+          defaultsO.mochaPostParams = val;
           break;
         default:
           defaultsO[index] = key;
