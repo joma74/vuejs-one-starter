@@ -26,17 +26,24 @@ import WebpackServerSetup from './utils/WebpackServerSetup';
 
 chaiConfig.setDefaults();
 
+/**
+ * The location of webpack.config.js. Must be resolveable relative to the
+ * current working directory.
+ */
+const WEBPACKCONFIGJS_LOCATION = (path.join(process.cwd(), '/webpack.config.js'));
+
 /* eslint-disable no-unused-expressions */
-describe('Application spec', function () {
+describe('Application spec', function() {
   let webdriverConfig;
   let webpackServerSetup;
   let takeScreenshot;
   let saveBrowserLog;
-  before(async function () {
+  let saveDriverLog;
+  before(async function() {
     this.timeout(TIMEOUT_BEFORE_MS);
     // process.env.NODE_ENV = 'development';
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    let webpackConfig = require(path.join(process.cwd(), '/webpack.config.js'));
+    let webpackConfig = require(WEBPACKCONFIGJS_LOCATION);
     webpackServerSetup = await new WebpackServerSetup(webpackConfig, true).start();
     webdriverConfig = new WebdriverConfig();
     let screenShotter = new Screenshotter(await webdriverConfig.getDriver(), process.env.npm_package_config_content_base);
@@ -49,22 +56,27 @@ describe('Application spec', function () {
     saveBrowserLog = allure.createStep('save browser log', async(logName) => {
       allure.createAttachment(`${logName}.browser.log`, await webdriverConfig.getBrowserLog());
     });
+    saveDriverLog = allure.createStep('save driver log', async(logName) => {
+      allure.createAttachment(`${logName}.driver.log`, await webdriverConfig.getDriverLog());
+    });
   });
-  after(async function () {
-    (await webdriverConfig.getDriver()).quit(); // await applies ONLY to the last method, so parenthese right
+  after(async function() {
+    // webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
+    // ONLY to the last method, so parenthese right away. else null/undefined.
     await webpackServerSetup.stop();
   });
-  afterEach(async function () {
+  afterEach(async function() {
     await saveBrowserLog(new Date().toISOString());
+    await saveDriverLog(new Date().toISOString());
   });
-  it('expect to show landing page', async function () {
+  it('expect to show landing page', async function() {
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
     let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
     await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
-  it('expect to show team list', async function () {
+  it('expect to show team list', async function() {
     allure.story('Show team list');
     allure.addLabel('severity', 'critical');
     let landingPage;
