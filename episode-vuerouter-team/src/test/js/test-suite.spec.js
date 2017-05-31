@@ -38,9 +38,6 @@ describe('Application spec', function () {
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     let webpackConfig = require(path.join(process.cwd(), '/webpack.config.js'));
     webpackServerSetup = await new WebpackServerSetup(webpackConfig, true).start();
-    // console.log('webpackServerSetup.getBaseUrl() >> ' + webpackServerSetup.getBaseUrl());
-    // allure.addEnvironment('landingPage', webpackServerSetup.getBaseUrl());
-    // console.log(`FIREFOX_SELENIUMUSER_PROFILE is >>${process.cwd() + '/profiles/firefox/SeleniumUser'}<<`);
     webdriverConfig = new WebdriverConfig();
     let screenShotter = new Screenshotter(await webdriverConfig.getDriver(), process.env.npm_package_config_content_base);
     takeScreenshot = allure.createStep('take screenshot', async(screenShotName) => screenShotter.take()
@@ -50,12 +47,11 @@ describe('Application spec', function () {
         })
     );
     saveBrowserLog = allure.createStep('save browser log', async(logName) => {
-      allure.createAttachment(logName, await webdriverConfig.getBrowserLog());
+      allure.createAttachment(`${logName}.browser.log`, await webdriverConfig.getBrowserLog());
     });
   });
   after(async function () {
-    console.log('this.driver >>' + JSON.stringify(await webdriverConfig.getDriver()));
-    await webdriverConfig.getDriver().quit();
+    (await webdriverConfig.getDriver()).quit(); // await applies ONLY to the last method, so parenthese right
     await webpackServerSetup.stop();
   });
   afterEach(async function () {
@@ -65,7 +61,6 @@ describe('Application spec', function () {
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
     let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
-    console.log('this.driver >>' + JSON.stringify(await webdriverConfig.getDriver()));
     await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
@@ -75,7 +70,6 @@ describe('Application spec', function () {
     let landingPage;
     await allure.createStep('show landing page', async() => {
       landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
-      console.log('this.driver >>' + JSON.stringify(await webdriverConfig.getDriver()));
       await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
     })();
     await allure.createStep('check number of nav items', async() => {

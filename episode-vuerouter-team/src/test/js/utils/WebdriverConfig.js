@@ -1,8 +1,5 @@
 import firefox from 'selenium-webdriver/firefox';
 import webdriver from 'selenium-webdriver';
-import {
-  Type
-} from 'selenium-webdriver/lib/logging';
 
 export const FIREFOX_SELENIUMUSER_PROFILE = new firefox.Profile(process.cwd() + '/profiles/firefox/SeleniumUser');
 
@@ -18,9 +15,14 @@ export default class WebdriverConfig {
     return this.driver;
   }
   async _createNewDriver() {
+    let loggingPrefs = new webdriver.logging.Preferences();
+    loggingPrefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.ALL);
+    let capabilities = webdriver.Capabilities.firefox();
+    capabilities.setLoggingPrefs(loggingPrefs);
     return await new webdriver.Builder()
       .forBrowser('firefox')
       .setFirefoxOptions(new firefox.Options().setProfile(FIREFOX_SELENIUMUSER_PROFILE))
+      .withCapabilities(capabilities)
       .build();
   }
   /**
@@ -33,7 +35,7 @@ export default class WebdriverConfig {
       return ['{ execution_error: "Driver not ready!" }'];
     }
     try {
-      let logEntries = await this.driver.manage().logs().get(Type.BROWSER);
+      let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.BROWSER);
       let logEntriesJSON = logEntries.map(function (logEntry) {
         return logEntry.toJSON();
       });
