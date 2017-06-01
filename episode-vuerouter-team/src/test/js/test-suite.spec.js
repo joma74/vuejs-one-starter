@@ -69,8 +69,9 @@ describe('Application spec', function() {
   it('expect to show landing page', async function() {
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
+    allure.addArguments(await webdriverConfig.getActiveBrowser());
     let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
-    await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
+    allure.addArguments('landingPage', landingPage.getBaseUrl());
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
   it('expect to show team list', async function() {

@@ -80,7 +80,7 @@ export default class WebdriverConfig {
       let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.BROWSER);
       // console.log(logEntries);
       // console.log(typeof logEntries);
-      let logEntriesJSON = logEntries.map(function(logEntry) {
+      let logEntriesJSON = logEntries.map(function (logEntry) {
         return JSON.stringify(logEntry, null, 2);
       });
       return logEntriesJSON;
@@ -94,7 +94,7 @@ export default class WebdriverConfig {
     }
     try {
       let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.DRIVER);
-      let logEntriesJSON = logEntries.map(function(logEntry) {
+      let logEntriesJSON = logEntries.map(function (logEntry) {
         return JSON.stringify(logEntry, null, 2);
       });
       return logEntriesJSON;
@@ -108,13 +108,19 @@ export default class WebdriverConfig {
     }
     try {
       let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.SERVER);
-      let logEntriesJSON = logEntries.map(function(logEntry) {
+      let logEntriesJSON = logEntries.map(function (logEntry) {
         return logEntry.toJSON();
       });
       return logEntriesJSON;
     } catch (error) {
       return [`{ execution_error: ${error.toString()} }`];
     }
+  }
+  getActiveBrowser() {
+    if (this.driver === null || this.driver === undefined) {
+      return ['{ execution_error: "Driver not ready!" }'];
+    }
+    return this.driver.getCapabilities().get(webdriver.Capabilities.BROWSER_NAME);
   }
 }
 
