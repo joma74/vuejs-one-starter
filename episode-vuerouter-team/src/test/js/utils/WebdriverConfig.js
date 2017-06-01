@@ -52,7 +52,6 @@ export default class WebdriverConfig {
     let loggingPrefs = new webdriver.logging.Preferences();
     loggingPrefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.DEBUG);
     loggingPrefs.setLevel(webdriver.logging.Type.DRIVER, webdriver.logging.Level.INFO);
-    loggingPrefs.setLevel(webdriver.logging.Type.CLIENT, webdriver.logging.Level.INFO);
     let firefoxCapabilities = webdriver.Capabilities.firefox();
     firefoxCapabilities.setLoggingPrefs(loggingPrefs);
     firefoxCapabilities.set('marionette', false);
@@ -67,58 +66,49 @@ export default class WebdriverConfig {
       .build();
   }
   /**
-   * Get the Log from the browser.
-   * @method getBrowserLog
-   * @return {Promise.<String>[]}     an array of JSON-stringified log messages
+   * Get the logs from webdriver.logging.Type.BROWSER.
+   * @method getLogFromBrowser
+   * @return {Promise<String[]|String[]>}     an array of JSON-stringified
+   * log messages. On exception an ...
    */
-  async getBrowserLog() {
+  async getLogFromBrowser() {
+    return this.getLogFrom(webdriver.logging.Type.BROWSER);
+  }
+  /**
+   * Get the logs from webdriver.logging.Type.DRIVER.
+   * @method getLogFromDriver
+   * @return {Promise<String[]|String[]>}     an array of JSON-stringified
+   * log messages. On exception an ...
+   */
+  async getLogFromDriver() {
+    return this.getLogFrom(webdriver.logging.Type.DRIVER);
+  }
+  /**
+   * Get the log from any of the given log source types.
+   * @method getLogFrom
+   * @param  {webdriver.logging.Type}   webDriverLoggingTypeSource any of the constants of webdriver.logging.Type.
+   * @return {Promise<String[]|String[]>}     an array of JSON-stringified log messages
+   */
+  async getLogFrom(webDriverLoggingTypeSource) {
     if (this.driver === null || this.driver === undefined) {
-      return ['{ execution_error: "Driver not ready!" }'];
+      return [this._getExecutionErrorFrom(new Error('Driver: not ready!'))];
     }
     try {
-      // this.driver.manage().useGeckoDriver(false);
-      let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.BROWSER);
-      // console.log(logEntries);
-      // console.log(typeof logEntries);
+      let logEntries = await this.driver.manage().logs().get(webDriverLoggingTypeSource);
       let logEntriesJSON = logEntries.map(function (logEntry) {
         return JSON.stringify(logEntry, null, 2);
       });
       return logEntriesJSON;
     } catch (error) {
-      return [`{ execution_error: ${error.toString()} }`];
+      return [this._getExecutionErrorFrom(error)];
     }
   }
-  async getDriverLog() {
-    if (this.driver === null || this.driver === undefined) {
-      return ['{ execution_error: "Driver not ready!" }'];
-    }
-    try {
-      let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.DRIVER);
-      let logEntriesJSON = logEntries.map(function (logEntry) {
-        return JSON.stringify(logEntry, null, 2);
-      });
-      return logEntriesJSON;
-    } catch (error) {
-      return [`{ execution_error: ${error.toString()} }`];
-    }
-  }
-  async getServerLog() {
-    if (this.driver === null || this.driver === undefined) {
-      return ['{ execution_error: "Driver not ready!" }'];
-    }
-    try {
-      let logEntries = await this.driver.manage().logs().get(webdriver.logging.Type.SERVER);
-      let logEntriesJSON = logEntries.map(function (logEntry) {
-        return logEntry.toJSON();
-      });
-      return logEntriesJSON;
-    } catch (error) {
-      return [`{ execution_error: ${error.toString()} }`];
-    }
+  _getExecutionErrorFrom(error){
+    return `{ "execution_error": ${JSON.stringify(error.toString(), null, 2)} }`;
   }
   async getBrowserInfo() {
     if (this.driver === null || this.driver === undefined) {
-      return ['{ execution_error: "Driver not ready!" }'];
+      return [this._getExecutionErrorFrom(new Error('Driver not ready!'))];
     }
     let capabilities = await this.driver.getCapabilities();
     let browserInfo = {};
