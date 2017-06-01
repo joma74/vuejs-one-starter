@@ -76,7 +76,7 @@ describe('Application spec', function() {
     allure.description('Opens the default address in the browser. Expectation is to get the index.html served and thereby the landing page rendered.');
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
-    allure.addArgument('browser', await webdriverConfig.getActiveBrowser());
+    allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
     await showLandingPage();
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
@@ -84,7 +84,7 @@ describe('Application spec', function() {
     allure.description('Clicks the nav menu item \'Teams\'. Expectation is to get the team list displayed.');
     allure.story('Show team list');
     allure.addLabel('severity', 'critical');
-    allure.addArgument('browser', await webdriverConfig.getActiveBrowser());
+    allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
     let landingPage = await showLandingPage();
     await allure.createStep('check number of nav items', async() => {
       expect(3).to.equal(await landingPage.getNavMenu().getNumberOfNavItems());
