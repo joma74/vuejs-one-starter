@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 'use strict';
 /* global allure */
 import {
@@ -23,6 +24,8 @@ import LandingPage, {
 
 import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
+import AllureHelper from './utils/AllureHelper';
+
 
 chaiConfig.setDefaults();
 
@@ -33,58 +36,57 @@ chaiConfig.setDefaults();
 const WEBPACKCONFIGJS_LOCATION = (path.join(process.cwd(), '/webpack.config.js'));
 
 /* eslint-disable no-unused-expressions */
-describe('Application spec', function() {
-  let webdriverConfig;
-  let webpackServerSetup;
-  let takeScreenshot;
+describe('Application spec', function () {
   let saveBrowserLog;
   let saveDriverLog;
   let showLandingPage;
-  before(async function() {
+  let takeScreenshot;
+  let webdriverConfig;
+  let webpackServerSetup;
+  before(async function () {
     this.timeout(TIMEOUT_BEFORE_MS);
-    // process.env.NODE_ENV = 'development';
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     let webpackConfig = require(WEBPACKCONFIGJS_LOCATION);
     webpackServerSetup = await new WebpackServerSetup(webpackConfig, true).start();
     webdriverConfig = new WebdriverConfig();
-    let screenShotter = new Screenshotter(await webdriverConfig.getDriver(), process.env.npm_package_config_content_base);
+    let driver = await webdriverConfig.getDriver();
+    let screenShotter = new Screenshotter(driver, process.env.npm_package_config_content_base);
     takeScreenshot = allure.createStep('take screenshot', async(screenShotName) => {
-          allure.createAttachment(screenShotName, (await screenShotter.take()).getBinaryDataAsBuffer());
+      allure.createAttachment(screenShotName, (await screenShotter.take()).getBinaryDataAsBuffer());
     });
     saveBrowserLog = allure.createStep('save browser log', async(logName) => {
-      allure.createAttachment(`${logName}.browser.log`, await webdriverConfig.getBrowserLog());
+      allure.createAttachment(`${logName}.browser.log`, await webdriverConfig.getLogFromBrowser());
     });
     saveDriverLog = allure.createStep('save driver log', async(logName) => {
-      allure.createAttachment(`${logName}.driver.log`, await webdriverConfig.getDriverLog());
+      allure.createAttachment(`${logName}.driver.log`, await webdriverConfig.getLogFromDriver());
     });
     showLandingPage = allure.createStep('show landing page', async() => {
-      let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
+      let landingPage = await new LandingPage(driver, webpackServerSetup.getBaseUrl()).view(2000);
       await allure.addArgument('landingPage', landingPage.getBaseUrl());
       return landingPage;
     });
   });
-  after(async function() {
+  after(async function () {
     webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
     // ONLY to the last method, so parenthese right away. else null/undefined.
     await webpackServerSetup.stop();
   });
-  afterEach(async function() {
+  afterEach(async function () {
     await saveBrowserLog(new Date().toISOString());
     await saveDriverLog(new Date().toISOString());
   });
-  it('expect to show landing page', async function() {
-    allure.description('Opens the default address in the browser. Expectation is to get the index.html served and thereby the landing page rendered.');
-    allure.story('Show landing page');
-    allure.addLabel('severity', 'blocker');
-    allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
+  it('expect to show landing page', async function () {
+    await AllureHelper.describeTestBy('Opens the default address in the browser. Expectation is to get the index.html served and thereby the landing page rendered.' //
+      , 'Show landing page' //
+      , allure.SEVERITY.BLOCKER,
+      webdriverConfig);
     await showLandingPage();
-    await takeScreenshot('landing-page-screenshot'); // <- da iffe
+    await takeScreenshot('landing-page-screenshot');
   });
-  it('expect to show team list', async function() {
-    allure.description('Clicks the nav menu item \'Teams\'. Expectation is to get the team list displayed.');
-    allure.story('Show team list');
-    allure.addLabel('severity', 'critical');
-    allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
+  it('expect to show team list', async function () {
+    await AllureHelper.describeTestBy('Clicks the nav menu item \'Teams\'. Expectation is to get the team list displayed.' //
+      , 'Show team list' //
+      , allure.SEVERITY.CRITICAL,
+      webdriverConfig);
     let landingPage = await showLandingPage();
     await allure.createStep('check number of nav items', async() => {
       expect(3).to.equal(await landingPage.getNavMenu().getNumberOfNavItems());
@@ -97,6 +99,6 @@ describe('Application spec', function() {
     await allure.createStep('activate nav item "Teams"', async() => {
       await landingPage.getNavMenu().navToTeams();
     })();
-    await takeScreenshot('team-list-screenshot'); // <- da iffe
+    await takeScreenshot('team-list-screenshot');
   });
 });
