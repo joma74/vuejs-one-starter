@@ -116,11 +116,15 @@ export default class WebdriverConfig {
       return [`{ execution_error: ${error.toString()} }`];
     }
   }
-  getActiveBrowser() {
+  async getActiveBrowser() {
     if (this.driver === null || this.driver === undefined) {
       return ['{ execution_error: "Driver not ready!" }'];
     }
-    return this.driver.getCapabilities().get(webdriver.Capabilities.BROWSER_NAME);
+    let capabilities = await this.driver.getCapabilities();
+    capabilities.forEach(function log(value, key){
+      console.log(`m[${key}] = ${value}`);
+    });
+    return capabilities.get(webdriver.Capability.BROWSER_NAME);
   }
 }
 

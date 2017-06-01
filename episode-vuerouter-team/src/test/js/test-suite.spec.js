@@ -39,6 +39,7 @@ describe('Application spec', function() {
   let takeScreenshot;
   let saveBrowserLog;
   let saveDriverLog;
+  let showLandingPage;
   before(async function() {
     this.timeout(TIMEOUT_BEFORE_MS);
     // process.env.NODE_ENV = 'development';
@@ -56,6 +57,11 @@ describe('Application spec', function() {
     saveDriverLog = allure.createStep('save driver log', async(logName) => {
       allure.createAttachment(`${logName}.driver.log`, await webdriverConfig.getDriverLog());
     });
+    showLandingPage = allure.createStep('show landing page', async() => {
+      let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
+      await allure.addArgument('landingPage', landingPage.getBaseUrl());
+      return landingPage;
+    });
   });
   after(async function() {
     webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
@@ -67,21 +73,19 @@ describe('Application spec', function() {
     await saveDriverLog(new Date().toISOString());
   });
   it('expect to show landing page', async function() {
+    allure.description('Opens the default address in the browser. Expectation is to get the index.html served and thereby the landing page rendered.');
     allure.story('Show landing page');
     allure.addLabel('severity', 'blocker');
-    allure.addArguments(await webdriverConfig.getActiveBrowser());
-    let landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
-    allure.addArguments('landingPage', landingPage.getBaseUrl());
+    allure.addArgument('browser', await webdriverConfig.getActiveBrowser());
+    await showLandingPage();
     await takeScreenshot('landing-page-screenshot'); // <- da iffe
   });
   it('expect to show team list', async function() {
+    allure.description('Clicks the nav menu item \'Teams\'. Expectation is to get the team list displayed.');
     allure.story('Show team list');
     allure.addLabel('severity', 'critical');
-    let landingPage;
-    await allure.createStep('show landing page', async() => {
-      landingPage = await new LandingPage(await webdriverConfig.getDriver(), webpackServerSetup.getBaseUrl()).view(2000);
-      await allure.addEnvironment('landingPage', landingPage.getBaseUrl());
-    })();
+    allure.addArgument('browser', await webdriverConfig.getActiveBrowser());
+    let landingPage = await showLandingPage();
     await allure.createStep('check number of nav items', async() => {
       expect(3).to.equal(await landingPage.getNavMenu().getNumberOfNavItems());
     })();
