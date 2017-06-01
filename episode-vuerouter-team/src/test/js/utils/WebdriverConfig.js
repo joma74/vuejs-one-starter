@@ -103,7 +103,7 @@ export default class WebdriverConfig {
       return [this._getExecutionErrorFrom(error)];
     }
   }
-  _getExecutionErrorFrom(error){
+  static _getExecutionErrorFrom(error){
     return `{ "execution_error": ${JSON.stringify(error.toString(), null, 2)} }`;
   }
   async getBrowserInfo() {
