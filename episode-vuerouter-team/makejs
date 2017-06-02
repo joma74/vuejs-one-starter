@@ -84,6 +84,9 @@ global.target[PATCH_APPLY] = function () {
   shell.exec('patch -p0 < patches/patch.silentcopy.FileCollection.js', function (code, output) {
     if (code > 1) throw new Error(code);
   });
+  shell.exec('patch -p0 < patches/patch.donotusebabelrc.Mix.js', function (code, output) {
+    if (code > 1) throw new Error(code);
+  });
   shell.set('-e');
 };
 

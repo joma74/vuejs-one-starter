@@ -48,6 +48,7 @@ mix.webpackConfig({
 
   }
 });
+// See node_modules/laravel-mix/src/Options.js
 mix.options({
   uglify: {  // activated only if also inProduction
     sourceMap: false,
@@ -65,6 +66,18 @@ mix.options({
     },
     comments: false,
     sourceMapInline: false
+  },
+  babel: {
+      cacheDirectory: true,
+      presets: [
+          ['env', {
+              'modules': false,
+              'targets': {
+                  'browsers': ['> 3%'],
+                  uglify: true
+              }
+          }]
+      ]
   }
 });
 
