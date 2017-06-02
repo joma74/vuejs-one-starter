@@ -1,4 +1,5 @@
 import chai from 'chai';
+chai.use(require('chai-string'));
 
 class ChaiConfig{
   setDefaults() {

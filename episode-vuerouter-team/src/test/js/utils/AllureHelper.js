@@ -24,6 +24,11 @@ export default class AllureHelper {
       allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
     }
   }
+  static scrapeEnvironmentVariables() {
+    Object.keys(process.env).sort().forEach(function(theKey, index) {
+      allure.addEnvironment(theKey, process.env[theKey]);
+    });
+  }
 }
 
 function isEmpty(str) {

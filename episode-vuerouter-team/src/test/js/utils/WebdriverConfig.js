@@ -1,5 +1,6 @@
 import firefox from 'selenium-webdriver/firefox';
 import webdriver from 'selenium-webdriver';
+import StringifyError from './StringifyError';
 
 
 export const FIREFOXSELENIUMUSERPROFILE_LOCATION = process.cwd() + '/profiles/firefox/SeleniumUser';
@@ -104,7 +105,7 @@ export default class WebdriverConfig {
     }
   }
   static _getExecutionErrorFrom(error){
-    return `{ "execution_error": ${JSON.stringify(error.toString(), null, 2)} }`;
+    return `{ "execution_error": ${StringifyError.stringifyError(error, null, 2)} }`;
   }
   async getBrowserInfo() {
     if (this.driver === null || this.driver === undefined) {

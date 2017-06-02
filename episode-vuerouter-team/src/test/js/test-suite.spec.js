@@ -71,6 +71,7 @@ describe('Application spec', function () {
     await webpackServerSetup.stop();
   });
   afterEach(async function () {
+    AllureHelper.scrapeEnvironmentVariables();
     await saveBrowserLog(new Date().toISOString());
     await saveDriverLog(new Date().toISOString());
   });
