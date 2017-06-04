@@ -2,6 +2,9 @@ import remove from 'lodash/remove';
 import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 import Deferred from './Deferred';
+import stringifyError from './StringifyError';
+
+const debug = require('debug')('vuerouter.team.test:.js.utils.webpackserversetup');
 
 export const HOSTNAME_DEFAULT = 'localhost';
 
@@ -18,6 +21,7 @@ export default class WebpackServerSetup {
   disableVerbosePlugins() {
     this.disableNotifierPlugin();
     this.disableFriendlyErrorsWebpackPlugin();
+    this.listPlugins();
   }
   disableNotifierPlugin() {
     remove(this.webpackConfig.plugins, function (entry) {
@@ -39,11 +43,13 @@ export default class WebpackServerSetup {
     });
   };
   listPlugins() {
+    debug('--- listing configured webpack plugins ---');
     this.webpackConfig.plugins.forEach(function (entry) {
-      // console.log(entry);
+      debug('%o', entry);
     });
   };
   async start() {
+    debug('--- starting ---');
     const deferred = new Deferred();
     const dPromise = deferred.promise;
 
@@ -62,9 +68,11 @@ export default class WebpackServerSetup {
           hash: false
         };
         if (error) { // fatal error
+          debug('webpack compiler gave fatal error %o', stringifyError(error));
           deferred.reject(error);
         } else if (stats.hasErrors()) { // soft error
           let errorMessage = stats.toString(statsConfig);
+          debug('webpack compiler gave soft error %s', errorMessage);
           deferred.reject(new Error(errorMessage));
         } else {
           let message = stats.toString(statsConfig);
@@ -73,6 +81,7 @@ export default class WebpackServerSetup {
       }),
       dPromise
     ]);
+    debug('dev server config is %o', this.devServerConfig);
     /* eslint-disable new-cap */
     this.webpackDevServer = new webpackDevServer(compiler, this.devServerConfig);
     this.webpackDevServer.listen(this.devServerConfig['port']);
@@ -100,14 +109,17 @@ export default class WebpackServerSetup {
     // console.log('Final configured devServer config >>' + JSON.stringify(this.devServerConfig));
   };
   _configureBaseUrl(){
+    debug('--- configuring base url ---');
     let protocolPart = (this.devServerConfig['https'] === true ? 'https' : 'http');
     let baseURL = `${protocolPart}://${this.webpackConfig.devServer.host || HOSTNAME_DEFAULT}:${this.webpackConfig.devServer.port}/`;
+    debug('baseURL is configured to >>%s<<', baseURL);
     return baseURL;
   }
   getBaseUrl(){
     return this.devServerConfig['publicPath'];
   }
   stop() {
+    debug('--- stopping ---');
     this.webpackDevServer && this.webpackDevServer.close();
   }
 }

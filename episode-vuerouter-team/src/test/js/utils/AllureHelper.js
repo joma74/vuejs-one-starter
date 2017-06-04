@@ -32,7 +32,7 @@ export default class AllureHelper {
 }
 
 function isEmpty(str) {
-  return (!str || !str.length);
+  return (!isUndefined(str) || !str.length);
 }
 
 function isUndefined(object) {

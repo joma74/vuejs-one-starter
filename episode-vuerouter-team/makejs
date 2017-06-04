@@ -182,7 +182,7 @@ global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run 
     specSel: '*',
     mochaPostParams: ''
   });
-  let command = `cross-env NODE_ENV=test BABEL_ENV=test ${argO.envVars} mocha --opts src/test/mocha.opts --colors ${argO.mochaPreParams} src/test/js/${argO.specSel}.spec.js ${argO.mochaPostParams}`;
+  let command = `cross-env NODE_ENV=test BABEL_ENV=test DEBUG_COLORS=true ${argO.envVars} mocha --opts src/test/mocha.opts --colors ${argO.mochaPreParams} src/test/js/${argO.specSel}.spec.js ${argO.mochaPostParams}`;
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);
   shell.config.fatal = true;
