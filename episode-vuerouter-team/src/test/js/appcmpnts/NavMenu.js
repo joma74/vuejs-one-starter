@@ -1,12 +1,14 @@
 import {
   By
 } from 'selenium-webdriver';
+import TeamList from './TeamList';
 
-export default class NavMenuPO {
+export default class NavMenu {
   constructor(driver) {
     this.driver = driver;
     this.navMenu = By.css("section[section-test-id='navigation']");
     this.navMenuListItems = By.css('ul li');
+    this.teamList = new TeamList(driver);
   }
   async navToTeams() {
     await this.driver
@@ -27,6 +29,9 @@ export default class NavMenuPO {
       .findElement(this.navMenu)
       .findElements(this.navMenuListItems);
     return menuListElement.length;
+  }
+  getTeamList() {
+    return this.teamList;
   }
 }
 

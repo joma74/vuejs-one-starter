@@ -21,6 +21,9 @@ import Screenshotter from './utils/Screenshotter';
 import LandingPage, {
   NavMenuItemEnum
 } from './appcmpnts/LandingPage';
+import {
+  TeamListItemEnum
+} from './appcmpnts/TeamList';
 
 import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
@@ -89,16 +92,49 @@ describe('Application spec', function () {
       , allure.SEVERITY.CRITICAL,
       webdriverConfig);
     let landingPage = await showLandingPage();
+    let navMenu = landingPage.getNavMenu();
     await allure.createStep('check number of nav items', async() => {
-      expect(3).to.equal(await landingPage.getNavMenu().getNumberOfNavItems());
+      expect(3).to.equal(await navMenu.getNumberOfNavItems());
     })();
     await allure.createStep('check nav item "Teams" exists', async() => {
-      let navItemTeams = await landingPage.getNavMenu().getNavItemFor(NavMenuItemEnum.TEAMS);
+      let navItemTeams = await navMenu.getNavItemFor(NavMenuItemEnum.TEAMS);
       allure.createAttachment('web element content', await getHtmlFrom(navItemTeams));
       expect(navItemTeams).to.exist;
     })();
     await allure.createStep('activate nav item "Teams"', async() => {
-      await landingPage.getNavMenu().navToTeams();
+      await navMenu.navToTeams();
+    })();
+    let teamList = navMenu.getTeamList();
+    await allure.createStep('check number of team list items', async() => {
+      expect(12).to.equal(await teamList.getNumberOfTeamListItems());
+    })();
+    await takeScreenshot('team-list-screenshot');
+  });
+  it('expect to have teams in team list', async function () {
+    await AllureHelper.describeTestBy('Check the team items list. Expectation is to get some teams displayed.' //
+      , 'Check team list' //
+      , allure.SEVERITY.NORMAL,
+      webdriverConfig);
+    let landingPage = await showLandingPage();
+    let navMenu = landingPage.getNavMenu();
+    await allure.createStep('activate nav item "Teams"', async() => {
+      await navMenu.navToTeams();
+    })();
+    let teamList = navMenu.getTeamList();
+    await allure.createStep(`check team "${TeamListItemEnum.properties[TeamListItemEnum.ABERDEEN].name}" exists`, async() => {
+      let team = await teamList.getTeamListItemFor(TeamListItemEnum.ABERDEEN);
+      allure.createAttachment('web element content', await getHtmlFrom(team));
+      expect(team).to.exist;
+    })();
+    await allure.createStep(`check team "${TeamListItemEnum.properties[TeamListItemEnum.MOTHERWELL].name}" exists`, async() => {
+      let team = await teamList.getTeamListItemFor(TeamListItemEnum.MOTHERWELL);
+      allure.createAttachment('web element content', await getHtmlFrom(team));
+      expect(team).to.exist;
+    })();
+    await allure.createStep(`check team "${TeamListItemEnum.properties[TeamListItemEnum.STJOHNSTONE].name}" exists`, async() => {
+      let team = await teamList.getTeamListItemFor(TeamListItemEnum.STJOHNSTONE);
+      allure.createAttachment('web element content', await getHtmlFrom(team));
+      expect(team).to.exist;
     })();
     await takeScreenshot('team-list-screenshot');
   });
