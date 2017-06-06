@@ -110,8 +110,8 @@ describe('Application spec', function () {
     })();
     await takeScreenshot('team-list-screenshot');
   });
-  it('expect to have teams in team list', async function () {
-    await AllureHelper.describeTestBy('Check the team items list. Expectation is to get some teams displayed.' //
+  it('expect teams exist in team list', async function () {
+    await AllureHelper.describeTestBy('Check the team items list. Expectation is that certain teams exist.' //
       , 'Check team list' //
       , allure.SEVERITY.NORMAL,
       webdriverConfig);

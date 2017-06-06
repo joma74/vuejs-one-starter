@@ -8,18 +8,18 @@ import {
 import {
   chaiConfig,
   expect
-} from './utils/ChaiConfig';
-import WebdriverConfig from './utils/WebdriverConfig';
+} from './ChaiConfig';
+import WebdriverConfig from './WebdriverConfig';
 
 chaiConfig.setDefaults();
 
 /* eslint-disable no-unused-expressions */
-describe('class WebdriverConfig', function() {
+describe('WebdriverConfig', function() {
   describe('function _getExecutionErrorFrom', function() {
     it('can convert an error back as object', function() {
       allure.description('Converting an error toJson is not ECMA specified and ' +
       ' hence defaults to an empty object. Alternative toString is not parseable. ' +
-      ' So this test shows the transformation of an error to json. ' +
+      ' Essentially this test shows the transformation of an error to json. ' +
       'See https://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify.');
       const message = JSON.stringify({
         aProp: 'anEasyValue'

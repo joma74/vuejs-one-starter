@@ -11,16 +11,16 @@ export default class AllureHelper {
    * @return {Promise}                      as defined async
    */
   static async describeTestBy(description, story, severity, webdriverConfig) {
-    if (!isEmpty(description)) {
+    if (!AllureHelper.isEmpty(description)) {
       allure.description(description);
     }
-    if (!isEmpty(story)) {
+    if (!AllureHelper.isEmpty(story)) {
       allure.story(story);
     }
-    if (!isEmpty(severity)) {
+    if (!AllureHelper.isEmpty(severity)) {
       allure.addLabel('severity', severity);
     }
-    if (!isUndefined(webdriverConfig)) {
+    if (!AllureHelper.isUndefined(webdriverConfig)) {
       allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
     }
   }
@@ -29,12 +29,10 @@ export default class AllureHelper {
       allure.addEnvironment(theKey, process.env[theKey]);
     });
   }
-}
-
-function isEmpty(str) {
-  return (!isUndefined(str) || !str.length);
-}
-
-function isUndefined(object) {
-  return !object;
+  static isEmpty(str) {
+    return (this.isUndefined(str) || !str.length);
+  }
+  static isUndefined(object) {
+    return (object === undefined || object === null);
+  }
 }

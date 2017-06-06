@@ -1,4 +1,5 @@
 --timeout 5000
+--recursive
 --reporter mocha-multi
 --reporter mocha-multi-reporters
 --reporter-options configFile=mocha-multireporters.config.js
