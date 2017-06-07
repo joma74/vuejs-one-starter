@@ -4,7 +4,7 @@ import webpackDevServer from 'webpack-dev-server';
 import Deferred from './Deferred';
 import stringifyError from './StringifyError';
 
-const debug = require('debug')('vuerouter.team.test:.js.utils.webpackserversetup');
+const debug = require('debug')('vuerouter.team.test:js.utils.webpackserversetup');
 
 export const HOSTNAME_DEFAULT = 'localhost';
 
@@ -93,7 +93,7 @@ export default class WebpackServerSetup {
    * @return {object}            config for the devServer
    */
   _configureDevServer() {
-    // console.log('Base configured devServer config >>' + JSON.stringify(devServerConfig));
+    debug('Base configured devServer config >>%o', this.devServerConfig);
     // this section has to redo all that is evaluated via CLI node_modules/.bin/webpack-dev-server
     this.devServerConfig['hot'] = false;
     this.devServerConfig['hotOnly'] = false;
@@ -106,7 +106,7 @@ export default class WebpackServerSetup {
     this.devServerConfig['publicPath'] = this._configureBaseUrl();
     this.devServerConfig['filename'] = this.webpackConfig.output.filename;
     // devServerConfig['overlay'] = false; // no effect
-    // console.log('Final configured devServer config >>' + JSON.stringify(this.devServerConfig));
+    debug('Final configured devServer config >>%o', this.devServerConfig);
   };
   _configureBaseUrl(){
     debug('--- configuring base url ---');

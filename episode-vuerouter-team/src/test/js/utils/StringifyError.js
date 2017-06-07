@@ -1,4 +1,4 @@
-const debug = require('debug')('vuerouter.team.test:.js.utils.stringifyerror');
+const debug = require('debug')('vuerouter.team.test:js.utils.stringifyerror');
 
 function stringifyError(error, replacer, space) {
   var plainObject = {};
