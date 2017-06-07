@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+const debug = require('debug')('vuerouter.team.build:makejs');
 let shell = require('shelljs');
 require('shelljs/make');
 
@@ -182,7 +183,7 @@ global.target[TEST_RUN] = global.target[TEST] = function (argArr) { // yarn run 
     specSel: '*',
     mochaPostParams: ''
   });
-  let command = `cross-env NODE_ENV=test BABEL_ENV=test DEBUG_COLORS=true ${argO.envVars} mocha --opts src/test/mocha.opts --colors ${argO.mochaPreParams} $(find src/test/js/ -name "${argO.specSel}.spec.js") ${argO.mochaPostParams}`;
+  let command = `cross-env DEBUG_COLORS=true ${argO.envVars} mocha --opts src/test/mocha.opts --colors ${argO.mochaPreParams} $(find src/test/js/ -name "${argO.specSel}.spec.js") ${argO.mochaPostParams}`;
   shell.config.fatal = false; // try-catch instead
   shell.exec(command);
   shell.config.fatal = true;
@@ -209,13 +210,16 @@ global.target[TEST_DEBUG] = function (argArr) {
  * @return {object}                  transformed to object form {opt1: 'arg', opt2: 'arg'}
  */
 function destructureArgs(argsArr, defaultsO) {
+  debug('destructuring given argsArr >> %o <<', argsArr);
   argsArr && argsArr.forEach(function (arg, index) {
+    debug('destructuring next arg >> %o <<', arg);
     let key;
     let val = arg; // if positional form
     let splitPosition = arg.indexOf('=');
     if (arg && splitPosition !== -1) { // if named parameter form
       key = arg.substring(0, splitPosition);
       val = arg.substring(splitPosition + 1);
+      debug(`next arg was split to key>>${key}<< and value>>${val}<< at position >>${splitPosition}<<`);
       (defaultsO[key] = val);
     } else if (arg) {
       switch (index) {
