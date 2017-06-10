@@ -49,7 +49,7 @@ export default class WebpackServerSetup {
     });
   };
   async start() {
-    debug('--- starting ---');
+    debug('--- starting webpackDevServer ---');
     const deferred = new Deferred();
     const dPromise = deferred.promise;
 
@@ -119,7 +119,7 @@ export default class WebpackServerSetup {
     return this.devServerConfig['publicPath'];
   }
   stop() {
-    debug('--- stopping ---');
+    debug('--- stopping webpackDevServer ---');
     this.webpackDevServer && this.webpackDevServer.close();
   }
 }

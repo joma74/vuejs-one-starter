@@ -2,10 +2,10 @@
 'use strict';
 /* global allure */
 import {
-  describe,
-  it,
+  after,
   before,
-  after
+  describe,
+  it
 } from 'mocha';
 import {
   chaiConfig,
@@ -28,7 +28,7 @@ import {
 import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
 import AllureHelper from './utils/AllureHelper';
-
+import LoadPackageJsonConfig from './utils/LoadPackageJsonConfig';
 
 chaiConfig.setDefaults();
 
@@ -48,6 +48,7 @@ describe('Application spec', function () {
   let webpackServerSetup;
   before(async function () {
     this.timeout(TIMEOUT_BEFORE_MS);
+    await new LoadPackageJsonConfig().adoptEnvironmentVariables();
     let webpackConfig = require(WEBPACKCONFIGJS_LOCATION);
     webpackServerSetup = await new WebpackServerSetup(webpackConfig, true).start();
     webdriverConfig = new WebdriverConfig();
