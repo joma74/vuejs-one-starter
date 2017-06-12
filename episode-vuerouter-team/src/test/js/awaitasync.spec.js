@@ -16,7 +16,7 @@ describe('An wait/async can be hidden inside an async iffe', function () {
   it('NOT if nothing awaits it', function () {
     let messages = [];
     let funcTimeout = function timeout(ms) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         setTimeout(function(){
             messages.push(3);
             resolve(4);
@@ -34,7 +34,7 @@ describe('An wait/async can be hidden inside an async iffe', function () {
   it('only iff awaited', async function () {
     let messages = [];
     let funcTimeout = function timeout(ms) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         setTimeout(function(){
             messages.push(3);
             resolve(4);
