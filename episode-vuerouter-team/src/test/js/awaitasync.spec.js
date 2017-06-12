@@ -50,3 +50,4 @@ describe('An wait/async can be hidden inside an async iffe', function () {
     expect([1, 2, 3, 4, 5]).to.eql(messages);
   });
 });
+
