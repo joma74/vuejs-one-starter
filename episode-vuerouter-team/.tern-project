@@ -1,9 +1,17 @@
 {
   "ecmaVersion": 6,
   "libs": [
-    "browser"
+    "browser",
+    "chai"
   ],
+  "loadEagerly": [
+    "src/**/*.js"
+  ],
+  "dontLoad": [],
   "plugins": {
+    "es_modules": {},
+    "node": {},
+    "requirejs": {},
     "doc_comment": {
       "fullDocs": true,
       "strong": true
@@ -12,12 +20,6 @@
       "dontLoad": "",
       "load": "",
       "modules": ""
-    },
-    "es_modules": {},
-    "commonjs": {},
-    "node_resolve": {},
-    "node": {}
-  },
-  "loadEagerly": [],
-  "dontLoad": []
+    }
+  }
 }
