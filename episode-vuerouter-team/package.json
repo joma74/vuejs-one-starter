@@ -21,7 +21,7 @@
     "pretest": "./makejs test:clean",
     "test": "./makejs test --",
     "makejs": "./makejs",
-    "test-debug": "./makejs test:debug --",
+    "test-debug": "node $NODE_DEBUG_OPTION ./makejs test:debug -- ",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --hot --https --content-base $npm_package_config_content_base",
     "bundle-stats": "cross-env NODE_ENV=production webpack --progress --display-modules --display-chunks --profile --json > $npm_package_config_content_base/stats.json",
     "bundle-report": "webpack-bundle-analyzer $npm_package_config_content_base/stats.json",
