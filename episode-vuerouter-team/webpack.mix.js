@@ -34,14 +34,14 @@ if (!mix.config.inProduction) {
 }
 mix.webpackConfig({
   plugins: [
-      new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'src/main/html/index.html',
       minify: {
         collapseWhitespace: true
       }
     })
-    ],
+  ],
   devServer: {
     https: true,
     port: 8080 // othe than that not supported, as Mix.js has this hardcoded
@@ -69,15 +69,18 @@ mix.options({
   },
   babel: {
     cacheDirectory: false,
-    presets: [['es2015', {
-        'modules': false
-            }],
-              ['stage-3'],
-            ],
-    'targets': {
-      'browsers': ['> 3%'],
-      uglify: true
-    }
+    presets: [
+      ["env", {
+        "targets": {
+          'browsers': ['> 3%']
+        },
+        "useBuiltIns": true,
+        "debug": true
+      }]
+    ],
+    "plugins": [
+      ["transform-object-rest-spread", { "useBuiltIns": true }]
+    ]
   }
 });
 
