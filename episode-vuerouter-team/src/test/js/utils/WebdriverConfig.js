@@ -1,4 +1,5 @@
 import firefox from 'selenium-webdriver/firefox';
+import chrome from 'selenium-webdriver/chrome';
 import webdriver from 'selenium-webdriver';
 import StringifyError from './StringifyError';
 
@@ -10,6 +11,10 @@ export const FIREFOXSELENIUMUSERPROFILE_LOCATION = process.cwd() + '/profiles/fi
  * @type {firefox.Profile}
  */
 export const FIREFOX_SELENIUMUSER_PROFILE = new firefox.Profile(FIREFOXSELENIUMUSERPROFILE_LOCATION);
+
+const debug = require('debug')('vuerouter.team.test:js.utils.webdriverconfig');
+
+
 
 
 /**
@@ -58,12 +63,16 @@ export default class WebdriverConfig {
     firefoxCapabilities.set('marionette', false);
     let chromeCapabilities = webdriver.Capabilities.chrome();
     chromeCapabilities.setLoggingPrefs(loggingPrefs);
+    var options = new chrome.Options();
+    options.options_['debuggerAddress'] = '127.0.0.1:6813';
+    debug(options);
     return await new webdriver.Builder()
       .forBrowser('firefox')
       .setFirefoxOptions(new firefox.Options().setProfile(FIREFOX_SELENIUMUSER_PROFILE))
       .withCapabilities(firefoxCapabilities)
       .forBrowser('chrome')
       .withCapabilities(chromeCapabilities)
+      .setChromeOptions(options)
       .build();
   }
   /**
