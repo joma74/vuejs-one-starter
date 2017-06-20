@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "allure-commandline": "^2.0.1",
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
     "babel-eslint": "6",
     "babel-loader": "^7.0.0",
