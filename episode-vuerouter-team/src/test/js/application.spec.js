@@ -70,14 +70,14 @@ describe('Application spec', function () {
     });
   });
   after(async function () {
-    webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
+    // webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
     // ONLY to the last method, so parenthese right away. else null/undefined.
     await webpackServerSetup.stop();
   });
   afterEach(async function () {
     AllureHelper.scrapeEnvironmentVariables();
-    await saveBrowserLog(new Date().toISOString());
-    await saveDriverLog(new Date().toISOString());
+    // await saveBrowserLog(new Date().toISOString()); // works only when chrome
+    // await saveDriverLog(new Date().toISOString()); // works only when chrome
   });
   it('expect to show landing page', async function () {
     await AllureHelper.describeTestBy('Opens the default address in the browser. Expectation is to get the index.html served and thereby the landing page rendered.' //

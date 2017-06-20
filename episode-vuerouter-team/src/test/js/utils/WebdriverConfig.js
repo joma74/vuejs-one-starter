@@ -64,7 +64,7 @@ export default class WebdriverConfig {
     let chromeCapabilities = webdriver.Capabilities.chrome();
     chromeCapabilities.setLoggingPrefs(loggingPrefs);
     var options = new chrome.Options();
-    // options.options_['debuggerAddress'] = '127.0.0.1:6813';
+    // options.options_['debuggerAddress'] = '127.0.0.1:9222';
     debug(options);
     return await new webdriver.Builder()
       .forBrowser('firefox')

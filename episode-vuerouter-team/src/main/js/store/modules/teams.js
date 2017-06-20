@@ -22,6 +22,7 @@ const actions = {
   [FN_FETCH_TEAMS]({
     commit
   }, dispatchParamO) {
+    debugger;
     return new Promise((resolve, reject) => {
       svc.fetchTeams(dispatchParamO.url)
         .then((response) => {
