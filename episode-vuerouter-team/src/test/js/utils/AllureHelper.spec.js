@@ -1,8 +1,6 @@
 /* eslint-env mocha */
 'use strict';
 import {
-  describe,
-  it
 } from 'mocha';
 import {
   chaiConfig,
