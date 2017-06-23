@@ -8,18 +8,13 @@ export = AllureRuntime;
 
 declare namespace AllureRuntime {
 
-    const SEVERITY: {
-        BLOCKER: string;
-        CRITICAL: string;
-        MINOR: string;
-        NORMAL: string;
-        TRIVIAL: string;
-    };
+    type SEVERITY = 'BLOCKER' | 'CRITICAL' | 'MINOR' | 'NORMAL' | 'TRIVIAL';
 
-    const TYPES: {
-        TEXT: string,
-        HTML: string,
-        MARKDOWN: string
+    export class TYPE {
+
+        public static readonly TEXT: string = "text";
+        public static readonly HTML: string  = "html";
+        public static readonly MARKDOWN: string = "markdown";
     };
 
     function addArgument(name: String, value: String): void;
@@ -32,7 +27,7 @@ declare namespace AllureRuntime {
 
     function createStep(name: String, stepFunc: Function): Function;
 
-    function description(description: String, type?: AllureRuntime.TYPES): void;
+    function description(description: String, type?: AllureRuntime.TYPE): void;
 
     function feature(feature: String): void;
 
@@ -45,5 +40,6 @@ declare namespace AllureRuntime {
 }
 
 declare global {
+
     const allure: typeof AllureRuntime;
 }

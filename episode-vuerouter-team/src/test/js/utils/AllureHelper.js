@@ -5,7 +5,7 @@ export default class AllureHelper {
    * @method describeTestBy
    * @param  {String}       description     of allure
    * @param  {String}       story           of allure
-   * @param  {AllureRuntime.SEVERITY.BLOCKER}       severity        of allure
+   * @param  {AllureRuntime.SEVERITY}       severity        of allure
    * @param  {src.test.js.utils.WebdriverConfig}       webdriverConfig to take browserInfo from
    * @return {Promise}                      as defined async
    */
