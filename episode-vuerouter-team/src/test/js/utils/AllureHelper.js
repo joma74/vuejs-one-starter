@@ -1,13 +1,12 @@
 /* global allure */
-
 export default class AllureHelper {
   /**
    * Describe the test.
    * @method describeTestBy
    * @param  {String}       description     of allure
    * @param  {String}       story           of allure
-   * @param  {allure.SEVERITY.BLOKER}       severity        of allure
-   * @param  {test.js.utils.WebdriverConfig}       webdriverConfig to take browserInfo from
+   * @param  {AllureRuntime.SEVERITY}       severity        of allure
+   * @param  {src.test.js.utils.WebdriverConfig}       webdriverConfig to take browserInfo from
    * @return {Promise}                      as defined async
    */
   static async describeTestBy(description, story, severity, webdriverConfig) {
@@ -18,14 +17,14 @@ export default class AllureHelper {
       allure.story(story);
     }
     if (!AllureHelper.isEmpty(severity)) {
-      allure.addLabel('severity', severity);
+      allure.severity(severity);
     }
     if (!AllureHelper.isUndefined(webdriverConfig)) {
       allure.addArgument('browserInfo', JSON.stringify(await webdriverConfig.getBrowserInfo()));
     }
   }
   static scrapeEnvironmentVariables() {
-    Object.keys(process.env).sort().forEach(function(theKey, index) {
+    Object.keys(process.env).sort().forEach(function (theKey, index) {
       allure.addEnvironment(theKey, process.env[theKey]);
     });
   }
