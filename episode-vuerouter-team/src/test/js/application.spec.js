@@ -70,7 +70,7 @@ describe('Application spec', function () {
     });
   });
   after(async function () {
-    // webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
+    webdriverConfig.getDriver().then(driver => driver.quit()); // await applies
     // ONLY to the last method, so parenthese right away. else null/undefined.
     await webpackServerSetup.stop();
   });
