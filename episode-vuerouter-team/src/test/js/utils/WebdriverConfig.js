@@ -15,8 +15,6 @@ export const FIREFOX_SELENIUMUSER_PROFILE = new firefox.Profile(FIREFOXSELENIUMU
 const debug = require('debug')('vuerouter.team.test:js.utils.webdriverconfig');
 
 
-
-
 /**
  * Holder of a selenium-webdriver instance. With unmanaged Promises, to keep
  * you trained with async await.
