@@ -16,8 +16,23 @@
 
 /// <reference types="node" />
 
+/**
+ * This module is a UMD module that exposes the global variable 'allure'.
+ * @See 
+ * {code}
+ *  global.allure = new Runtime(allureReporter); 
+ * {code}
+ */
 export as namespace MochaAllureReporter;
 
+/**
+ * Module surface of allure-js-commons 1.3.0
+ * @See 
+ * {code}
+ *  var Runtime = require("allure-js-commons/runtime");
+ *  global.allure = new Runtime(allureReporter); 
+ * {code}
+ */
 export module Runtime {
 
     type SEVERITY = 'BLOCKER' | 'CRITICAL' | 'MINOR' | 'NORMAL' | 'TRIVIAL';
@@ -48,10 +63,18 @@ export module Runtime {
     function severity(severity: SEVERITY): void;
 
     function story(story: String): void;
-
 }
 
+/**
+ * Declare things that go in the global namespace
+ */
 declare global {
-
+    /**
+     * global variable of allure-js-commons 1.3.0's Runtime
+     * @See 
+     * {code}
+     *  global.allure = new Runtime(allureReporter); 
+     * {code}
+     */
     const allure: typeof MochaAllureReporter.Runtime;
 }
