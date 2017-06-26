@@ -33,16 +33,21 @@ export as namespace MochaAllureReporter;
  *  global.allure = new Runtime(allureReporter); 
  * {code}
  */
-export module Runtime {
+declare module Runtime {
 
-    type SEVERITY = 'BLOCKER' | 'CRITICAL' | 'MINOR' | 'NORMAL' | 'TRIVIAL';
+    type SEVERITYTYPE = 'blocker' | 'critical' | 'minor' | 'normal' | 'trivial';
 
-    class TYPE {
+    interface SEVERITIES {
+        BLOCKER: SEVERITYTYPE,
+        CRITICAL: SEVERITYTYPE,
+        MINOR: SEVERITYTYPE,
+        NORMAL: SEVERITYTYPE,
+        TRIVIAL: SEVERITYTYPE
+    }
 
-        public static readonly TEXT = "text";
-        public static readonly HTML = "html";
-        public static readonly MARKDOWN = "markdown";
-    };
+    const SEVERITY: SEVERITIES;
+    
+    type DESCRIPTIONTYPE = "text" | "html" | "markdown" | string;
 
     function addArgument(name: string, value: string): void;
 
@@ -54,13 +59,13 @@ export module Runtime {
 
     function createStep(name: string, stepFunc: Function): Function;
 
-    function description(description: string, type?: TYPE): void;
+    function description(description: string, type?: DESCRIPTIONTYPE): void;
 
     function feature(feature: string): void;
 
     function isPromise(obj: any): boolean;
 
-    function severity(severity: SEVERITY): void;
+    function severity(severity: SEVERITYTYPE): void;
 
     function story(story: string): void;
 }
