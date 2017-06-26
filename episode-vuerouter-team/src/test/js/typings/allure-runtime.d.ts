@@ -17,7 +17,7 @@
 /// <reference types="node" />
 
 /**
- * This module is a UMD module that exposes the global variable 'allure'.
+ * This module is a module that exposes the global variable 'allure'.
  * @See 
  * {code}
  *  global.allure = new Runtime(allureReporter); 
@@ -44,25 +44,25 @@ export module Runtime {
         public static readonly MARKDOWN = "markdown";
     };
 
-    function addArgument(name: String, value: String): void;
+    function addArgument(name: string, value: string): void;
 
-    function addEnvironment(name: String, value: String): void;
+    function addEnvironment(name: string, value: string): void;
 
-    function addLabel(name: String, value: any): void;
+    function addLabel(name: string, value: any): void;
 
-    function createAttachment(name: String, content: (Buffer | Function | String), mimeType?: string): void;
+    function createAttachment(name: string, content: (Buffer | Function | string), mimeType?: string): void;
 
-    function createStep(name: String, stepFunc: Function): Function;
+    function createStep(name: string, stepFunc: Function): Function;
 
-    function description(description: String, type?: TYPE): void;
+    function description(description: string, type?: TYPE): void;
 
-    function feature(feature: String): void;
+    function feature(feature: string): void;
 
     function isPromise(obj: any): boolean;
 
     function severity(severity: SEVERITY): void;
 
-    function story(story: String): void;
+    function story(story: string): void;
 }
 
 /**
