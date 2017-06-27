@@ -2,7 +2,8 @@
     "compilerOptions": {
         "target": "ESNext",
         "checkJs": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "lib": [ "es2015" ]
     },
     "typeAcquisition": {
         "include": ["allure-js-commons", "mocha-allure-reporter", "node"]
