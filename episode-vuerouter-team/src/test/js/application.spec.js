@@ -23,6 +23,7 @@ import path from 'path';
 import WebpackServerSetup from './utils/WebpackServerSetup';
 import AllureHelper from './utils/AllureHelper';
 import LoadPackageJsonConfig from './utils/LoadPackageJsonConfig';
+import 'mocha-allure-reporter';
 
 chaiConfig.setDefaults();
 

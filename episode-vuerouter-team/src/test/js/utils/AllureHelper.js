@@ -1,5 +1,3 @@
-import WebdriverConfig from './WebdriverConfig';
-
 /* global allure */
 export default class AllureHelper {
   /**
