@@ -4,14 +4,6 @@
         "checkJs": true,
         "allowSyntheticDefaultImports": true
     },
-    "exclude": [
-        "node_modules",
-        "target"
-    ],
-    "include": [
-        "node_modules/mocha-allure-reporter",
-        "node_modules/allure-js-commons"
-    ],
     "typeAcquisition": {
         "include": ["allure-js-commons", "mocha-allure-reporter", "node"]
     }

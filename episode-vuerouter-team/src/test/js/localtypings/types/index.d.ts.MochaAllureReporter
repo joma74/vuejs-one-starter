@@ -1,0 +1,34 @@
+// Type definitions for mocha-allure-reporter 1.3.1 
+// Project: mocha-allure-reporter<https://github.com/allure-framework/allure-mocha>
+// Definitions by: joma74<dev-mails@gmx.net>
+
+/// <reference path="../allure-js-commons/index.d.ts" />
+
+import * as Runtime from "allure-js-commons";
+
+declare namespace MochaAllureReporter {
+
+    export namespace Runtime {
+
+        import * as Runtime from "allure-js-commons";
+
+        export = Runtime;
+    };
+}
+
+declare module MochaAllureReporter {
+    
+    function startTest(nodeName: string): string;
+}
+
+export = MochaAllureReporter;
+
+export as namespace MochaAllureReporter;
+
+declare global {
+    /**
+     * global variable of allure-js-commons 1.3.0's Runtime
+     * @See 'global.allure = new Runtime(allureReporter); '
+     */
+    const allure: typeof Runtime;
+}
