@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@types/chai-string@^1.1.30":
+  version "1.1.30"
+  resolved "https://registry.yarnpkg.com/@types/chai-string/-/chai-string-1.1.30.tgz#4d8744b31a5a2295fc01c981ed1e2d4c8a070f0a"
+  dependencies:
+    "@types/chai" "*"
+
+"@types/chai@*", "@types/chai@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.0.1.tgz#37fea779617cfec3fd2b19a0247e8bbdd5133bf6"
+
 "@types/mocha@^2.2.41":
   version "2.2.41"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.41.tgz#e27cf0817153eb9f2713b2d3f6c68f1e1c3ca608"
@@ -9,6 +19,10 @@
 "@types/node@^8.0.4":
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.4.tgz#d0ca03fa4a3d7ab66c1f4e78a0fd06e30e46a7a9"
+
+"@types/selenium-webdriver@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-3.0.4.tgz#8a6c33c7216f8a8b0962028bf9b868540fdcba47"
 
 abbrev@1:
   version "1.1.0"

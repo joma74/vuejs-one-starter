@@ -7,11 +7,11 @@ export default class AllureHelper {
    * @param  {string} story of allure
    * @param  {MochaAllureReporter.Runtime.SEVERITYTYPE} severity of allure
    * @param  {WebdriverConfig} webdriverConfig to take browserInfo from
-   * @return {Promise} as defined async
+   * @return {Promise<void>} as defined async
    */
   static async describeTestBy(description, story, severity, webdriverConfig) {
     if (!AllureHelper.isEmpty(description)) {
-      allure.description(description, "text");
+      allure.description(description, 'text');
     }
     if (!AllureHelper.isEmpty(story)) {
       allure.story(story);

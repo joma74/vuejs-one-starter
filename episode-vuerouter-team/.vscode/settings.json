@@ -1,4 +1,4 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "typescript.tsdk": "/home/joma/.config/yarn/global/node_modules/typescript/lib"
+    "typescript.tsdk": "/home/joerg/.config/yarn/global/node_modules/typescript/lib/"
 }

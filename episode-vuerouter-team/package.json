@@ -29,8 +29,11 @@
     "serve-app": "cross-env NODE_ENV=production webpack-dev-server --https --progress --compress --content-base $npm_package_config_content_base"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.1",
+    "@types/chai-string": "^1.1.30",
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.4",
+    "@types/selenium-webdriver": "^3.0.4",
     "allure-commandline": "^2.0.1",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",

@@ -31,7 +31,7 @@ export default class WebdriverConfig {
   }
   /**
    * Get the configured webdriver.
-   * @return {Promise.<webdriver>} the configured webdriver
+   * @return {webdriver.ThenableWebDriver} the configured webdriver
    */
   async getDriver() {
     if (this.driver === null || this.driver === undefined) {
@@ -50,7 +50,7 @@ export default class WebdriverConfig {
    * If no other override applies e.g. environment variable SELENIUM_BROWSER=xyz,
    * the BROWSER defaults to chrome.
    * @method _createNewDriver
-   * @return {Promise.<webdriver>} the new webdriver.
+   * @return {webdriver.ThenableWebDriver} the new webdriver.
    */
   async _createNewDriver() {
     let loggingPrefs = new webdriver.logging.Preferences();
@@ -94,12 +94,12 @@ export default class WebdriverConfig {
   /**
    * Get the log from any of the given log source types.
    * @method getLogFrom
-   * @param  {webdriver.logging.Type}   webDriverLoggingTypeSource any of the constants of webdriver.logging.Type.
-   * @return {Promise<String[]|String[]>}     an array of JSON-stringified log messages
+   * @param  {string}   webDriverLoggingTypeSource any of the constants of webdriver.logging.Type.
+   * @return {Promise<string[]>}     an array of JSON-stringified log messages
    */
   async getLogFrom(webDriverLoggingTypeSource) {
     if (this.driver === null || this.driver === undefined) {
-      return [this._getExecutionErrorFrom(new Error('Driver: not ready!'))];
+      return [WebdriverConfig._getExecutionErrorFrom(new Error('Driver: not ready!'))];
     }
     try {
       let logEntries = await this.driver.manage().logs().get(webDriverLoggingTypeSource);
@@ -108,7 +108,7 @@ export default class WebdriverConfig {
       });
       return logEntriesJSON;
     } catch (error) {
-      return [this._getExecutionErrorFrom(error)];
+      return [WebdriverConfig._getExecutionErrorFrom(error)];
     }
   }
   static _getExecutionErrorFrom(error){
@@ -116,7 +116,7 @@ export default class WebdriverConfig {
   }
   async getBrowserInfo() {
     if (this.driver === null || this.driver === undefined) {
-      return [this._getExecutionErrorFrom(new Error('Driver not ready!'))];
+      return [WebdriverConfig._getExecutionErrorFrom(new Error('Driver not ready!'))];
     }
     let capabilities = await this.driver.getCapabilities();
     let browserInfo = {};

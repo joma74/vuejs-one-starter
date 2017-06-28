@@ -2,10 +2,6 @@
 'use strict';
 /* global allure */
 import {
-  describe,
-  it
-} from 'mocha';
-import {
   chaiConfig,
   expect
 } from './ChaiConfig';
