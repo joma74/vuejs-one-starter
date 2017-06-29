@@ -1,18 +1,16 @@
 diff -uN node_modules/mocha-allure-reporter.patched/index.d.ts node_modules/mocha-allure-reporter/index.d.ts
 --- node_modules/mocha-allure-reporter.patched/index.d.ts	1970-01-01 01:00:00.000000000 +0100
 +++ node_modules/mocha-allure-reporter/index.d.ts	2017-06-27 23:27:41.093000000 +0200
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,27 @@
 +// Type definitions for mocha-allure-reporter 1.3.1 
 +// Project: mocha-allure-reporter<https://github.com/allure-framework/allure-mocha>
 +// Definitions by: joma74<dev-mails@gmx.net>
 +
-+/// <reference path="../allure-js-commons/index.d.ts" />
-+
-+import { Runtime } from "allure-js-commons";
++import { Runtime } from "allure-js-commons/runtime";
 +
 +declare namespace MochaAllureReporter {
 +
-+    export { SEVERITYTYPE, SEVERITIES, DESCRIPTIONTYPE } from "allure-js-commons";
++    export { SEVERITYTYPE, SEVERITIES, DESCRIPTIONTYPE } from "allure-js-commons/runtime";
 +}
 +
 +declare module MochaAllureReporter {

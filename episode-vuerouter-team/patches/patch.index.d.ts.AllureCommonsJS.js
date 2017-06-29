@@ -1,7 +1,7 @@
 Common subdirectories: node_modules/allure-js-commons.patched/beans and node_modules/allure-js-commons/beans
 diff -uN node_modules/allure-js-commons.patched/index.d.ts node_modules/allure-js-commons/index.d.ts
---- node_modules/allure-js-commons.patched/index.d.ts	1970-01-01 01:00:00.000000000 +0100
-+++ node_modules/allure-js-commons/index.d.ts	2017-06-27 23:25:55.243000000 +0200
+--- node_modules/allure-js-commons.patched/runtime.d.ts	1970-01-01 01:00:00.000000000 +0100
++++ node_modules/allure-js-commons/runtime.d.ts	2017-06-27 23:25:55.243000000 +0200
 @@ -0,0 +1,44 @@
 +// Type definitions for allure-js-commons 1.3.1 
 +// Project: allure-js-commons<https://github.com/allure-framework/allure-mocha>
