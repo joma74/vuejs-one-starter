@@ -88,10 +88,10 @@ global.target[PATCH_APPLY] = function () {
   shell.exec('patch -p0 < patches/patch.donotusebabelrc.Mix.js', function (code, output) {
     if (code > 1) throw new Error(code);
   });
-  shell.exec('patch -p0 < patches/patch.index.d.ts.AllureCommonsJS.js', function (code, output) {
+  shell.exec('patch -p0 < patches/patch.AllureCommonJS.d.ts', function (code, output) {
     if (code > 1) throw new Error(code);
   });
-  shell.exec('patch -p0 < patches/patch.index.d.ts.MochaAllureReporter.js', function (code, output) {
+  shell.exec('patch -p0 < patches/patch.MochaAllureReporter.d.ts', function (code, output) {
     if (code > 1) throw new Error(code);
   });
   shell.set('-e');
