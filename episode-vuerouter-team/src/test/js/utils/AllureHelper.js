@@ -5,7 +5,7 @@ export default class AllureHelper {
    * @method describeTestBy
    * @param  {string} description of allure
    * @param  {string} story of allure
-   * @param  {AllureCommonJsRuntimeTypes.SEVERITYTYPE} severity of allure
+   * @param  {Runtime.SEVERITYTYPE} severity of allure
    * @param  {WebdriverConfig} webdriverConfig to take browserInfo from
    * @return {Promise<void>} as defined async
    */
@@ -28,9 +28,17 @@ export default class AllureHelper {
       allure.addEnvironment(theKey, process.env[theKey]);
     });
   }
+  /**
+   * 
+   * @param {string} str 
+   */
   static isEmpty(str) {
     return (this.isUndefined(str) || !str.length);
   }
+  /**
+   * 
+   * @param {Object} object 
+   */
   static isUndefined(object) {
     return (object === undefined || object === null);
   }

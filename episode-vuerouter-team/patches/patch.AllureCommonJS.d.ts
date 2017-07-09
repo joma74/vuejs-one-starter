@@ -1,7 +1,7 @@
 Common subdirectories: node_modules/allure-js-commons.orig/beans and node_modules/allure-js-commons/beans
 diff -uN node_modules/allure-js-commons.orig/index.d.ts node_modules/allure-js-commons/index.d.ts
 --- node_modules/allure-js-commons.orig/index.d.ts	1970-01-01 01:00:00.000000000 +0100
-+++ node_modules/allure-js-commons/index.d.ts	2017-07-09 00:11:23.539000000 +0200
++++ node_modules/allure-js-commons/index.d.ts	2017-07-09 01:43:46.647526719 +0200
 @@ -0,0 +1,30 @@
 +import { DESCRIPTIONTYPE } from "allure-js-commons/runtime";
 +
@@ -37,34 +37,20 @@ diff -uN node_modules/allure-js-commons.orig/index.d.ts node_modules/allure-js-c
 Common subdirectories: node_modules/allure-js-commons.orig/node_modules and node_modules/allure-js-commons/node_modules
 diff -uN node_modules/allure-js-commons.orig/runtime.d.ts node_modules/allure-js-commons/runtime.d.ts
 --- node_modules/allure-js-commons.orig/runtime.d.ts	1970-01-01 01:00:00.000000000 +0100
-+++ node_modules/allure-js-commons/runtime.d.ts	2017-07-09 00:11:16.202000000 +0200
-@@ -0,0 +1,47 @@
++++ node_modules/allure-js-commons/runtime.d.ts	2017-07-09 01:51:37.283512472 +0200
+@@ -0,0 +1,33 @@
 +// Type definitions for allure-js-commons 1.3.1 
 +// Project: allure-js-commons<https://github.com/allure-framework/allure-mocha>
 +// Definitions by: joma74<dev-mails@gmx.net>
 +
++/// <reference path="runtimetypes.d.ts" /> 
 +/// <reference types="node" />
-+
-+
-+declare type SEVERITYTYPE = 'blocker' | 'critical' | 'minor' | 'normal' | 'trivial';
-+
-+declare interface SEVERITIES {
-+    BLOCKER: SEVERITYTYPE,
-+    CRITICAL: SEVERITYTYPE,
-+    MINOR: SEVERITYTYPE,
-+    NORMAL: SEVERITYTYPE,
-+    TRIVIAL: SEVERITYTYPE
-+}
-+
-+declare type DESCRIPTIONTYPE = "text" | "html" | "markdown" | string;
-+
-+export as namespace AllureCommonJsRuntimeTypes;
 +
 +export declare class Runtime {
 +
 +    constructor(someParam?: any);
 +
-+    readonly SEVERITY: SEVERITIES;
++    readonly SEVERITY: Runtime.SEVERITIES;
 +
 +    addArgument(name: string, value: string): void;
 +
@@ -76,14 +62,32 @@ diff -uN node_modules/allure-js-commons.orig/runtime.d.ts node_modules/allure-js
 +
 +    createStep(name: string, stepFunc: Function): Function;
 +
-+    description(description: string, type?: DESCRIPTIONTYPE): void;
++    description(description: string, type?: Runtime.DESCRIPTIONTYPE): void;
 +
 +    feature(feature: string): void;
 +
 +    isPromise(obj: any): boolean;
 +
-+    severity(severity: SEVERITYTYPE): void;
++    severity(severity: Runtime.SEVERITYTYPE): void;
 +
 +    story(story: string): void;
 +}
+\ No newline at end of file
+diff -uN node_modules/allure-js-commons.orig/runtimetypes.d.ts node_modules/allure-js-commons/runtimetypes.d.ts
+--- node_modules/allure-js-commons.orig/runtimetypes.d.ts	1970-01-01 01:00:00.000000000 +0100
++++ node_modules/allure-js-commons/runtimetypes.d.ts	2017-07-09 01:51:11.811513243 +0200
+@@ -0,0 +1,13 @@
++export declare type SEVERITYTYPE = 'blocker' | 'critical' | 'minor' | 'normal' | 'trivial';
++
++export declare interface SEVERITIES {
++    BLOCKER: SEVERITYTYPE,
++    CRITICAL: SEVERITYTYPE,
++    MINOR: SEVERITYTYPE,
++    NORMAL: SEVERITYTYPE,
++    TRIVIAL: SEVERITYTYPE
++}
++
++export declare type DESCRIPTIONTYPE = "text" | "html" | "markdown" | string;
++
++export as namespace Runtime;
 \ No newline at end of file
