@@ -1,9 +1,13 @@
 {
     "compilerOptions": {
-        "checkJs": true,
         "allowSyntheticDefaultImports": true,
-        "lib": [ "es5", "es6", "es7" ]
+        "checkJs": true,
+        "moduleResolution": "node",
+        "target": "ESNEXT"
     },
+    "exclude": [
+        "node_modules"
+    ],
     "typeAcquisition": {
         "include": ["node", "mocha", "chai", "chai-string", "selenium-webdriver"]
     }

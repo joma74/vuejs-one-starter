@@ -31,7 +31,7 @@ export default class WebdriverConfig {
   }
   /**
    * Get the configured webdriver.
-   * @return {webdriver.ThenableWebDriver} the configured webdriver
+   * @return {Promise<webdriver.WebDriver>} the configured webdriver
    */
   async getDriver() {
     if (this.driver === null || this.driver === undefined) {
@@ -50,7 +50,7 @@ export default class WebdriverConfig {
    * If no other override applies e.g. environment variable SELENIUM_BROWSER=xyz,
    * the BROWSER defaults to chrome.
    * @method _createNewDriver
-   * @return {webdriver.ThenableWebDriver} the new webdriver.
+   * @return {Promise<webdriver.WebDriver>} the new webdriver.
    */
   async _createNewDriver() {
     let loggingPrefs = new webdriver.logging.Preferences();
@@ -95,7 +95,7 @@ export default class WebdriverConfig {
    * Get the log from any of the given log source types.
    * @method getLogFrom
    * @param  {string}   webDriverLoggingTypeSource any of the constants of webdriver.logging.Type.
-   * @return {Promise<string[]>}     an array of JSON-stringified log messages
+   * @return {Promise<string[]>}  an array of JSON-stringified log messages
    */
   async getLogFrom(webDriverLoggingTypeSource) {
     if (this.driver === null || this.driver === undefined) {
@@ -111,15 +111,27 @@ export default class WebdriverConfig {
       return [WebdriverConfig._getExecutionErrorFrom(error)];
     }
   }
+  /**
+   * @return {string} a stringified Error instance
+   */
   static _getExecutionErrorFrom(error){
     return `{ "execution_error": ${StringifyError.stringifyError(error, null, 2)} }`;
   }
+  /**
+   * @typedef {{[key: string]: string}} OnExecutionError
+   * @key {string} execution_error the stringified Error
+   * @typedef {{[key: string]: string}} BrowserInfo
+   * @key {string} webdriver.Capability.BROWSER_NAME the NAME of the browser
+   * @key {string} webdriver.Capability.VERSION the VERSION of the browser
+   * @key {string} webdriver.Capability.PLATFORM the PLATFORM of the browser
+   * @return {Promise<OnExecutionError | BrowserInfo>} either an object containing an execution_error or a browserInfo containing {BROWSER_NAME, VERSION and PLATFORM}
+   */
   async getBrowserInfo() {
+    let browserInfo = {};
     if (this.driver === null || this.driver === undefined) {
-      return [WebdriverConfig._getExecutionErrorFrom(new Error('Driver not ready!'))];
+      return browserInfo[WebdriverConfig._getExecutionErrorFrom(new Error('Driver not ready!'))];
     }
     let capabilities = await this.driver.getCapabilities();
-    let browserInfo = {};
     browserInfo[webdriver.Capability.BROWSER_NAME] = capabilities.get(webdriver.Capability.BROWSER_NAME);
     browserInfo[webdriver.Capability.VERSION] = capabilities.get(webdriver.Capability.VERSION);
     browserInfo[webdriver.Capability.PLATFORM] = capabilities.get(webdriver.Capability.PLATFORM);
